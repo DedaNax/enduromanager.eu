@@ -50,7 +50,7 @@
 						$info =$rslt[Info];
 					}
 					if ($publishID) echo "<a style=\"font-weight: bold;\" href=\"?rm_func=reslt&rm_subf=endurodaysaved&publishID=$publishID\">";
-						echo $days[$j]->START_DATE;
+						echo DateTimeString($days[$j]->START_DATE);						
 						if ($publishID) echo " ",$info;						
 					if ($publishID) echo "</a>";
 					

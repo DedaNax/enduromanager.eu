@@ -197,7 +197,7 @@
 			}
 			echo "</tbody></table>";
 			echo "<hr><p style=\"font-style: italic\">";
-				echo $rslt[RaceName]," ",$rslt[RaceDayText]," ",$rslt[Info], " | ",$rslt[PublisherName]," ",$rslt[TimeStamp];
+				echo $rslt[RaceName]," ",$rslt[RaceDayText]," ",$rslt[Info], " | ",$rslt[PublisherName]," ",DateTimeString($rslt[TimeStamp]);
 			echo "</p><hr>";
 			
 			break;
@@ -236,7 +236,7 @@
 		echo "<a href=\"?rm_func=reslt&rm_subf=enduromenu\"><b>Rezultāti</b></a>";		
 		echo " -> <b>",$r[0]->getName(),"</b>"; $resutltToStore[-1][RaceName] = $r[0]->getName();		
 		$resutltToStore[-1][RaceDate] = $r[0]->getDate();	
-		echo " -> <b>",substr($erd[0]->START_DATE,0,10),"</b>"; $resutltToStore[-1][RaceDayText] = substr($erd[0]->START_DATE,0,10);		
+		echo " -> <b>",DateTimeString($erd[0]->START_DATE),"</b>"; $resutltToStore[-1][RaceDayText] = DateTimeString($erd[0]->START_DATE);		
 		$resutltToStore[-1][RaceDayDate] = $erd[0]->START_DATE;
 		echo "<hr>";
 		

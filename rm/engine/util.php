@@ -139,4 +139,11 @@ function printheader(){
 function printfooter(){
 	return "</body></html>";
 }
+
+function DateTimeString($input){
+	return strftime("%d.%m.%Y %H:%M",strtotime($input));
+}
+function DateString($input){
+	return strftime("%d.%m.%Y",strtotime($input));
+}
 ?>

@@ -1514,7 +1514,7 @@ function timeInput($opt){
 		if(!$day){$day=$erd[0]->ERD_ID;}
 		echo "</select>";
 		
-		echo " | <a href=\"?rm_func=reslt&rm_subf=publishDayResult&day=".$erd[0]->ERD_ID."\">".ORG_RACE_DAY_RESULT_PUBLISH."</a>";
+		echo " | <a href=\"?rm_func=reslt&rm_subf=publishDayResult&day=$day\">".ORG_RACE_DAY_RESULT_PUBLISH."</a>";
 	
 	$cl = $em->getERCD($opt,$day,"");
 	$task = $em->getEt("",$opt);	
