@@ -1,7 +1,0 @@
-Subject: Lietotāja konts ir aktivizēts
-
-Labdien, {USERNAME}!
-
-Jūsu lietotāja konts forumā «{SITENAME}» ir aktivizēts. Tagad Jūs varat ielogoties forumā, izmantojot lietotājvārdu un paroli, kas tika atsūtīti Jums iepriekšējā vēstulē. 
-
-{EMAIL_SIG}

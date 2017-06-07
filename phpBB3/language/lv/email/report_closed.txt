@@ -1,8 +1,0 @@
-Subject: Sūdzība ir izbeigtа — «{POST_SUBJECT}»
-
-Sveiki, {USERNAME}!
-
-Jūsu sūdzība uz ziņojumu «{POST_SUBJECT}» tēmā «{TOPIC_TITLE}» forumā «{SITENAME}» tika izskatīta. Pēc izskatīšanas sūdzība tika slēgta. Ja Jums ir radušies jautājumi, tad sazinieties ar {CLOSER_NAME}, izmantojot privātās vēstules.
-
-
-{EMAIL_SIG}
