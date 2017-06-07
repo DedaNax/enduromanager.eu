@@ -480,8 +480,7 @@ class main {
 
 							
 				$out .= "</li>"; 
-				$out .= '<p><img src="./enduro_logo.jpg" class="logo"></p>';
-				$out .= '<p><img src="./enduro_logo90.jpg" class="logo90"></p>';
+				$out .= '<p><img src="./enduro_logo.jpg" class="logo"></p>';				
 				/*	
 				/*	
 				
