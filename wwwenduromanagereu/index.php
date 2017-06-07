@@ -1,7 +1,4 @@
 <?php
-
-
-
 error_reporting(E_ALL ^ E_NOTICE);
 ini_set('display_errors','On');
 
@@ -33,14 +30,8 @@ include "./engine/em_security.php";
 include "./engine/licence.php";
 include "./engine/enduro_store_result.php";
 
-
-
-
-
 $connection = mysql_connect(RM_DB_ADDRESS,RM_DB_USER,RM_DB_PASS);
 mysql_select_db(RM_DB_NAME, $connection);
-
-
 
 $rm_mode = isset($_GET['rm_mode']) ? $_GET['rm_mode'] : $_POST['rm_mode'];
 $func = isset($_GET['print_func']) ? $_GET['print_func'] : $_POST['print_func'];
