@@ -1,0 +1,119 @@
+@CHARSET "UTF-8";
+
+div.galerijas {
+	position: relative;
+}
+
+
+div.galerijas div.galerija {
+	display: block;
+	position: relative;
+	float: left;
+	width: 230px;
+	height: 50px;
+	margin-top: 5px;
+	margin-bottom: 20px;
+}
+
+
+div.galerijas div.galerija img {
+	float: left;
+}
+
+div.galerijas div.galerija div.title {
+	float: right;
+	font-size: 12px;
+	font-weight: bold;
+	width: 155px;
+	height: 100%;
+	position: relative;
+}
+
+
+div.galerijas div.galerija div.title a {
+	position: absolute;
+	bottom: 5px;
+}
+
+
+div.galerijas .image {
+	float: left;
+	display: block;
+	margin: 1px;
+	width: 170px;
+	height: 170px;
+	background: url(../images/sample_small.jpg) 50% 50% no-repeat;
+}
+
+div.galerijas a.image {
+	border: 1px solid #CACACA;
+}
+
+div.galerijas a.image:hover {
+	/* border: 1px solid orange; */
+}
+
+
+
+
+div#galerija {
+	overflow: hidden;
+}
+
+div#galerija div.imageSet {
+	display: block;
+	float: left;
+	width: 170px;
+	height: 170px;
+	color: #c1d4da;
+	text-decoration: none;
+	margin: 1px;
+}
+
+
+
+div#galerija div.imageSet a.bilde {
+	display: block;
+	width: 170px;
+	height: 170px;
+	cursor: pointer;	
+	background: url(../images/ico/gallery.gif) no-repeat center center;
+}
+
+
+div#galerija div.imageSet a.bilde:hover {
+	/* border: 1px solid orange; */
+}
+
+
+div#galerija div.imageSet div.nosaukums {
+	color: #2b2f48;
+	text-align: center;
+}
+
+#uploadCancel {
+	position: absolute;
+	top: 0px;
+	left: 65px;
+}
+
+
+div#galerija div.control,
+div#galerija div.control a  {
+	font-size: 11px;
+	text-align: right;
+	text-decoration: none;
+	color: #afd5ec;
+}
+
+div#galerija div.control a:hover {
+	color: blue;
+}
+
+
+div#galerija .imageSet .delete {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+}
+

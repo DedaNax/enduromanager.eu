@@ -1,0 +1,19 @@
+Subject: Paziņojums par jaunu ziņojumu - «{FORUM_NAME}»
+
+Sveiki, {USERNAME}!
+
+Jūs saņēmāt šo vēstuli tāpēc, ka sekojat tēmai «{FORUM_NAME}» forumā «{SITENAME}». Forumā pēc Jūsu pēdējā apmeklējuma ir parādījies jauns ziņojums tēmā «{TOPIC_TITLE}». Jūs varat apskatīt nelasīto ziņojumu pārejot pa saiti; jaunas vēstules nepienāks tik ilgi kamēr Jūs neapskatīsiet šo tēmu.
+
+{U_NEWEST_POST}
+
+Ja gribat apskatīt šo tēmu, tad spiediet uz šo saiti:
+{U_TOPIC}
+
+Ja gribat apskatīt forumu, tad spiediet uz šīs saites:
+{U_FORUM}
+
+Ja vairs negribat sekot forumam, tad spiediet uz šīs saites:
+
+{U_STOP_WATCHING_FORUM}
+
+{EMAIL_SIG}

@@ -1,0 +1,16 @@
+Subject: phpBB forums ir ieinstalēts
+
+Apsveicam!
+
+Jūs esat uzstādījis phpBB forumu uz servera.
+
+Šī vēstule satur svarīgu informāciju, kuru iepējams vajadzētu saglabāt. Jūsu parole glabājas datu bāzē šifrētā veidā un to nav iespējams atjaunot nozaudēšanas gadījumā. Ja, tomēr aizmirsīsiet paroli, tad varēsiet pieprasīt jaunu.
+
+---------------------------------
+Lietotāja vārds: 	   {USERNAME}
+Parole: 		       {PASSWORD}
+
+Saite uz forumu: {U_BOARD}
+---------------------------------
+
+

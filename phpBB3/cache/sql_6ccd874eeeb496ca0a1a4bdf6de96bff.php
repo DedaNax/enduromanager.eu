@@ -1,0 +1,11 @@
+<?php
+if (!defined('IN_PHPBB')) exit;
+
+/* SELECT ban_ip, ban_userid, ban_email, ban_exclude, ban_give_reason, ban_end FROM phpbb_banlist WHERE (ban_ip = '' OR ban_exclude = 1) AND (ban_userid = 0 OR ban_exclude = 1) */
+
+$expired = (time() > 1496853310) ? true : false;
+if ($expired) { return; }
+
+$this->sql_rowset[$query_id] = unserialize('a:10:{i:0;a:6:{s:6:"ban_ip";s:0:"";s:10:"ban_userid";s:1:"0";s:9:"ban_email";s:8:"@mail.ru";s:11:"ban_exclude";s:1:"0";s:15:"ban_give_reason";s:4:"spam";s:7:"ban_end";s:1:"0";}i:1;a:6:{s:6:"ban_ip";s:0:"";s:10:"ban_userid";s:1:"0";s:9:"ban_email";s:10:"@gmx.co.uk";s:11:"ban_exclude";s:1:"0";s:15:"ban_give_reason";s:4:"spam";s:7:"ban_end";s:1:"0";}i:2;a:6:{s:6:"ban_ip";s:0:"";s:10:"ban_userid";s:1:"0";s:9:"ban_email";s:9:"*@mail.ru";s:11:"ban_exclude";s:1:"0";s:15:"ban_give_reason";s:4:"spam";s:7:"ban_end";s:1:"0";}i:3;a:6:{s:6:"ban_ip";s:0:"";s:10:"ban_userid";s:1:"0";s:9:"ban_email";s:11:"*@gmx.co.uk";s:11:"ban_exclude";s:1:"0";s:15:"ban_give_reason";s:4:"spam";s:7:"ban_end";s:1:"0";}i:4;a:6:{s:6:"ban_ip";s:0:"";s:10:"ban_userid";s:1:"0";s:9:"ban_email";s:10:"*gawab.com";s:11:"ban_exclude";s:1:"0";s:15:"ban_give_reason";s:4:"spam";s:7:"ban_end";s:1:"0";}i:5;a:6:{s:6:"ban_ip";s:0:"";s:10:"ban_userid";s:1:"0";s:9:"ban_email";s:9:"*@gmx.com";s:11:"ban_exclude";s:1:"0";s:15:"ban_give_reason";s:4:"spam";s:7:"ban_end";s:1:"0";}i:6;a:6:{s:6:"ban_ip";s:0:"";s:10:"ban_userid";s:1:"0";s:9:"ban_email";s:15:"*@pobieramy.org";s:11:"ban_exclude";s:1:"0";s:15:"ban_give_reason";s:4:"spam";s:7:"ban_end";s:1:"0";}i:7;a:6:{s:6:"ban_ip";s:0:"";s:10:"ban_userid";s:1:"0";s:9:"ban_email";s:11:"*@proreg.ru";s:11:"ban_exclude";s:1:"0";s:15:"ban_give_reason";s:4:"spam";s:7:"ban_end";s:1:"0";}i:8;a:6:{s:6:"ban_ip";s:0:"";s:10:"ban_userid";s:1:"0";s:9:"ban_email";s:13:"*@ua-news.net";s:11:"ban_exclude";s:1:"0";s:15:"ban_give_reason";s:4:"spam";s:7:"ban_end";s:1:"0";}i:9;a:6:{s:6:"ban_ip";s:0:"";s:10:"ban_userid";s:1:"0";s:9:"ban_email";s:12:"*@rambler.ru";s:11:"ban_exclude";s:1:"0";s:15:"ban_give_reason";s:4:"spam";s:7:"ban_end";s:1:"0";}}');
+
+?>

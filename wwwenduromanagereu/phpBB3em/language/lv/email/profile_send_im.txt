@@ -1,0 +1,12 @@
+
+Sveiki, {TO_USERNAME}!
+
+Jums ir pienākusi vēstule no foruma «{SITENAME}» lietotāja {FROM_USERNAME}. Ja šī vēstule ir spams, tad ziņojiet par to foruma administratoram:
+
+{BOARD_EMAIL}
+
+
+Jums sūtītā vēstule:
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+{MESSAGE}

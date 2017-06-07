@@ -1,0 +1,12 @@
+Subject: Тēma nav apstiprināta — «{TOPIC_TITLE}»
+
+Sveiki, {USERNAME}!
+
+Jūsu tēmu «{TOPIC_TITLE}» foruma «{SITENAME}» administrators nav apstiprinājis.
+
+Iemesls kāpēc ir noraidīta tēma:
+
+{REASON}
+
+
+{EMAIL_SIG}

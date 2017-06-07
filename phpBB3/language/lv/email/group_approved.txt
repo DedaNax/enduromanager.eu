@@ -1,0 +1,10 @@
+Subject: Jūsu pieprasījums tika apstiprināts
+
+Apsveicam!
+
+Jūsu pieteikums iestāties grupā «{GROUP_NAME}» forumā «{SITENAME}» tika apstiprināts.
+Spiediet uz saites, lai apskatītu  sīkāku informāciju par Jūsu dalību grupās: 
+
+{U_GROUP}
+
+{EMAIL_SIG}

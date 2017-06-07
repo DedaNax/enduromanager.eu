@@ -1,0 +1,11 @@
+Subject: Jūs tikāt iekļauts grupā
+
+Apsveicam!
+
+Jūs tikāt pieņemts grupā «{GROUP_NAME}» forumā «{SITENAME}».
+Grupā Jūs ir pieņēmis tās līderis vai arī foruma administrators, griezieties pie viņiem pēc papildus informācijas. 
+
+Spiediet uz šīs saites, lai redzētu informāciju par dalību šajā grupā:
+{U_GROUP}
+
+{EMAIL_SIG}

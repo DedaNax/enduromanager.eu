@@ -1,0 +1,30 @@
+.inp2 {	margin: 0;
+		border: 0;
+		padding: 0;
+		font: bold 100% Comic Sans MS, SansSerif, Verdana;
+		font-size: 3em;
+		width: 2em;  	   
+		text-align: center; 
+		cursor: default;
+		color:red;
+}
+.inp3 {	margin: 0;
+		border: 0;
+		padding: 0;
+		font: bold 100% Comic Sans MS, SansSerif, Verdana;
+		font-size: 3em;
+		width: 2em;  	   
+		text-align: center; 
+		cursor: default;
+		color:green;
+}
+.inp4 {	margin: 0;
+		border: 0;
+		padding: 0;
+		font: bold 100% Comic Sans MS, SansSerif, Verdana;
+		font-size: 3em;
+		width: 2em;  	   
+		text-align: center; 
+		cursor: default;
+		color:orange;
+}

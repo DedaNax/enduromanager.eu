@@ -1,0 +1,17 @@
+Subject: Jaunās paroles aktivācija
+
+Sveiki, {USERNAME}!
+
+Šī vēstule Jums tika nosūtīta tāpēc, ka Jūs ( vai kāds kas uzdodas par Jums) pieprasījāt jaunu paroli lietotāja kontam forumā «{SITENAME}».
+
+Pirms izmantot jauno paroli Jums tā ir jāaktivē. Lai to izdarītu apmeklējiet šo saiti:
+
+{U_ACTIVATE}
+
+Ja aktivācija būs veiksmīga, tad forumam varēsiet pieslēgties izmantojot šo paroli:
+
+Parole: {PASSWORD}
+
+Šo paroli varat nomainīt foruma lietotāja vadības panelī. Ja Jums rodas grūtības , tad  sazinieties ar foruma administratoru.
+
+{EMAIL_SIG}

@@ -1,0 +1,18 @@
+Subject: Atkārtota aktivācija forumā «{SITENAME}»
+
+Foruma administrators ir pieprasījis Jūsu lietotāja konta atkārtotu aktivāciju. Jūsu lietotāja konts pašlaik nav aktivēts.
+
+Lūdzu, saglabājiet šo vēstuli. Jūsu lietotāja konta parametri:
+
+----------------------------
+Lietotāja vārds: {USERNAME}
+----------------------------
+
+Neaizmirstat savu paroli: tā glabājas mūsu datu bāzē šifrētā veidā, un mēs nevarēsim Jums to nosūtīt. Ja tomēr pazaudēsiet savu paroli, tad varēsiet pieprasīt jaunu, kura būs jāaktivē tādā pat veidā kā Jūsu lietotāja konts.
+
+Lūdzu, apmeklējiet šo saiti, lai atkārtoti aktivētu savu lietotāja kontu:
+
+{U_ACTIVATE}
+
+
+{EMAIL_SIG}

@@ -1,0 +1,14 @@
+Subject: Aktivējiet foruma lietotāja kontu
+
+Labdien!
+
+Lietotāja {USERNAME} konts ir no jauna izveidots vai arī ir ticis deaktivizēts. Jums ir jāpārbauda šī lietotāja profils un , ja tas ir nepieciešams, tas ir jāaktivizē.
+
+Saite, lai apskatītu lietotāja profilu:
+{U_USER_DETAILS}
+
+Saite, lai aktivizētu lietotāja kontu:
+{U_ACTIVATE}
+
+
+{EMAIL_SIG}

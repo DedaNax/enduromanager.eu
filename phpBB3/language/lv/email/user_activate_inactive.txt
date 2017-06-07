@@ -1,0 +1,7 @@
+Subject: Jūsu lietotāja konts tika deaktivēts
+
+Sveiki, {USERNAME}!
+
+Jūsu lietotāja konts forumā «{SITENAME}» tika deaktivēts, visdrīzāk tas notika tāpēc, ka Jūsu profilā tika veiktas izmaiņas. Lai varētu izmantot savu lietotāja kontu, tas ir foruma administratoram jāaktivē. Pēc aktivācijas Jums tiks paziņots.
+
+{EMAIL_SIG}

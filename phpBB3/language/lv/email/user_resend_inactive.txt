@@ -1,0 +1,20 @@
+Subject: Laipni lūdzam forumā «{SITENAME}»
+
+{WELCOME_MSG}
+
+Lūdzu, saglabājiet šo vēstuli. Jūsu lietotāja konta parametri:
+
+----------------------------
+Lietotāja vārds: {USERNAME}
+----------------------------
+
+Neaizmirstat savu paroli: tā glabājas mūsu datu bāzē šifrētā veidā, un mēs nevarēsim Jums to nosūtīt. Ja tomēr pazaudēsiet savu paroli, tad varēsiet pieprasīt jaunu, kura būs jāaktivē tādā pat veidā kā Jūsu lietotāja konts.
+
+Uz doto brīdi Jūsu lietotāja konts nav aktivēts. Jūs nevarēsiet izmantot to tik ilgi, kamēr neapmeklēsiet šo saiti:
+
+{U_ACTIVATE}
+
+
+Paldies par reģistrāciju!
+
+{EMAIL_SIG}

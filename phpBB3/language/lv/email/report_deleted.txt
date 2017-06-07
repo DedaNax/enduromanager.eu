@@ -1,0 +1,8 @@
+Subject: Sūdzība ir dzēsta — «{POST_SUBJECT}»
+
+Sveiki, {USERNAME}!
+
+Jūsu iesniegtā sūdzība par ziņojumu «{POST_SUBJECT}» tēmā «{TOPIC_TITLE}» forumā «{SITENAME}» tika izdzēsta.
+
+
+{EMAIL_SIG}

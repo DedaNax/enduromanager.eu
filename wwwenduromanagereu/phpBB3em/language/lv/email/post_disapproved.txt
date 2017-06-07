@@ -1,0 +1,12 @@
+Subject: Ziņojums netika apstiprināts — «{POST_SUBJECT}»
+
+Sveiki, {USERNAME}!
+
+Šo ziņojumu saņēmāt tādēļ, ka Jūsu ziņojums «{POST_SUBJECT}» forumā «{SITENAME}» tika neapstiprināts.
+
+Ziņojumu neapstiprināja šāda iemesla dēļ:
+
+{REASON}
+
+
+{EMAIL_SIG}
