@@ -104,67 +104,7 @@ function printGUI(){
 		
 		
 	}
-	// ENDURO SPRINT
-	// $side[] = Array('href' => ' ?menuitem=esprint&rm_func=enduro&rm_subf=apply&type=4', 'title' => MENU_ENDURO_SPRINT, 'level' => 0);
-	// if($params['menuitem'] == "esprint"){
-		// $i=0;
-		// if ($sport){
-			// if($i!=0){$side[] = Array('level' => 1);}
-			// $i=1;
-			// $side[] = Array('href' => '?rm_func=enduro&rm_subf=apply&type=4', 'title' => MENU_APPL, 'level' => 1,'sel'=> checkSel(enduro,apply));
-		// }
-		// if (
-			// ($sec->testUserGroup($_SESSION['user_id'],"RM_ENDURO_ORG"))
-		// ){
-			// if($i!=0){$side[] = Array('level' => 1);}
-			// $i=1;
-			// $side[] = Array('href' => ' ?rm_func=race&rm_subf=racelist&type=4', 'title' => MENU_E_RACE,'level' => 1,'sel'=> checkSel(race,racelist));
-		// }
-		// if (
-			// ($sec->testUserGroup($_SESSION['user_id'],ENDURO_ADMINS))
-		// ){
-			// if($i!=0){$side[] = Array('level' => 1);}
-			// $i=1;
-			// $side[] = Array('href' => ' ?rm_func=champ&rm_subf=champlist&type=4', 'title' => MENU_CHAMP, 'level' => 1,'sel'=> checkSel(champ,champlist));		
-			// $side[] = Array('href' => ' ?rm_func=champ&rm_subf=classlist&type=4', 'title' => ENDURO_CLASS, 'level' => 1,'sel'=> checkSel(champ,classlist));
-		// }
-		
-		// if($i!=0){$side[] = Array('level' => 1);}
-		// $side[] = Array('href' => ' ?rm_func=print&rm_subf=enduroapllist&type=4', 'title' => MENU_ENDURO_APLS,'level' => 1,'sel'=> checkSel('print',enduroapllist));
-		// $side[] = Array('href' => ' ?rm_func=print&rm_subf=enduroapllist&no_gui=1&type=4', 'title' => MENU_ENDURO_APLS_PRINT,'level' => 1,'target' => '_blank');
-		// $side[] = Array('href' => ' ?rm_func=reslt&rm_subf=enduromenu&type=4', 'title' => MENU_ENDURO_RESULT,'level' => 1,'sel'=> checkSel(reslt,enduromenu));
-	// }
 	
-	//ENDURO CROSS
-	// $side[] = Array('href' => '?menuitem=cross&rm_func=enduro&rm_subf=apply&type=5', 'title' => MENU_CROSS, 'level' => 0);
-	// if($params['menuitem'] == "cross"){
-		// $i=0;
-		// if ($sport){
-			// if($i!=0){$side[] = Array('level' => 1);}
-			// $i=1;
-			// $side[] = Array('href' => '?rm_func=enduro&rm_subf=apply&type=5', 'title' => MENU_APPL, 'level' => 1,'sel'=> checkSel(enduro,apply));
-		// }
-		// if (
-			// ($sec->testUserGroup($_SESSION['user_id'],"RM_ENDURO_ORG"))
-		// ){
-			// if($i!=0){$side[] = Array('level' => 1);}
-			// $i=1;
-			// $side[] = Array('href' => '?rm_func=race&rm_subf=racelist&type=5', 'title' => MENU_E_RACE,'level' => 1,'sel'=> checkSel(race,racelist));
-		// }
-		// if (
-			// ($sec->testUserGroup($_SESSION['user_id'],ENDURO_ADMINS))
-		// ){
-			// if($i!=0){$side[] = Array('level' => 1);}
-			// $i=1;
-			// $side[] = Array('href' => '?rm_func=champ&rm_subf=champlist&type=5', 'title' => MENU_CHAMP, 'level' => 1,'sel'=> checkSel(champ,champlist));		
-			// $side[] = Array('href' => '?rm_func=champ&rm_subf=classlist&type=5', 'title' => ENDURO_CLASS, 'level' => 1,'sel'=> checkSel(champ,classlist));
-		// }
-		// if($i!=0){$side[] = Array('level' => 1);}
-		// $side[] = Array('href' => '?rm_func=print&rm_subf=enduroapllist&type=5', 'title' => MENU_ENDURO_APLS,'level' => 1,'sel'=> checkSel('print',enduroapllist));
-		// $side[] = Array('href' => '?rm_func=print&rm_subf=enduroapllist&no_gui=1&type=5', 'title' => MENU_ENDURO_APLS_PRINT,'level' => 1,'target' => '_blank');
-		// $side[] = Array('href' => '?rm_func=reslt&rm_subf=enduromenu&type=5', 'title' => MENU_ENDURO_RESULT,'level' => 1,'sel'=> checkSel(reslt,enduromenu));
-	// }
-	//PE
 	$side[] = Array('href' => ' ?menuitem=pe&rm_func=racer&rm_subf=raceAppl', 'title' => MENU_PE, 'level' => 0);
 	if($params['menuitem'] == "pe"){
 		$i=0;
@@ -195,35 +135,6 @@ function printGUI(){
 		$side[] = Array('href' => '?rm_func=print&rm_subf=trdata&no_gui=1', 'title' => MENU_ENDURO_APLS_PRINT,'level' => 1,'target' => '_blank');
 		$side[] = Array('href' => '?rm_func=reslt&rm_subf=menu', 'title' => MENU_ENDURO_RESULT,'level' => 1,'sel'=> checkSel(reslt,menu));
 	}
-//4H 
-	// $side[] = Array('href' => '?menuitem=4h&rm_func=enduro&rm_subf=apply&type=6', 'title' => MENU_4H, 'level' => 0);
-	// if($params['menuitem'] == "4h"){
-		// $i=0;
-		// if ($sport){
-			// if($i!=0){$side[] = Array('level' => 1);}
-			// $i=1;
-			// $side[] = Array('href' => '?rm_func=enduro&rm_subf=apply&type=6', 'title' => MENU_APPL, 'level' => 1,'sel'=> checkSel(enduro,apply));
-		// }
-		// if (
-			// ($sec->testUserGroup($_SESSION['user_id'],"RM_ENDURO_ORG"))
-		// ){
-			// if($i!=0){$side[] = Array('level' => 1);}
-			// $i=1;
-			// $side[] = Array('href' => '?rm_func=race&rm_subf=racelist&type=6', 'title' => MENU_E_RACE,'level' => 1,'sel'=> checkSel(race,racelist));
-		// }
-		// if (
-			// ($sec->testUserGroup($_SESSION['user_id'],ENDURO_ADMINS))
-		// ){
-			// if($i!=0){$side[] = Array('level' => 1);}
-			// $i=1;
-			// $side[] = Array('href' => '?rm_func=champ&rm_subf=champlist&type=6', 'title' => MENU_CHAMP, 'level' => 1,'sel'=> checkSel(champ,champlist));		
-			// $side[] = Array('href' => '?rm_func=champ&rm_subf=classlist&type=6', 'title' => ENDURO_CLASS, 'level' => 1,'sel'=> checkSel(champ,classlist));
-		// }
-		// if($i!=0){$side[] = Array('level' => 1);}
-		// $side[] = Array('href' => '?rm_func=print&rm_subf=enduroapllist&type=6', 'title' => MENU_ENDURO_APLS,'level' => 1,'sel'=> checkSel('print',enduroapllist));
-		// $side[] = Array('href' => '?rm_func=print&rm_subf=enduroapllist&no_gui=1&type=6', 'title' => MENU_ENDURO_APLS_PRINT,'level' => 1,'target' => '_blank');
-		// $side[] = Array('href' => '?rm_func=reslt&rm_subf=enduromenu&type=6', 'title' => MENU_ENDURO_RESULT,'level' => 1,'sel'=> checkSel(reslt,enduromenu));
-	// }
 	
 	//RACER DATA
 	if (
@@ -237,9 +148,6 @@ function printGUI(){
 			$side[] = Array('href' => '?rm_func=racer&rm_subf=clublist', 'title' => MENU_CLUB_LIST, 'level' => 1,'sel'=> checkSel(racer,clublist));	
 		}		
 	}
-	
-	
-	
 		
 	$header = TITLE;
 	
