@@ -186,4 +186,7 @@
  define("ORG_RACE_DAY_RESULT_PUBLISH_SUCCESS","Resultāti ir veiksmīgi nopublicēti");// 
  
  define("RESULT_IZST","Izstājies");// 
+ 
+ define("ENDURO_APPLY_AUTH_WARN","Pieteikties sacensībām var tikai autorizēts sportists!");// 
+ define("ENDURO_APPLY_AUTH_TEXT","Lai autorizētos sistēmā, Jums jāievada lietotājvārds (e-pasts) un parole lapas augšējā sadaļā. Ja Jums nav sportista profils sistēmā, lūdzu reģistrēties <a href=\"http://www.enduromanager.eu/?rm_func=appl&rm_subf=pe&reg=1&addmode=appl\">šeit!</a><br> Problēmu, jautājumu un neskaidrību gadījumā, lūdzu sazināties ar Dinu Blūmu dbluma@inbox.lv");// 
 ?>

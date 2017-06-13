@@ -36,8 +36,6 @@ function printHowTo(){
 }
 
 function registerNewUser($subf){
-	//print_r($_POST);
-	
 	$bb3auth = new BB3Auth();
 	$sec = new Security;
 	
@@ -57,42 +55,41 @@ function registerNewUser($subf){
 					echo "Nezināms sacensību veids!";
 			}
 		} 
-	} elseif($_SESSION['params']['reg']==1){
-		
+	} elseif($_SESSION['params']['reg']==1){		
 		printNewTRacer("","");
 		
-	} elseif($_SESSION['params']['login']==1 || $_SESSION['params']['regdone']==1){		
-		global $phpbb_root_path;
-		$phpbb_root_path = "../phpBB3/";
-		require_once("../phpBB3/includes/auth.php");
+	} elseif($_SESSION['params']['login']==1 || $_SESSION['params']['regdone']==1){
+		// global $phpbb_root_path;
+		// $phpbb_root_path = "../phpBB3/";
+		// require_once("../phpBB3/includes/auth.php");
 	
-		$auth = new auth;
+		// $auth = new auth;	
 		
-		if ($_SESSION['params']['regdone']==1){
-			$loginResult = $auth->login($_SESSION['params']['email'], $_SESSION['params']['p1'], 0, 1, 0);
-		} else {
-			$loginResult = $auth->login($_SESSION['params']['username'], $_SESSION['params']['password'], 0, 1, 0);
-		}		
+		// if ($_SESSION['params']['regdone']==1){
+			// $loginResult = $auth->login($_SESSION['params']['email'], $_SESSION['params']['p1'], 0, 1, 0);
+		// } else {
+			// $loginResult = $auth->login($_SESSION['params']['username'], $_SESSION['params']['password'], 0, 1, 0);
+		// }		
 		
-		if (!$loginResult[error_msg]){
-			switch ($subf){
-				case "pe":
-					@header('location: ?rm_func=racer&rm_subf=raceAppl');
-					break;
-				case "enduro":
-					@header('location: ?rm_func=enduro&rm_subf=apply');
-					break;
-				case "ek":
-					@header('location: ?rm_func=enduro&rm_subf=apply');
-					break;
-				default:
-					echo prntWarn("Nezināma funkcija!");
-			}
-		} else {
-			echo "<center style=\"color:red;font-size:20px\">Autorizācijas neizdevās!</center><br>";
-			$_SESSION['params']['login']=0;
-			registerNewUser($subf);			
-		}
+		// if (!$loginResult[error_msg]){
+			// switch ($subf){
+				// case "pe":
+					@header('location: ?menuitem=enduro&rm_func=enduro&rm_subf=apply');
+					// break;
+				// case "enduro":
+					// @header('location: ?rm_func=enduro&rm_subf=apply');
+					// break;
+				// case "ek":
+					// @header('location: ?rm_func=enduro&rm_subf=apply');
+					// break;
+				// default:
+					// echo prntWarn("Nezināma funkcija!");
+			// }
+		// } else {
+			// echo "<center style=\"color:red;font-size:20px\">Autorizācijas neizdevās!</center><br>";
+			// $_SESSION['params']['login']=0;
+			// registerNewUser($subf);			
+		// }
 		
 	} else {
 		?>

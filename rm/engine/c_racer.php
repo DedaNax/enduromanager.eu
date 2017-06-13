@@ -1984,26 +1984,25 @@ function editRacer($subf,$opt){
 				if (!$_SESSION['params']['red_f']){
 					echo "<p class=\"regusertitle\">",REG_USER_TITLE,"</p>";
 					echo REG_USER_TXT;
-				}				
+				}			
+
+					
 				switch($_SESSION['params']['red_f']){
-					case "enduro":
+					case "enduro":					
 						$_SESSION['params']['racer'] = $id;						
 						proceedEnduro($_SESSION['params']['red_s'],$opt);
 						break;
-					case "appl":
+					case "appl":					
 						registerNewUser($_SESSION['params']['red_s']);
 						break;
-					case "racer":
+					case "racer":					
 						editRacer($_SESSION['params']['red_s'],$opt);
 						break;
-					case "":
+					case "":					
 						break;
-					default:
+					default:					
 						printAddTRacer($opt);
 				}
-				
-				
-				
 			} else {
 				printNewTRacer($opt,1);
 			}
@@ -2109,11 +2108,7 @@ function saveNewUser(){
 		'pf_rm_allow_emails'	=> 1
 	);
 	
-	echo $_SESSION['params']['cont'];
-	
 	$user_id = user_add($user_row, $cp_data);
-	
-	
 	
 	$rcm->userAddGroup($user_id,RACER_GROUP_ID);
 	

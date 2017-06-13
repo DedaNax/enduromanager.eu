@@ -67,16 +67,16 @@
  define("LIC_NR_COMMENT", "Komentārs");
  
  
- define("EDIT", "Labot");
+ define("EDIT", "Edit");
  
- define("WRONG_MAIL_FORMAT", "E-pasta formāts ir nepareizs!");
- define("EMAIL_EXISTS", "Tāda e-pasta adrese jau ir reģistrēta!");
+ define("WRONG_MAIL_FORMAT", "Wrong e-mail name format!");
+ define("EMAIL_EXISTS", "E-mail is already in use!");
  
- define("LOGIN_IMP_NAME", "Lietotājs (e-pasts)");
- define("LOGIN_IMP_PASS", "Parole");
+ define("LOGIN_IMP_NAME", "User (e-mail)");
+ define("LOGIN_IMP_PASS", "Password");
  
- define("REG_USER_TITLE", "Lietotāja reģistrācija");
- define("REG_USER_TXT", "Apsveicam! Jūs esat reģistrēts sistēmā www.enduromanager.eu! Izmantojiet lietotāja vārdu un paroli autorizācijai sistēmā.");
+ define("REG_USER_TITLE", "User registration");
+ define("REG_USER_TXT", "User registration is successfull! Use your e-mail and password to log in to the system.");
  
  define("EM_RACE_LIST_EMPTY", "Pieteikšanās sacensībām nav atvērtas!");
  
@@ -186,8 +186,16 @@
  define("NEW_RACER_FNAME","First name");//Vārds
  define("NEW_RACER_PASS2","Repeat password");//Parole 2. reizi
  define("NEW_RACER_PASS","Password");//Parole
- define("NEW_RACER_TITLE","Participand data");//Sportista pamatdati
+ define("NEW_RACER_TITLE","Participant data");//Sportista pamatdati
  
+ define("ORG_SAVE_RESULT","Saglabāt rezultātus");//
+ define("ORG_RACE_DAY_RESULT_PUBLISH","Publicēt dienas rezultātus");//
+ define("ORG_RACE_DAY_RESULT_PUBLISH_SUCCESS","Resultāti ir veiksmīgi nopublicēti");// 
+ 
+ define("RESULT_IZST","Izstājies");// 
+ 
+ define("ENDURO_APPLY_AUTH_WARN","To apply for the competition can only authorized athlete!");// 
+ define("ENDURO_APPLY_AUTH_TEXT","To log in to the system, you need to enter a username (email) and password in the top section. If you do not have athlete's profile in the system, please register <a href=\"http://www.enduromanager.eu/?rm_func=appl&rm_subf=pe&reg=1&addmode=appl\"> here</a>!<br> Problems, questions and uncertainties, please contact competitions secretary Dina Blūma by e-mail dbluma@inbox.lv");// 
  
  
  

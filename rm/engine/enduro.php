@@ -1782,8 +1782,8 @@ function moveClass(){
 function printEnduroApply($opt){
 	$sec = new Security;
 	if(!$sec->testUserGroup($_SESSION['user_id'],"Sportisti")){
-		echo prntWarn("Pieteikties sacensībām var tikai autorizēts sportists! ");
-		echo "Lai autorizētos sistēmā, Jums jāievada lietotājvārds (e-pasts) un parole lapas augšējā sadaļā. Ja Jums nav sportista profils sistēmā, lūdzu reģistrēties <a href=\"http://www.enduromanager.eu/?rm_func=appl&rm_subf=pe&reg=1&addmode=appl\">šeit!</a><br> Problēmu, jautājumu un neskaidrību gadījumā, lūdzu sazināties ar Dinu Blūmu dbluma@inbox.lv";
+		echo prntWarn(ENDURO_APPLY_AUTH_WARN);
+		echo ENDURO_APPLY_AUTH_TEXT;
 		return;
 	}
 	
