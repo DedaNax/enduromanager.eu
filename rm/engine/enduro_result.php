@@ -494,259 +494,6 @@
 		}
 		echo "</table>";
 	}
-
-	function clubTeams(){
-		$rm =new raceManager;
-		$cm = new champManager;
-		$em = new EnduroManager;
-		
-		$race = $rm->getRace($_SESSION['params']['r'],"","","","","","","");
-		
-		echo "<a href=\"?rm_func=reslt&rm_subf=enduromenu\"><b>Rezultāti</b></a>";
-		echo " -> <b>",$race[0]->getName(),"</b>";
-		echo "<h1 align=\"center\" style=\"font-size:20px\">Klubu komandas</h1><hr>";
-		
-		$sql="
-			SELECT 
-				distinct 
-					fl.`id`  as id,
-					et.`name` as name,
-					et.	`ET_ID`	
-			FROM `c_club` fl
-				inner join `phpbb_profile_fields_data` fd on (fl.`id` = fd.`pf_rm_club`)
-				inner join `enduro_application` ea on (ea.`racer_id` = fd.`user_id` and ea.`race_id` = ".$race[0]->ID." and ea.`team_c` > 0)
-				inner join `enduro_team` et on (et.`ET_ID` = ea.`team_c` )
-			order by id";
-		$r = queryDB($sql);
-		while($row = mysql_fetch_array($r, MYSQL_ASSOC)){
-			$results = array();
-			$sum = array();
-			$days= $em->getERD($race[0]->ID);
-			
-			for($i=0;$i<count($days);$i++){
-				$sql = "
-					SELECT 
-						
-						case 
-							when ea.`class_id` in ( 11,27,13,64,46,51,66,67,68,70) then edr.`POINTS` * 0.5
-							when ea.`class_id` in (12,28) then edr.`POINTS` * 0.25
-							else edr.`POINTS` * 1
-						end as PTS,
-						
-						ea.`ERA_ID`,
-						ea.`CLASS_ID` 
-						
-					FROM  `enduro_day_racer` edr
-						INNER JOIN  `enduro_application` ea ON ( edr.`ea_id` = ea.`era_id` and ea.`team_c` > 0) 
-							
-						INNER JOIN  `phpbb_profile_fields_data` pd ON ( pd.`user_id` = ea.`racer_id` AND pd.`pf_rm_club` = ".$row["id"]." ) 
-					WHERE edr.`erd_id` = ".$days[$i]->ERD_ID." and ea.`team_c` = ".$row["ET_ID"]."
-					ORDER BY PTS DESC 
-					LIMIT 4";
-				$r1 = queryDB($sql);
-				while($row1 = mysql_fetch_array($r1, MYSQL_ASSOC)){
-					$results[$days[$i]->ERD_ID][$row1["ERA_ID"]] = $row1["PTS"];
-					
-					$sum["all"] += $row1["PTS"];
-					$sum[$days[$i]->ERD_ID] += $row1["PTS"];					
-				}
-			}	
-			echo "<table border=\"1\" style=\"border-collapse:collapse\" >";
-				echo "<tr>";
-					echo "<td colspan=\"5\" align=\"center\" style=\"font-weight:bold;font-size:15px;border-color:#F0F0F0\">",$row['name'];
-				echo "<tr>";
-					echo "<td width=\"150px\">Sportists";
-					echo "<td width=\"30px\" align=\"center\">NR";
-					echo "<td width=\"50px\" align=\"center\">Klase";					
-					echo "<td width=\"50px\" align=\"center\">1. diena";
-					echo "<td width=\"50px\" align=\"center\">2. diena";
-					$sql = "
-						SELECT *,cl.`name`  as cl_name, ea.`class_id` as clid
-						FROM `enduro_application` ea
-							inner join `phpbb_profile_fields_data` prof on (prof.`user_id` = ea.`racer_id`)
-							inner join `d_class` cl on (cl.`classid` = ea.`CLASS_ID`)
-						WHERE  ea.`race_id` = ".$race[0]->ID." and ea.`team_c` = ".$row["ET_ID"]." and prof.`pf_rm_club` = ".$row['id']."
-						order by prof.`pf_rm_sport_nr` asc";						
-					$r1 = queryDB($sql);
-					while($row1 = mysql_fetch_array($r1, MYSQL_ASSOC)){
-						$sql = "
-							SELECT * 
-							FROM  `enduro_day_racer` 
-							WHERE `ea_id` = ".$row1["ERA_ID"]."
-							order by `erd_id` asc";
-						$r2 = queryDB($sql);
-						echo "<tr>";
-							echo "<td>",$row1["pf_rm_f_name"]," ",$row1["pf_rm_l_name"];
-							echo "<td align=\"center\"><b>",$row1["pf_rm_sport_nr"],"</b>";
-							echo "<td align=\"center\">",$row1["cl_name"];
-							echo "<td align=\"center\"";
-								if($row2 = mysql_fetch_array($r2, MYSQL_ASSOC)){
-									if($results[$row2["ERD_ID"]][$row1["ERA_ID"]]){
-										echo " style=\"background-color:#FFFF99\"";
-									}
-									echo ">"; 
-										switch ($row1["clid"]) {
-											case 11:
-											case 27:
-											case 13:
-											case 64:											
-											case 46:
-											case 51:
-											case 66:
-											case 67:
-											case 68:
-											case 70:
-												echo $row2['POINTS'] * 0.5;
-												break;
-											case 12:
-											case 28:
-												echo $row2['POINTS'] * 0.25;
-												break;
-											default:
-												echo $row2['POINTS'] * 1;
-										} 
-								} else {
-									echo ">","&nbsp";
-								}							
-							echo "<td align=\"center\"";
-								if($row2 = mysql_fetch_array($r2, MYSQL_ASSOC)){
-									if($results[$row2["ERD_ID"]][$row1["ERA_ID"]]){
-										echo " style=\"background-color:#FFFF99\"";
-									}
-									echo ">";
-										switch ($row1["clid"]) {
-											case 11:
-											case 27:
-											case 13:
-											case 64:											
-											case 46:
-											case 51:
-											case 66:
-											case 67:
-											case 68:
-											case 70:
-												echo $row2['POINTS'] * 0.5;
-												break;
-											case 12:
-											case 28:
-												echo $row2['POINTS'] * 0.25;
-												break;
-											default:
-												echo $row2['POINTS'] * 1;
-										}
-								} else {
-									echo ">","&nbsp";
-								}
-					}
-					echo "<tr>";
-						echo "<td colspan=\"3\" align=\"right\"> Kopā dienā";
-						echo "<td align=\"center\">",$days[0] ? $sum[$days[0]->ERD_ID] : "&nbsp";
-						echo "<td align=\"center\">",$days[1] ? $sum[$days[1]->ERD_ID] : "&nbsp";
-					echo "<tr >";
-						echo "<td colspan=\"3\" align=\"right\">Kopā";
-						echo "<td colspan=\"2\" align=\"center\">",$sum["all"];					
-			echo "</table><br>";
-		}
-	}
-	
-	/* function constrTeams(){	
-		$rm =new raceManager;
-		$cm = new champManager;
-		$em = new EnduroManager;
-		
-		$race = $rm->getRace($_SESSION['params']['r'],"","","","","","","");
-		
-		echo "<a href=\"?rm_func=reslt&rm_subf=enduromenu\"><b>Rezultāti</b></a>";
-		echo " -> <b>",$race[0]->getName(),"</b>";
-		echo "<h1 align=\"center\" style=\"font-size:20px\">Ražotāju komandas</h1><hr>";
-		
-		$sql="
-			SELECT distinct fl.`option_id` +1 as id,fl.`lang_value` as name
-			FROM `phpbb_profile_fields_lang` fl
-				inner join `phpbb_profile_fields_data` fd on (fl.`option_id`+1 = fd.`pf_rm_moto_name`)
-				inner join `enduro_application` ea on (ea.`racer_id` = fd.`user_id` and ea.`race_id` = ".$race[0]->ID." and ea.`prod_c` > 0)
-			WHERE `field_id` = ".KL_MOTO."
-			order by id";
-		$r = queryDB($sql);
-		while($row = mysql_fetch_array($r, MYSQL_ASSOC)){
-			$results = array();
-			$sum = array();
-			$days= $em->getERD($race[0]->ID);
-			
-			for($i=0;$i<count($days);$i++){
-				$sql = "
-					SELECT IF( ea.`class_id` = ".ENDURO_HOB_ID.", edr.`POINTS` / 2,edr.`POINTS`) as PTS ,ea.`ERA_ID`,ea.`CLASS_ID` 
-					FROM  `enduro_day_racer` edr
-						INNER JOIN  `enduro_application` ea ON ( edr.`ea_id` = ea.`era_id` and ea.`prod_c` > 0) 
-						INNER JOIN  `phpbb_profile_fields_data` pd ON ( pd.`user_id` = ea.`racer_id` AND pd.`pf_rm_moto_name` = ".$row["id"]." ) 
-					WHERE edr.`erd_id` = ".$days[$i]->ERD_ID."
-					ORDER BY PTS DESC 
-					LIMIT 3";
-				$r1 = queryDB($sql);
-				while($row1 = mysql_fetch_array($r1, MYSQL_ASSOC)){
-					$results[$days[$i]->ERD_ID][$row1["ERA_ID"]] = $row1["PTS"];
-					
-					$sum["all"] += $row1["PTS"];
-					$sum[$days[$i]->ERD_ID] += $row1["PTS"];					
-				}
-			}	
-			echo "<table border=\"1\" style=\"border-collapse:collapse\" >";
-				echo "<tr>";
-					echo "<td colspan=\"5\" align=\"center\" style=\"font-weight:bold;font-size:15px;border-color:#F0F0F0\">",$row['name'];
-				echo "<tr>";
-					echo "<td width=\"150px\">Sportists";
-					echo "<td width=\"30px\" align=\"center\">NR";
-					echo "<td width=\"50px\" align=\"center\">Klase";					
-					echo "<td width=\"50px\" align=\"center\">1. diena";
-					echo "<td width=\"50px\" align=\"center\">2. diena";
-					$sql = "
-						SELECT *,cl.`name`  as cl_name, ea.`class_id` as clid
-						FROM `enduro_application` ea
-							inner join `phpbb_profile_fields_data` prof on (prof.`user_id` = ea.`racer_id`)
-							inner join `d_class` cl on (cl.`classid` = ea.`CLASS_ID`)
-						WHERE  ea.`race_id` = ".$race[0]->ID." and ea.`prod_c` > 0 and prof.`pf_rm_moto_name` = ".$row['id']."
-						order by prof.`pf_rm_sport_nr` asc";						
-					$r1 = queryDB($sql);
-					while($row1 = mysql_fetch_array($r1, MYSQL_ASSOC)){
-						$sql = "
-							SELECT * 
-							FROM  `enduro_day_racer` 
-							WHERE `ea_id` = ".$row1["ERA_ID"]."
-							order by `erd_id` asc";
-						$r2 = queryDB($sql);
-						echo "<tr>";
-							echo "<td>",$row1["pf_rm_f_name"]," ",$row1["pf_rm_l_name"];
-							echo "<td align=\"center\"><b>",$row1["pf_rm_sport_nr"],"</b>";
-							echo "<td align=\"center\">",$row1["cl_name"];
-							echo "<td align=\"center\"";
-								if($row2 = mysql_fetch_array($r2, MYSQL_ASSOC)){
-									if($results[$row2["ERD_ID"]][$row1["ERA_ID"]]){
-										echo " style=\"background-color:#FFFF99\"";
-									}
-									echo ">", $row1["clid"] == ENDURO_HOB_ID ? $row2['POINTS'] / 2 : $row2['POINTS'];
-								} else {
-									echo ">","&nbsp";
-								}							
-							echo "<td align=\"center\"";
-								if($row2 = mysql_fetch_array($r2, MYSQL_ASSOC)){
-									if($results[$row2["ERD_ID"]][$row1["ERA_ID"]]){
-										echo " style=\"background-color:#FFFF99\"";
-									}
-									echo ">", $row1["clid"] == ENDURO_HOB_ID ? $row2['POINTS'] / 2 : $row2['POINTS'];
-								} else {
-									echo ">","&nbsp";
-								}
-					}
-					echo "<tr>";
-						echo "<td colspan=\"3\" align=\"right\"> Kopā dienā";
-						echo "<td align=\"center\">",$days[0] ? $sum[$days[0]->ERD_ID] : "&nbsp";
-						echo "<td align=\"center\">",$days[1] ? $sum[$days[1]->ERD_ID] : "&nbsp";
-					echo "<tr >";
-						echo "<td colspan=\"3\" align=\"right\">Kopā";
-						echo "<td colspan=\"2\" align=\"center\">",$sum["all"];					
-			echo "</table><br>";
-		}
-	} */
 	
 	function enduroAbs(){
 		$rm =new raceManager;
@@ -755,16 +502,9 @@
 		
 		$r = $rm->getRace($_SESSION['params']['r'],"","","","","","","");
 		
-		
 		echo "<a href=\"?rm_func=reslt&rm_subf=enduromenu\"><b>Rezultāti</b></a>";
 		echo " -> <b>",$r[0]->getName(),"</b>";
 		echo "<h1 align=\"center\" style=\"font-size:20px\">Absolūtais vērtējums</h1><hr>";
-		
-		
-		
-		
-		
-		
 		
 		$sql = "
 			SELECT 
@@ -1077,7 +817,116 @@
 	
 		echo "</table>";
 	}
+
+	function clubTeams(){
+		$topRacers = 4;
+		$rm =new raceManager;		
+		$race = $rm->getRace($_SESSION['params']['r'],"","","","","","","");
+		
+		echo "<a href=\"?rm_func=reslt&rm_subf=enduromenu\"><b>Rezultāti</b></a>";
+		echo " -> <b>",$race[0]->getName(),"</b>";
+		echo "<h1 align=\"center\" style=\"font-size:20px\">Klubu komandas</h1><hr>";
 	
-	
-	
-	?>
+		$sql="
+			SELECT 
+				CASE 
+					WHEN ea.`class_id` IN ( 11, 27, 13, 64, 46, 51, 66, 67, 68, 70 ) THEN edr.`POINTS` * 0.5
+					WHEN ea.`class_id` IN ( 12, 28 ) THEN edr.`POINTS` * 0.25
+					ELSE edr.`POINTS` * 1 
+				END AS PTS, 
+				ea.`ERA_ID` , 
+				ea.`CLASS_ID` , 
+				ea.`racer_id`,
+				ea.`team_c`,
+				pd.`pf_rm_f_name` , 
+				pd.`pf_rm_l_name`, 
+				pd.`pf_rm_sport_nr`, 
+				cl.`name` AS cl_name,
+				et.`name` AS team_name, 
+				et.`ET_ID`,
+				eday.`START_DATE`,
+				eday.`ERD_ID`
+			FROM  `enduro_day_racer` edr
+				INNER JOIN  `enduro_application` ea ON ( edr.`ea_id` = ea.`era_id` AND ea.`team_c` > 0 ) 
+					INNER JOIN  `enduro_team` et ON (et.`ET_ID` = ea.`team_c`)	
+					INNER JOIN  `phpbb_profile_fields_data` pd ON ( pd.`user_id` = ea.`racer_id`) 
+					INNER JOIN  `d_class` cl ON ( cl.`classid` = ea.`CLASS_ID` ) 
+				INNER JOIN `enduro_race_day` eday ON (eday.`ERD_ID` = edr.`ERD_ID`)
+			WHERE ea.`race_id` = ".$race[0]->ID."
+			ORDER BY
+				ea.`team_c`,
+				eday.`START_DATE` ASC,
+				PTS DESC";
+		$r = queryDB($sql);
+		
+		$days = array();
+		$racers = array();
+		$results = array();		
+		$pRow = null;
+		$rcrCntr = 0;
+		while($row = mysql_fetch_array($r, MYSQL_ASSOC)){
+			if( $row[ERD_ID] != $pRow[ERD_ID] || $row[team_c] != $pRow[team_c] ){
+				$rcrCntr = 0;
+			}
+			
+			$days[$row[ERD_ID]] = $row[START_DATE];
+			
+			$results[$row[team_c]][name] = $row[team_name];
+			$results[$row[team_c]][$row[ERD_ID]];
+			
+			$racers[$row[racer_id]][name] = $row[pf_rm_f_name] . " " . $row[pf_rm_l_name];
+			$racers[$row[racer_id]][nr] = $row[pf_rm_sport_nr];
+			$racers[$row[racer_id]][cl_name] = $row[cl_name];
+			
+			$results[$row[team_c]][racers][$row[racer_id]][$row[ERD_ID]][pts] = $row[PTS];
+			$incl = 1;
+			if($rcrCntr >= $topRacers || $row[PTS] == 0){
+				$incl = 0;				
+			}
+			$results[$row[team_c]][racers][$row[racer_id]][$row[ERD_ID]][incl] = $incl;
+			
+			$results[$row[team_c]][race_total] += $row[PTS] * $incl;
+			$results[$row[team_c]][$row[ERD_ID]][day_total] += $row[PTS] * $incl;	
+			
+			$pRow = $row;
+			$rcrCntr++;
+		}
+		
+		$results = array_sort($results, 'race_total', SORT_DESC);
+		
+		foreach($results as $tkey => $tvalue)
+		{
+			echo '<p><table style ="width: ',260+count($days)*50,'px;" border="1">';
+				echo '<tr><td colspan="',3+count($days),'" style="    text-align: center;font-size: 16px;font-weight: bold;">',$tvalue[name];
+				echo '<tr style="font-weight: bold;"><td style="width:150px">Sportists<td style="width:30px">NR<td style="width:80px">Klase';
+				foreach($days as $dkey => $dvalue){
+					echo '<td style="width:50px">',DateString($dvalue);
+				}
+				
+				foreach($tvalue[racers] as $rkey => $rvalue){
+					echo '<tr><td>',$racers[$rkey][name],'<td>',$racers[$rkey][nr],'<td>',$racers[$rkey][cl_name];
+					foreach($days as $dkey => $dvalue){
+						echo '<td ';
+						if ($rvalue[$dkey][incl]){
+							echo 'style="background-color:#FFFF99;text-align:center;"';
+						} else {
+							echo 'style="text-align:center;"';
+						}
+						echo '>',$rvalue[$dkey][pts]+0;
+					}
+				};
+				
+				if (count($days) > 1){
+					echo '<tr><td colspan = "3" style="text-align:right">Kopā dienā';
+					foreach($days as $dkey => $dvalue){
+						echo '<td style="text-align:center;font-weight: bold;">',$tvalue[$dkey][day_total];
+					};
+				}
+				
+				echo '<tr><td colspan = "3" style="text-align:right">Kopā<td colspan = "',count($days),'" style="text-align:center;font-weight: bold;">',$tvalue[race_total];
+				
+			echo "</table></p>";
+		}		
+		echo "<hr>";
+	}	
+?>

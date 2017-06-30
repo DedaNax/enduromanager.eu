@@ -528,4 +528,4 @@
 	$_SESSION[resutltToStore][$day] = $resutltToStore;
 	
 }
-	?>
+?>

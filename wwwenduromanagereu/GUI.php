@@ -1334,6 +1334,4 @@ function checkPerm($f,$s){
 	
 	return false;
 }
-
-
 ?>

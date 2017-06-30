@@ -48,5 +48,4 @@ switch ($rm_mode){
 
 echo mysql_error($connection);
 mysql_close ($connection);
-
 ?>
