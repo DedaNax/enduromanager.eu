@@ -140,52 +140,17 @@
 				$contents = str_replace("{club}",$racer[0]->getClub_name(),$contents);
 				$contents = str_replace("{phone}",$racer[0]->getTel(),$contents);
 				
-				$teh = explode("^",$apl[0]->TEHN);
-				//echo $apl->TEHN;
-				//$contents = str_replace("{moto}",$m[$racer[0]->getTehnN()-1],$contents);
-				//$contents = str_replace("{cc}",$racer[0]->getMotocc(),$contents);
-			//print_r($teh);
-			
+				$teh = explode("^",$apl[0]->TEHN);			
 				$contents = str_replace("{moto}",$teh[0],$contents);
 				$contents = str_replace("{model}",$teh[1],$contents);
 				$contents = str_replace("{cc}",$teh[2],$contents);				
-				$contents = str_replace("{tak}",$teh[3],$contents);
-
-				
+				$contents = str_replace("{tak}",$teh[3],$contents);				
 			}
 			$cl = $cm->getClass($apl[0]->CLASS_ID,"");
-			//echo $cl[0]->getCode();
-			if($cl){
-				// $clases = array(
-					// 0=>'allE1',
-					// 1=>'allE2',
-					// 2=>'allE3',
-					// 3=>'allSEN',
-					// 4=>'allHOB',
-					// 5=>'allC',
-					// 6=>'allVET',
-					// 7=>'qua',
-					// 8=>'ral',
-					// 9=>'qatv',
-					// 10=>'kv',
-					// 11=>'E',
-					// 12=>'jun',
-					// 13=>'end',
-					// 14=>'wom',
-					// 15=>'qo',
-					// 16=>'a',
-					// 17=>'ccATV1',
-					// 18=>'ccATV2',
-					// 19=>'ccATV2',
-					// 20=>'ccATV2'
-				// );
-				
-				$clases = $cm->getClass("",3);
-				
-				//print_r($clases);
-				
-				for($i=0;$i<count($clases);$i++){
-					//echo "{".$clases[$i]->getCode()."}","<br>";
+			
+			if($cl){		
+				$clases = $cm->getClass("",3);	
+				for($i=0;$i<count($clases);$i++){					
 					$contents = str_replace("{".$clases[$i]->getCode()."}",($cl[0]->getCode() ==  $clases[$i]->getCode() ? "X" : ""),$contents);
 				}
 			}
