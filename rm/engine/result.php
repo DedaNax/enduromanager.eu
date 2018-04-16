@@ -783,13 +783,8 @@ function printchamp($mode){
 	echo "<b>";		
 		$cmp = $chm->getChamps($_SESSION['params']['cha'],"","","");
 		echo $cmp[0]->getName();		
-	echo "</b>";
-	
+	echo "</b>";	
 	echo "<hr>";
-	
-	
-	
-	
 	
 	$champ = $_SESSION['params']['cha'];
 	
@@ -864,7 +859,6 @@ function printchamp($mode){
 		echo "</table>";
 		
 		
-	}
-	
+	}	
 }
 ?>
