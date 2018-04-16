@@ -734,7 +734,7 @@ function proceedEnduro($subf,$opt){
 				printActRace();
 				break;
 			}
-			printEnduroApply($opt);
+			printEnduroApply($opt);			
 			break;	
 		case "clubapply":
 			printEnduroClubApply($opt);
@@ -750,7 +750,8 @@ function proceedEnduro($subf,$opt){
 					if ($_SESSION['params']['org']){
 						printEnduroReg($opt);
 					} else {
-						printEnduroApply($opt);
+						//printEnduroApply($opt);
+						enduroapllist();
 					}
 					
 			}			
