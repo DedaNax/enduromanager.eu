@@ -234,6 +234,8 @@ function enduro_kartina(){
 	$race = $rm->getRace($opt,"","","","","","");
 	$champ = $cm->getChamps($race[0]->getCH_ID(),"","","");
 	
+	$slot = $race[0]->slots;
+	
 	$x = 0;
 	$y = 0;
 	$cl = $em->getERCD($opt,$day,"");
