@@ -4,7 +4,6 @@ $ap = new AP;
 
 function enduro_rudite(){
 	echo printheader();
-	$slot=2;
 	
 	$em = new EnduroManager;
 	$rm = new raceManager;
@@ -23,10 +22,10 @@ function enduro_rudite(){
 		echo "<br> STARTA LAIKI (KUSTĪBAS GRAFIKS)";
 	echo "</h2>";
 	
+	$slot = $race[0]->slots;
 	$cl = $em->getERCD($opt,$day,"");
 	
-	echo "<table  align=\"center\" border = \"0\">";
-				
+	echo "<table  align=\"center\" border = \"0\">";				
 		for($i=0;$i<count($cl);$i++){
 			$cnt = $em->getEnduroDayRacerCNT($day,$cl[$i]->CLASS_ID);
 			if ($cnt > 0){
@@ -38,15 +37,15 @@ function enduro_rudite(){
 					echo "<td >";
 						echo $cl[$i]->NAME;			
 					echo "<td>";								
-						echo "<table width=\"300\" border=\"1\">";
+						echo "<table width=\"",$slot*130,"px\" border=\"1\" style=\"border-collapse: collapse;\">";
 							echo "<tr>";
-								echo "<td width=\"30\">NR<td width=\"50\">LK0<td width=\"50\">Laiks<td width=\"30\">NR<td width=\"50\">LK0<td width=\"50\">Laiks";
+								echo str_repeat("<td width=\"30px\">NR<td width=\"50px\">LK0<td width=\"50px\">Laiks",$slot);
 									for($j=0;$j<$cnt/$slot;$j++){
 										echo "<tr>";
 											for($x=0;$x<$slot;$x++){
 											$rcr = $em->getEnduroDayFreeRacerList1($day,$cl[$i]->CLASS_ID,$j+1,$x+1);
 												if($rcr[0]){
-													echo "<td width=\"30\">
+													echo "<td width=\"30px\">
 														<font style=\"font-size:14px;font-weight:bold;\"", $rcr[0]->getNr() ? ">".$rcr[0]->getNr()."</font>" : " color=\"red\">NAV</font>";
 														
 														$lk0 = "`lk0`";
@@ -84,21 +83,19 @@ function enduro_rudite(){
 
 function enduro_start(){
 	echo printheader();
-	$slot=2;
 	
 	$em = new EnduroManager;
 	$rm = new raceManager;
 	$cm = new champManager;
 	
 	$day = $_GET['day'];
-	$erd = $em->getERD1($day);
-	
+	$erd = $em->getERD1($day);	
 	$opt = $erd[0]->RACE_ID;
 	$race = $rm->getRace($opt,"","","","","","");
-	$champ = $cm->getChamps($race[0]->getCH_ID(),"","","");
-	
+	$champ = $cm->getChamps($race[0]->getCH_ID(),"","","");	
 	$stages = $em->getES($race[0]->getID());
 	
+	$slot = $race[0]->slots;
 	
 	echo "<h2 align=\"center\">";
 		echo $champ[0]->getName(),", "; 
@@ -123,7 +120,7 @@ function enduro_start(){
 					echo "<td width=\"50\">";
 						echo $cl[$i]->NAME;			
 					echo "<td>";								
-						echo "<table border=\"1\">";
+						echo "<table border=\"1\" style=\"border-collapse: collapse;\">";
 							if($sep){
 								$sep = 0;
 								echo "<tr align=\"center\">";
@@ -225,16 +222,14 @@ function enduro_start(){
 }
 
 function enduro_kartina(){
-	echo printheader();
-	$slot=3;
+	echo printheader();	
 	
 	$em = new EnduroManager;
 	$rm = new raceManager;
 	$cm = new champManager;
 	
 	$day = $_GET['day'];
-	$erd = $em->getERD1($day);
-	
+	$erd = $em->getERD1($day);	
 	$opt = $erd[0]->RACE_ID;
 	$race = $rm->getRace($opt,"","","","","","");
 	$champ = $cm->getChamps($race[0]->getCH_ID(),"","","");
@@ -246,8 +241,8 @@ function enduro_kartina(){
 	for($i=0;$i<count($cl);$i++){
 		$cnt = $em->getEnduroDayRacerCNT($day,$cl[$i]->CLASS_ID);			
 			//echo "||| $cnt ||||";
-		for($j=0;$j<$cnt/2;$j++){
-			for ($l=0;$l<2;$l++){
+		for($j=0;$j<$cnt/$slot;$j++){
+			for ($l=0;$l<$slot;$l++){
 				$rcr = $em->getEnduroDayFreeRacerList1($day,$cl[$i]->CLASS_ID,$j+1,$l+1);
 				//print_r($rcr);
 				for($k=0;$k<count($rcr);$k++){

@@ -1,6 +1,4 @@
 <?php
-
-
 function printGUI(){
 	$maintenceWarn = 0;
 	$maintence = 0;
@@ -1238,6 +1236,4 @@ function checkPerm($f,$s){
 	
 	return false;
 }
-
-
 ?>

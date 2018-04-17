@@ -1363,13 +1363,14 @@ function lkinp($opt){
 	$rcm = new RacerManager;
 	$rm = new raceManager;
 	$em = new EnduroManager;
-	$cm = new champManager;
+	$cm = new champManager;	
 	
-	$slot = 2;
 	$cl = $em->getERCD($opt,$_SESSION['params']['day'],$_SESSION['params']['c']=="all" ? "":$_SESSION['params']['c']);
 	$day=$_SESSION['params']['day'];
 	$r = $rm->getRace($cl[0]->RACE_ID,"","","","","","","");
 	$erd = $em->getERD1($day);
+	
+	$slot = $r[0]->slots;
 	
 	echo "<a href=\"?rm_func=enduro&rm_subf=laiks&opt=$opt&day=$day\"><b>Rezultātu ievade</b></a>";
 	echo " -> <b>",$r[0]->getName(),"</b>";
@@ -1391,15 +1392,11 @@ function lkinp($opt){
 					echo "<td>";								
 						echo "<table border=\"1\">";
 							echo "<tr>";
-								echo "<td width=\"50\">LK0
-									  
+								echo "<td width=\"50\">LK0";
+									echo str_repeat("
 									  <td width=\"30\" colspan=\"2\">NR
 									  <td width=\"50\">LK0 Laiks
-									  <td width=\"50\">LK
-									  
-									  <td width=\"30\" colspan=\"2\">NR
-									  <td width=\"50\">LK0 Laiks
-									  <td width=\"50\">LK";
+									  <td width=\"50\">LK",$slot);
 									  
 									for($j=0;$j<$cnt/$slot;$j++){
 										echo "<tr>";
@@ -2310,7 +2307,7 @@ function printEnduroReg($opt){
 }
 
 function printStarts($opt){
-	$slot=2;
+	
 
 	printAactualRaceMenu(3);
 	
@@ -2321,6 +2318,9 @@ function printStarts($opt){
 	
 	$fullname="";
 	$r = $rm->getRace($opt ? $opt : "","","","","",1,0);
+	
+	$slot= $r[0]->slots;
+	
 	if (!$r || $r[0]->getType() <> 3){
 		echo "<h1 align=\"center\" style=\"color:red;font-weight:bold\">Nav nevienas aktīvas sacensības!</h1>";
 		return; 
@@ -2407,7 +2407,7 @@ function printStarts($opt){
 	echo "</table>";
 	
 	$cl = $em->getERCD($opt,$day,"");
-	echo "<table width=\"100%\" style=\"background-color:white;\">";
+	echo "<table width=\"",$slot * 200 + 200,"px\" style=\"background-color:white;\">";
 		$time = explode(" ",$erday->START_DATE);
 		$time = explode(":",$time[1]);
 		$hr=$time[0];
@@ -2439,24 +2439,22 @@ function printStarts($opt){
 						echo "</a>";
 				echo "<tr>";
 					echo "<td colspan=\"2\">";
-						echo "<table width=\"100%\" border=\"1\">";
+						echo "<table width=\"",$slot * 200 + 200,"px\" border=\"1\">";
 							echo "<tr style=\"font-weight:bold\">";
-								echo "<td width=\"350px\">Starta numuri";
-								echo "<td width=\"20px\" align=\"center\">LK0";								
+								echo "<td width=\"*\">Starta numuri";
+								echo "<td width=\"65px\" align=\"center\">LK0";								
 								
-								echo "<td width=\"*\" align=\"right\">Sportisti";
+								echo "<td width=\"180px\" align=\"right\">Sportisti";
 							echo "<tr valign=\"top\">";
-								echo "<td>";
+								echo "<td colspan=2>";
 									echo "<table width=\"100%\" border=\"1\">";
-										
-										
 										for($j=0;$j<$cnt/$slot;$j++){
 											echo "<tr style=\"height:23px\">";
 												for($x=0;$x<$slot;$x++){
 													$rcr = $em->getEnduroDayFreeRacerList1($day,$cl[$i]->CLASS_ID,$j+1,$x+1);
 													$name = "rcrx$day"."x".$cl[$i]->CLASS_ID ."x".($j+1)."x".($x+1);
 													if($rcr[0]){														
-														echo "<td width=\"",100/$slot,"%\"
+														echo "<td width=\"183px\"
 																id = \"$name\"
 																onclick=\"glow('$name');\"
 															  >
@@ -2468,7 +2466,7 @@ function printStarts($opt){
 																echo "<img src=\"images/RedCross_trans_16x16.png\" border=\"0\" alt=\"X\" Title = \"Izņemt\">";
 															echo "</a>";
 													} else {														
-														echo "<td width=\"",100/$slot,"%\"
+														echo "<td width=\"183px\"
 																id = \"$name\"
 																onclick=\"glow('$name');\"
 															>&nbsp</td>";
@@ -2477,21 +2475,13 @@ function printStarts($opt){
 																echo "<img src=\"images/RedCross_trans_16x16.png\" border=\"0\" alt=\"X\" Title = \"Izņemt\">";
 															echo "</a>";
 													}
-												}											
-										}
-									echo "</table>";
-								echo "<td width=\"30px\">";
-									echo "<table width=\"100%\" border=\"1\">";
-										$time = explode(" ",$erday->START_DATE);
-										for($j=0;$j<$cnt/2;$j++){	
-										
-											$sql = "select `lk0` from `enduro_day_racer` 
+												}	
+												
+												$sql = "select `lk0` from `enduro_day_racer` 
 													where `erd_id` = $day and `pair` = ". ($j+1) ."
 													and `ea_id` in (select `era_id` from `enduro_application` where `class_id` = ".$cl[$i]->CLASS_ID.")";
-											$r = queryDB($sql);
-											$row = mysql_fetch_array($r, MYSQL_ASSOC);
-			
-											echo "<tr style=\"height:23px\">";			
+												$r = queryDB($sql);
+												$row = mysql_fetch_array($r, MYSQL_ASSOC);
 												
 												$name = "lkx$i"."x".($j+1)."x".$cl[$i]->CLASS_ID."x$day";
 												echo "<td>
@@ -2507,14 +2497,14 @@ function printStarts($opt){
 														name=\"$name\"
 														onchange=\"editoffset('$name');\"
 													>";
-													$m+=$erday->OFFSET_MIN;
-													if($m > 59){
-														$h++;
-														$m = 0;
-													}	
+												$m+=$erday->OFFSET_MIN;
+												if($m > 59){
+													$h++;
+													$m = 0;
+												}	
 												$fullname.=$name.";";
-										}
-									echo "</table>";
+										}										
+									echo "</table>";								
 								echo "<td align =\"right\">";
 									$racers = $em->getEnduroDayFreeRacerList($day,$cl[$i]->CLASS_ID);
 									echo "<table border=\"1\" width=\"100%\">";

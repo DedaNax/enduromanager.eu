@@ -18,6 +18,7 @@ class Race{
 	public $ogalvis;
 	public $tgalvis;
 	public $exresLink;
+	public $slots;
 		
 	public function setID($value){
 		$this->ID = $value;
@@ -568,6 +569,7 @@ class raceManager{
 			$item->tgalid = $row[TMS_GAL_ID];
 			$item->tgalvis = $row[TMS_GAL_VISIBLE];
 			$item->exresLink = $row[EX_RES_LINK];
+			$item->slots = $row[SLOTS]?$row[SLOTS]:2;
 			
 			array_push($reslt,$item);
 		}
@@ -575,21 +577,49 @@ class raceManager{
 		return $reslt;
 	}	
 	
-	public function insRace($ch_id,$name,$notes,$date,$edate,$rules,$code,$type,$galid,$orggalid,$tmgalid,$erl){
+	public function insRace($ch_id,$name,$notes,$date,$edate,$rules,$code,$type,$galid,$orggalid,$tmgalid,$erl,$slots){
 		
-		$sql = "INSERT INTO `d_race` (`ch_id` ,`name`, `notes`,`date`,`end_date`,`code`,`type`,`GAL_ID`,`ORG_GAL_ID`,`TMS_GAL_ID`,`EX_RES_LINK` ) 
-		        VALUES ('$ch_id', '$name', ".($notes ? "'$notes'" : " null ").",
-				".($date ? "'$date'" : " null ").",".($edate ? "'$edate'" : " null ").",'$code',$type,$galid,$orggalid,$tmgalid,'$erl');";
-		//echo $sql;
+		$sql = "INSERT INTO `d_race` (
+					`ch_id` ,
+					`name`, 
+					`notes`,
+					`date`,
+					`end_date`,
+					`code`,
+					`type`,
+					`GAL_ID`,
+					`ORG_GAL_ID`,
+					`TMS_GAL_ID`,
+					`EX_RES_LINK`,
+					`SLOTS` 
+				) 
+		        VALUES (
+					'$ch_id', 
+					'$name', 
+					".($notes ? "'$notes'" : " null ").",
+					".($date ? "'$date'" : " null ").",
+					".($edate ? "'$edate'" : " null ").",
+					'$code',
+					$type,
+					$galid,
+					$orggalid,
+					$tmgalid,
+					'$erl',
+					".($slots ? $slots : "null")."
+				);";		
 		$q_result = queryDB($sql);
 	}	
-	public function saveRace($id,$ch_id,$name,$notes,$date,$edate,$rules,$code,$type,$erl){
-		$sql = "UPDATE `d_race` SET `type` = $type,`name` = '$name',
-			`date` = ".( $date ? "'$date'" : " null ").",
-			`END_DATE` = ".( $edate ? "'$edate'" : " null ").",
-		                            `notes` = ".($notes ? "'$notes'" : " null ").",`ch_id` = $ch_id, `EX_RES_LINK` = '$erl'
-				where `race_id` = $id;";
-				//echo $sql;
+	public function saveRace($id,$ch_id,$name,$notes,$date,$edate,$rules,$code,$type,$erl,$slots){
+		$sql = "UPDATE `d_race` 
+				SET `type` = $type,
+				    `name` = '$name',
+					`date` = ".( $date ? "'$date'" : " null ").",
+					`END_DATE` = ".( $edate ? "'$edate'" : " null ").",
+		            `notes` = ".($notes ? "'$notes'" : " null ").",
+					`ch_id` = $ch_id, 
+					`EX_RES_LINK` = '$erl',
+					`SLOTS` = ".($slots ? $slots : "null")."
+				WHERE `race_id` = $id;";				
 		$q_result = queryDB($sql);
 	}	
 	public function delRace($id){
@@ -2394,6 +2424,16 @@ function printEditRace($opt){
 						
 						echo "<td><textarea cols=\"30\" rows=\"4\" name = \"notes\" style=\"width:95%\">", $list[0]->getNotes(),"</textarea>";
 						echo '<tr><td>Saite uz rezultātiem<td><input type="text" name = "ex_res" style="width:400px" value="',$list[0]->exresLink,'">';
+						
+						if($list[0]->getType() == 3 || $list[0]->getType() == 4 ){
+							echo '<tr><td>Sportistu skaits uz starta<td>';								
+								echo '<select  name = "slots" style="width:400px">';									
+									echo '<option',$list[0]->slots == 2 ? ' selected ':'','>2</option>';
+									echo '<option',$list[0]->slots == 3 ? ' selected ':'','>3</option>';
+									echo '<option',$list[0]->slots == 4 ? ' selected ':'','>4</option>';								
+								echo '</select>';
+						}
+						
 				echo "</tbody></table>";
 				switch ($list[0]->getType()){
 					case 1:
@@ -2715,10 +2755,10 @@ function saveRace($opt){
 					$em->saveET(str_replace("et","",$et[$i]),$_SESSION['params'][$et[$i]]);
 				}
 				
-				$rm->saveRace($opt,$_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type'],$_POST['ex_res']);
+				$rm->saveRace($opt,$_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type'],$_POST['ex_res'],$_POST['slots']);
 				break;
 			default:	
-				$rm->saveRace($opt,$_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type'],$_POST['ex_res']);			
+				$rm->saveRace($opt,$_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type'],$_POST['ex_res'],$_POST['slots']);			
 		}
 		
 	}else {
@@ -2745,11 +2785,11 @@ function saveRace($opt){
 				
 				
 				
-				$rm->insRace($_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type'],$gid,$ogid,$tmgid,$_POST['ex_res']);
+				$rm->insRace($_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type'],$gid,$ogid,$tmgid,$_POST['ex_res'],$_POST['slots']);
 				return mysql_insert_id();
 				break;
 			default:
-				$rm->insRace($_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type']," null "," null "," null ",$_POST['ex_res']);				     
+				$rm->insRace($_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type']," null "," null "," null ",$_POST['ex_res'],$_POST['slots']);				     
 				return mysql_insert_id();
 				break;
 						

@@ -124,7 +124,7 @@ function changeOffset(dir){
 	xmlhttp.open("GET","?no_gui=1&script_gui=1&rm_func=enduro&rm_subf=erd_offset_change&erd=".concat(y[0].value,"&val=",x[0].value),false);
 	xmlhttp.send();
 	
-	if (xmlhttp.responseText != "1") {		
+	if (xmlhttp.responseText.trim() != "1") {		
 		alert("KĻŪDA!".concat("\n",xmlhttp.responseText));
 		return;
 	}
