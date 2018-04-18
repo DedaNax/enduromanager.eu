@@ -819,7 +819,7 @@
 	}
 
 	function clubTeams(){
-		$topRacers = 4;
+		$topRacers = 3;
 		$rm =new raceManager;		
 		$race = $rm->getRace($_SESSION['params']['r'],"","","","","","","");
 		
