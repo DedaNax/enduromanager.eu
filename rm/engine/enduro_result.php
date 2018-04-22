@@ -830,7 +830,7 @@
 		$sql="
 			SELECT 
 				CASE 
-					WHEN ea.`class_id` IN ( 11, 27, 13, 64, 67, 80 ) THEN edr.`POINTS` * 0.5
+					WHEN ea.`class_id` IN ( 11, 27, 13, 64, 67, 80, 79 ) THEN edr.`POINTS` * 0.5
 					WHEN ea.`class_id` IN ( 12, 28 ) THEN edr.`POINTS` * 0.35
 					ELSE edr.`POINTS` * 1 
 				END AS PTS, 
