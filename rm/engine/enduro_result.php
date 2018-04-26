@@ -65,7 +65,13 @@
 							echo " | ";
 						}					
 					}
-				}				
+				}			
+					echo "<br> <a href=\"?rm_func=reslt&rm_subf=enduroAbs&r=",$r[$i]->getID(),"\">";
+						echo "Absolūtais vertējums";
+					echo "</a>";
+					echo "<a target=\"_blank\" href=\"?rm_func=reslt&rm_subf=enduroAbs&no_gui=1&r=",$r[$i]->getID(),"\">";
+						echo "<font style=\"font-size:15px\">^</font>";
+					echo "</a>";				
 				echo "<br>";
 				if (strpos($cmp->getName(), 'Sprint') == false){
 					echo "<a href=\"?rm_func=reslt&rm_subf=endurorace&r=",$r[$i]->getID(),"\">";
@@ -73,13 +79,7 @@
 					echo "</a>";
 					echo "<a target=\"_blank\" href=\"?rm_func=reslt&rm_subf=endurorace&no_gui=1&r=",$r[$i]->getID(),"\">";
 						echo "<font style=\"font-size:15px\">^</font>";
-					echo "</a>";			
-					echo "| <a href=\"?rm_func=reslt&rm_subf=enduroAbs&r=",$r[$i]->getID(),"\">";
-						echo "Absolūtais vertējums";
-					echo "</a>";
-					echo "<a target=\"_blank\" href=\"?rm_func=reslt&rm_subf=enduroAbs&no_gui=1&r=",$r[$i]->getID(),"\">";
-						echo "<font style=\"font-size:15px\">^</font>";
-					echo "</a>";
+					echo "</a>";	
 					echo "<br>";
 				}
 				 echo "<a href=\"?rm_func=reslt&rm_subf=clubTeams&r=",$r[$i]->getID(),"\">";
@@ -501,6 +501,8 @@
 		$em = new EnduroManager;
 		
 		$r = $rm->getRace($_SESSION['params']['r'],"","","","","","","");
+		$cmps  = $cm->getChamps($r[0]->getCH_ID(),"","","");
+		$cmp = $cmps[0];
 		
 		echo "<a href=\"?rm_func=reslt&rm_subf=enduromenu\"><b>Rezultāti</b></a>";
 		echo " -> <b>",$r[0]->getName(),"</b>";
@@ -548,9 +550,16 @@
 					echo "<td width=\"50px\">Klase";
 					echo "<td width=\"180px\">Klubs";
 					echo "<td width=\"80px\">Tehnika";
-					echo "<td width=\"50px\">1. diena";
-					echo "<td width=\"50px\">2. diena";
-					echo "<td width=\"50px\">Kopā";
+					echo "<td width=\"50px\">";
+					
+					if (strpos($cmp->getName(), 'Sprint')){
+						echo "Laiks";
+					} else {
+						echo "1. diena";
+						echo "<td width=\"50px\">2. diena";
+						echo "<td width=\"50px\">Kopā";
+					}
+					
 					echo "<td width=\"50px\" align=\"center\">Vieta";
 		}
 		$vieta = 1;
@@ -568,13 +577,34 @@
 						}
 					echo ">",substr($row["tim"],0,2) == "00" ? substr($row["tim"],3,20): $row["tim"],"<b>.</b>",( $row["sec100"] % 100) <10 ? "0".( $row["sec100"] % 100) : ( $row["sec100"] % 100);
 				$eaid = $row["era_id"];
+				
+				if (strpos($cmp->getName(), 'Sprint')){
+					echo "<td align=\"center\">";
+					switch($vieta){
+						case 1:
+							echo "<b style=\"font-size:15px\">I</b>";
+							break;
+						case 2:
+							echo "<b style=\"font-size:15px\">II</b>";
+							break;
+						case 3:
+							echo "<b style=\"font-size:15px\">III</b>";
+							break;
+						default:
+							echo $vieta;
+							break;
+					}
+					$vieta++;
+				}
 			} else {
+					
 					echo "<td align=\"center\"";
 						if($row["sec100"]==0){
 							echo "style=\"background-color:pink\"";
 						}
 					echo ">",substr($row["tim"],0,2) == "00" ? substr($row["tim"],3,20): $row["tim"],"<b>.</b>",( $row["sec100"] % 100) <10 ? "0".( $row["sec100"] % 100) : ( $row["sec100"] % 100);
 					echo "<td align=\"center\">",substr($row["tim2"],0,2) == "00" ? substr($row["tim2"],3,20): $row["tim2"],"<b>.</b>",( $row["pts"] % 100) <10 ? "0".( $row["pts"] % 100) : ( $row["pts"] % 100);
+					
 					echo "<td align=\"center\">";
 					switch($vieta){
 						case 1:
