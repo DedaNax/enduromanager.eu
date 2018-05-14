@@ -387,7 +387,8 @@
 		$rm =new raceManager;
 		$cm = new champManager;
 		$em = new EnduroManager;
-		
+
+		$classFilter = $_SESSION['params'][c];
 		$rc = $rm->getRace($_SESSION['params']['r'],"","","","","","","");
 				
 		echo "<a href=\"?rm_func=reslt&rm_subf=enduromenu\"><b>Rezultāti</b></a>";
@@ -444,11 +445,15 @@
 		$r = queryDB($sql);
 		$i=0;
 		while($row = mysql_fetch_array($r, MYSQL_ASSOC)){
+			if($classFilter && $row[ClassID] != $classFilter) continue;
 			if($row[CLASS_ID] != $class_id) {			
 				$i=1;
 				echo "</table>";
-				echo "<br><b style=\"font-size:16px\">",$row[Name],"</b><br>";
-				echo "<table border =\"1\">";
+				echo "<br><b style=\"font-size:16px\"><a href=\"?rm_func=reslt&rm_subf=endurorace&r=",$_SESSION['params']['r'],"&c=",$row[ClassID],"\" style=\"text-decoration: none;color: #0E0E6E;\">",$row[Name],"</a></b>";
+				if(!$_SESSION['params'][no_gui]){
+					echo "<a href=\"?rm_func=reslt&rm_subf=endurorace&r=",$_SESSION['params']['r'],"&c=",$row[ClassID],"&no_gui=1\" style=\"text-decoration: none;color: #0E0E6E;\" target=\"_blank\">^</a></h2>";	
+				} else echo "<br>";
+				echo "<table border =\"1\" style=\"border-collapse: collapse;\">";
 					echo "<tr style=\"font-weight:bold\">";
 						echo "<td>Num";
 						echo "<td width=\"150\">Sportists";

@@ -118,6 +118,7 @@
 	
 	function enduroDaySaved(){
 		$publishID = $_SESSION['params'][publishID];
+		$classFilter = $_SESSION['params'][c];
 		
 		$sql = 
 		   "SELECT `Info`, `PublisherName`,`RaceName`, `RaceDayText`, `TimeStamp`
@@ -144,13 +145,18 @@
 			$place = 1;
 			
 			while($row = mysql_fetch_array($results, MYSQL_ASSOC)){
-				
+				if($classFilter && $row[ClassID] != $classFilter) continue;
 				if($class != $row[ClassID]){
 					$place = 1;
 					if($class != null){
 						echo "</tbody></table>";
 					}
-					echo "<h2>",$row[ClassName],"</h2>";
+					echo "<h2><a href = \"?rm_func=reslt&rm_subf=endurodaysaved&publishID=$publishID&c=",$row[ClassID],"\" style=\"text-decoration: none;color: #0E0E6E;\" >",$row[ClassName],"</a>";
+					if(!$_SESSION['params'][no_gui]){
+						echo "<a href = \"?rm_func=reslt&rm_subf=endurodaysaved&publishID=$publishID&c=",$row[ClassID],"&no_gui=1\" style=\"text-decoration: none;color: #0E0E6E;\" target=\"_blank\">^</a></h2>";	
+					} else echo "</h2>";
+					
+					
 					echo "<table border =\"1\" style=\"border-collapse: collapse\"><tbody>";
 						echo "<tr style = \"font-weight:bold\"><td>Num<td>Sportists<td>Klubs<td>Valsts<td>TK LK0<td>LK";
 							$tests = json_decode($row[tests]);

@@ -29,7 +29,7 @@ function enduro_rudite(){
 		for($i=0;$i<count($cl);$i++){
 			$cnt = $em->getEnduroDayRacerCNT($day,$cl[$i]->CLASS_ID);
 			if ($cnt > 0){
-				if($cl[$i]->SEPARATOR){
+				if(!$cl[$i]->SEPARATOR && $i!=0){
 					echo "<tr>";
 						echo "<td colspan=\"2\"><hr>";
 				}
@@ -99,20 +99,18 @@ function enduro_start(){
 	
 	echo "<h2 align=\"center\">";
 		echo $champ[0]->getName(),", "; 
-		echo $race[0]->getName(), ", ";//,$race[0]->getDate();
-		echo substr($erd[0]->START_DATE,0,10);//$race[0]->getDate();
+		echo $race[0]->getName(), ", ";
+		echo substr($erd[0]->START_DATE,0,10);
 		echo "<br> STARTA LAIKI (KUSTĪBAS GRAFIKS)";
 	echo "</h2>";
 	
-	$cl = $em->getERCD($opt,$day,"");
-	$sep = 1;
+	$cl = $em->getERCD($opt,$day,"");	
 	echo "<table  align=\"center\" border = \"0\" >";
 				
 		for($i=0;$i<count($cl);$i++){
 			$cnt = $em->getEnduroDayRacerCNT($day,$cl[$i]->CLASS_ID);
 			if ($cnt > 0){
-				if($cl[$i]->SEPARATOR){
-					$sep = 1;
+				if(!$cl[$i]->SEPARATOR && $i!=0){					
 					echo "<tr>";
 						echo "<td colspan=\"2\"><hr>";
 				}
@@ -120,100 +118,97 @@ function enduro_start(){
 					echo "<td width=\"50\">";
 						echo $cl[$i]->NAME;			
 					echo "<td>";								
-						echo "<table border=\"1\" style=\"border-collapse: collapse;\">";
-							if($sep){
-								$sep = 0;
+						echo "<table border=\"1\" style=\"border-collapse: collapse;\">";														
+							echo "<tr align=\"center\">";
+								$tstr="";
+								$m=0;
+								for($k=0;$k<$cl[$i]->ENDURO_LAPS;$k++){
+									for($n=0;$n<count($stages);$n++){
+										$stage = $em->getRCDS("",$cl[$i]->CLASS_ID,$stages[$n]->ES_ID,$cl[$i]->ERCD_ID);
+											$tstr = "$tstr<td width=\"40\">";
+												$tstr.= substr($stage[0]->OFFSET_TIME,0,5);
+												$ofs = explode(":",$stage[0]->OFFSET_TIME);
+												$m+=$ofs[1];
+												$m+=$ofs[0]*60;
+									}
+								}
+								if($cl[$i]->FIN_OFFSET){
+									$ofs = explode(":",$cl[$i]->FIN_OFFSET);
+									$m+=$ofs[1];
+									$m+=$ofs[0]*60;
+								}
+								
+								echo "<td width=\"",($slot * 30)+40,"\" colspan=\"",$slot+1,"\" align=\"center\">";
+								$h= (int) floor($m/60);
+								$m = $m-$h*60;
+								
+									echo ($h < 10 ? "0".$h : $h).":".($m < 10 ? "0".$m : $m),"$tstr";
+								if($cl[$i]->FIN_OFFSET){
+									echo "<td width=\"40\">";
+										echo substr($cl[$i]->FIN_OFFSET,0,5);
+								}
+								
 								echo "<tr align=\"center\">";
-									$tstr="";
-									$m=0;
-									for($k=0;$k<$cl[$i]->ENDURO_LAPS;$k++){
-										for($n=0;$n<count($stages);$n++){
-											$stage = $em->getRCDS("",$cl[$i]->CLASS_ID,$stages[$n]->ES_ID,$cl[$i]->ERCD_ID);
-												$tstr = "$tstr<td width=\"40\">";
-													$tstr.= substr($stage[0]->OFFSET_TIME,0,5);
-													$ofs = explode(":",$stage[0]->OFFSET_TIME);
-													$m+=$ofs[1];
-													$m+=$ofs[0]*60;
+								echo "<td width=\"",$slot * 30,"\" colspan=\"$slot\" align=\"center\"><b>NR</b><td width=\"40\"><b>LK0</b>";
+								for($j=0;$j<$cl[$i]->ENDURO_LAPS * count($stages);$j++){
+									echo "<td width=\"40\"><b>LK",$j+1,"</b>";
+								}
+								if($cl[$i]->FIN_OFFSET){
+									echo "<td width=\"40\"><b>PF</b>";
+								}							
+							for($j=0;$j<$cnt/$slot;$j++){
+								echo "<tr align=\"center\">";
+									
+									for($x=0;$x<$slot;$x++){
+										$rcr = $em->getEnduroDayFreeRacerList1($day,$cl[$i]->CLASS_ID,$j+1,$x+1);
+										if($rcr[0]){
+											echo "<td width=\"30\" align=\"center\">";
+											echo "<font style=\"font-size:14px;font-weight:bold;\"", $rcr[0]->getNr() ? ">".$rcr[0]->getNr()."</font>" : " color=\"red\">NAV</font> ";
+										} else {
+											echo "<td width=\"30\" align=\"center\">";
+											echo "&nbsp";													
 										}
 									}
-									if($cl[$i]->FIN_OFFSET){
-										$ofs = explode(":",$cl[$i]->FIN_OFFSET);
-										$m+=$ofs[1];
-										$m+=$ofs[0]*60;
-									}
 									
-									echo "<td width=\"",($slot * 30)+40,"\" colspan=\"",$slot+1,"\" align=\"center\">";
-									$h= (int) floor($m/60);
-									$m = $m-$h*60;
-									
-										echo ($h < 10 ? "0".$h : $h).":".($m < 10 ? "0".$m : $m),"$tstr";
-									if($cl[$i]->FIN_OFFSET){
-										echo "<td width=\"40\">";
-											echo substr($cl[$i]->FIN_OFFSET,0,5);
-									}
-									
-									echo "<tr align=\"center\">";
-									echo "<td width=\"",$slot * 30,"\" colspan=\"$slot\" align=\"center\"><b>NR</b><td width=\"40\"><b>LK0</b>";
-									for($j=0;$j<$cl[$i]->ENDURO_LAPS * count($stages);$j++){
-										echo "<td width=\"40\"><b>LK",$j+1,"</b>";
-									}
-									if($cl[$i]->FIN_OFFSET){
-										echo "<td width=\"40\"><b>PF</b>";
-									}
+									echo "<td width=\"40\" align=\"center\">";
+										$sql = "select `lk0` from `enduro_day_racer` 
+												where `erd_id` = $day and `pair` = ". ($j+1) ."
+												and `ea_id` in (select `era_id` from `enduro_application` where `class_id` = ".$cl[$i]->CLASS_ID.")";
+										
+										
+										$r = queryDB($sql);
+										$row = mysql_fetch_array($r, MYSQL_ASSOC);
+										echo substr($row["lk0"],0,5);
+										
+										$time = explode(":",$row["lk0"]);
+										
+										for($k=0;$k<$cl[$i]->ENDURO_LAPS;$k++){
+											for($n=0;$n<count($stages);$n++){
+												$stage = $em->getRCDS("",$cl[$i]->CLASS_ID,$stages[$n]->ES_ID,$cl[$i]->ERCD_ID);
+												
+												$ofs = explode(":",$stage[0]->OFFSET_TIME);
+												
+												$time[0] += $ofs[0];
+												$time[1] += $ofs[1];
+												$time[0] += $time[1] >= 60 ? 1 : 0;														
+												$time[1] = $time[1] >= 60 ? $time[1] - 60 : $time[1];
+												
+												
+												echo "<td width=\"40\">",$time[0]<10 ? "0".$time[0]: $time[0],":", $time[1]<10 ? "0".$time[1]: $time[1];
+											}													
+										}
+										if($cl[$i]->FIN_OFFSET){
+											$ofs = explode(":",$cl[$i]->FIN_OFFSET);
+											
+											$time[0] += $ofs[0];
+											$time[1] += $ofs[1];
+											$time[0] += $time[1] >= 60 ? 1 : 0;														
+											$time[1] = $time[1] >= 60 ? $time[1] - 60 : $time[1];
+											
+											
+											echo "<td width=\"40\">",$time[0]<10 ? "0".$time[0]: $time[0],":", $time[1]<10 ? "0".$time[1]: $time[1];
+										}
 							}
-									for($j=0;$j<$cnt/$slot;$j++){
-										echo "<tr align=\"center\">";
-											
-											for($x=0;$x<$slot;$x++){
-												$rcr = $em->getEnduroDayFreeRacerList1($day,$cl[$i]->CLASS_ID,$j+1,$x+1);
-												if($rcr[0]){
-													echo "<td width=\"30\" align=\"center\">";
-													echo "<font style=\"font-size:14px;font-weight:bold;\"", $rcr[0]->getNr() ? ">".$rcr[0]->getNr()."</font>" : " color=\"red\">NAV</font> ";
-												} else {
-													echo "<td width=\"30\" align=\"center\">";
-													echo "&nbsp";													
-												}
-											}
-											
-											echo "<td width=\"40\" align=\"center\">";
-												$sql = "select `lk0` from `enduro_day_racer` 
-														where `erd_id` = $day and `pair` = ". ($j+1) ."
-														and `ea_id` in (select `era_id` from `enduro_application` where `class_id` = ".$cl[$i]->CLASS_ID.")";
-												
-												
-												$r = queryDB($sql);
-												$row = mysql_fetch_array($r, MYSQL_ASSOC);
-												echo substr($row["lk0"],0,5);
-												
-												$time = explode(":",$row["lk0"]);
-												
-												for($k=0;$k<$cl[$i]->ENDURO_LAPS;$k++){
-													for($n=0;$n<count($stages);$n++){
-														$stage = $em->getRCDS("",$cl[$i]->CLASS_ID,$stages[$n]->ES_ID,$cl[$i]->ERCD_ID);
-														
-														$ofs = explode(":",$stage[0]->OFFSET_TIME);
-														
-														$time[0] += $ofs[0];
-														$time[1] += $ofs[1];
-														$time[0] += $time[1] >= 60 ? 1 : 0;														
-														$time[1] = $time[1] >= 60 ? $time[1] - 60 : $time[1];
-														
-														
-														echo "<td width=\"40\">",$time[0]<10 ? "0".$time[0]: $time[0],":", $time[1]<10 ? "0".$time[1]: $time[1];
-													}													
-												}
-												if($cl[$i]->FIN_OFFSET){
-													$ofs = explode(":",$cl[$i]->FIN_OFFSET);
-													
-													$time[0] += $ofs[0];
-													$time[1] += $ofs[1];
-													$time[0] += $time[1] >= 60 ? 1 : 0;														
-													$time[1] = $time[1] >= 60 ? $time[1] - 60 : $time[1];
-													
-													
-													echo "<td width=\"40\">",$time[0]<10 ? "0".$time[0]: $time[0],":", $time[1]<10 ? "0".$time[1]: $time[1];
-												}
-									}
 						echo "</table>";		
 			}
 		}
