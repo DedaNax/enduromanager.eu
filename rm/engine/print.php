@@ -108,12 +108,6 @@
 	}
 	
 	function printEnduroApl($apl){
-		
-		$handle = fopen("./Files/enduro_anketa.htm", "r");
-		$contents = fread($handle, filesize("./Files/enduro_anketa.htm"));   	
-		fclose($handle);
-		
-		
 		$em = new EnduroManager;
 		$rm = new raceManager;
 		$rcm = new RacerManager;
@@ -122,7 +116,15 @@
 		$apl= $em->getERA($apl,"","","","");
 		if ($apl){
 			$r = $rm->getRace($apl[0]->RACE_ID,"","","","","","");
-			$cmp = $cm->getChamps($r[0]->getCH_ID(),"","","");
+			$cmp = $cm->getChamps($r[0]->getCH_ID(),"","","");			
+			
+			$mod="";
+			if (strpos($cmp[0]->getName(), 'Sprint')){$mod="sprint";}
+			if (strpos($cmp[0]->getName(), 'Cross')){$mod="cc";}
+			
+			$handle = fopen("./Files/enduro_anketa_$mod.htm", "r");
+			$contents = fread($handle, filesize("./Files/enduro_anketa_$mod.htm"));   	
+			fclose($handle);
 			
 			if ($r){
 				$contents = str_replace("{place}",$cmp[0]->getName(). ",<br> ". $r[0]->getName(),$contents);

@@ -89,7 +89,7 @@
 				 echo "<a target=\"_blank\" href=\"?rm_func=reslt&rm_subf=clubTeams&no_gui=1&r=",$r[$i]->getID(),"\">";
 					 echo "<font style=\"font-size:15px\">^</font>";
 				 echo "</a>";
-				if (strpos($cmp->getName(), 'Sprint') == false){
+				/* if (strpos($cmp->getName(), 'Sprint') == false){
 					echo " | ";
 					echo "<a href=\"?rm_func=reslt&rm_subf=constrTeams&r=",$r[$i]->getID(),"\">";
 						echo "Ražotāju komandas";
@@ -97,7 +97,7 @@
 					echo "<a target=\"_blank\" href=\"?rm_func=reslt&rm_subf=constrTeams&no_gui=1&r=",$r[$i]->getID(),"\">";
 						echo "<font style=\"font-size:15px\">^</font>";
 					echo "</a>";
-				}
+				} */
 				echo "<br>";
 			}
 			if ($r[$i]->exresLink){
