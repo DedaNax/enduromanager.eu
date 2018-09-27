@@ -119,8 +119,8 @@
 			$cmp = $cm->getChamps($r[0]->getCH_ID(),"","","");			
 			
 			$mod="";
-			if (strpos($cmp[0]->getName(), 'Sprint')){$mod="sprint";}
-			if (strpos($cmp[0]->getName(), 'Cross')){$mod="cc";}
+			if (strpos($cmp[0]->getName(), 'Sprint') !== false){$mod="sprint";}
+			if (strpos($cmp[0]->getName(), 'Cross') !== false){$mod="cc";}			
 			
 			$handle = fopen("./Files/enduro_anketa_$mod.htm", "r");
 			$contents = fread($handle, filesize("./Files/enduro_anketa_$mod.htm"));   	

@@ -581,8 +581,7 @@
 							echo "style=\"background-color:pink\"";
 						}
 					echo ">",substr($row["tim"],0,2) == "00" ? substr($row["tim"],3,20): $row["tim"],"<b>.</b>",( $row["sec100"] % 100) <10 ? "0".( $row["sec100"] % 100) : ( $row["sec100"] % 100);
-				$eaid = $row["era_id"];
-				
+				$eaid = $row["era_id"];				
 				if (strpos($cmp->getName(), 'Sprint')){
 					echo "<td align=\"center\">";
 					switch($vieta){
