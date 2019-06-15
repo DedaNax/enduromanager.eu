@@ -386,78 +386,7 @@ class main {
 
 
 
-	function showSideCategoriesPublic($parent = false, $level = 0, $ext = false) {
-
-		/*
-		if($level > 2)
-			return;
-		
-
-		$overwrite = Array(8 => 'phpBB3/', 166 => 'rm/');
-
-		$root = $this->findRoot($this->id);
-		
-		if(!is_numeric($parent))
-			$parent = 0;
-
-
-		$relatives = $this->findRelatives($this->id);			
-	
-		
-		if(!$this->isAdmin) {
-			
-			$bb3auth = new BB3Auth();
-			$priv = $bb3auth->check('u_raksti_priv') ? 'AND active = 1' : ' AND active = 1 AND priv < 1';
-			
-		}
-		
-		
-		$sql = "SELECT 
-					id, 
-					parent,
-					title_$this->lang as title,
-					bold
-				FROM $this->table
-				WHERE title_$this->lang <> '' AND objType = 0 AND parent = '$parent' $priv
-				ORDER BY seq, id";
-
-		$result = mysql_query($sql) or die(mysql_error());
-
-
-		$out = "\n<ul class=\"side level$level\">\n";
-
-		while($row = mysql_fetch_object($result))
-		{
-			
-			//$row->title = ($level == 0) ? mb_strtolower($row->title, "utf-8") : $row->title;
-			$row->title = ($level == 0) ? strtolower($row->title) : $row->title;
-			$bold		= ($row->bold == 1) ? 'bold' : '';
-
-			if(isset($overwrite[$row->id])) {
-				$link = BASE_URL . $overwrite[$row->id];	
-			} else {
-			//	$link = SEO::encode($row->id, $this->title);
-			}
-			
-			if(array_key_exists($row->id, $relatives)) {
-
-				$out .= "<li class=\"active $bold\"><a class=\"active $bold\" href=\"" . $link . "\"> $row->title </a> \n";
-
-				$o = $this->showSideCategoriesPublic($row->id, ($level + 1), $ext);
-
-
-				if(preg_match("/<li/", $o)) {
-					$out .= $o;
-				}
-
-				
-				if($this->id == $row->id && $this->id = 166) {
-					// $out .= '<ul class="side level2"><li><a href="">tests</a></li></ul>';
-				}
-
-
-				// ext hook
-*/
+	function showSideCategoriesPublic($parent = false, $level = 0, $ext = false) {	
 				$i=0;
 				foreach((Array)$ext as $id => $items) {
 
@@ -477,52 +406,24 @@ class main {
 						$out .= '</ul>';
 					}
 				}	
-
 							
 				$out .= "</li>"; 
 				$out .= '<p><img src="./enduro_logo.jpg" class="logo"></p>';				
-				/*	
-				/*	
-				
-			} else {
-				
-				$out .= "<li><a class=\"$bold\" href=\"" . $link . "\"> $row->title </a></li>\n";
-			}
-			
-		}
-		*/
+				$out .= "</li>"; 
+				$out .= '<p><a href="http://www.rocketbiker.lv" target="_blanc"><img src="./mapon_o.jpg" width="180px" height="180px"></a></p>';	
+
 		$out .= "</ul>\n";
-		
-		
 
 		return $out;
 	}
-
-
-
-	
-
-
-
-
-
-	
-	
-	
-
-	
-	
 	
 	protected function getDocs($parent)
-	{
-
-		
+	{		
 		if(!$this->isAdmin) {
 			
 			$bb3auth = new BB3Auth();
 			$priv = $bb3auth->check('u_raksti_priv') ? 'AND active = 1' : ' AND active = 1 AND priv < 1';
-		}
-		
+		}		
 
 		$sql = "SELECT 
 					id, 
@@ -551,15 +452,8 @@ class main {
 		return $out;
 	}
 
-
-
-
-
-
-
 	public function showDocs($parent)
-	{
-		
+	{		
 		$out = "";
 
 		foreach($this->getDocs($parent) as $key => $data)
@@ -574,12 +468,6 @@ class main {
 
 		return '<div class="docs">' . $out . '</div>';
 	}
-	
-	
-	
-	
-
-
 
 	public function spaces($nr)
 	{
@@ -590,26 +478,12 @@ class main {
 		return $out;
 	}
 
-
-
-
-
-
-
 	public function showBody($id = 0)
 	{
-
-
 		if(isset($_GET['sitemap']))
 		{
 			return $this->showTree(0);
 		}
-
-
-
-
-		//$out .= $this->showLocator();
-		//$out .= "<br>";
 
 		if($id == 0) { $id = $this->id; }
 
@@ -621,33 +495,18 @@ class main {
 			$out = $row->texis;
 		}
 
-		
-
 		return $out;
 	}
 
-
-
-	
-	
-
-
 	function showBodyPublic($id = 0)
 	{
-
-		// default
-		
-		if($id == 0) { $id = $this->id; }			
-		
-		
+		// default		
+		if($id == 0) { $id = $this->id; }	
 		
 		if(isset($_POST["search"]) && !empty($_POST["search"])) {
 			
 			return $this->search();
 		}
-		
-		
-		
 		
 		$sql = "SELECT
 					id, parent, objType, images,
@@ -656,13 +515,10 @@ class main {
 					datums
 				FROM " . $this->table . " WHERE id = '$id'";
 		$result = mysql_query($sql) or $this->debug($sql, mysql_error());
-
 		
 		if($row = mysql_fetch_object($result))
 		{
-
-			// sākumā rādām kas ir appasaule
-			
+			// sākumā rādām kas ir appasaule			
 			if($row->id == 1)
 				$out = $this->kasir();
 			
@@ -676,20 +532,10 @@ class main {
 				if($plugin->body($row, $out))
 					return $out;
 			}
-			
-			
 		}
 			
 		return $out;
 	}
-
-
-
-	
-	
-	
-	
-	
 	
 	function kasir() {
 
@@ -700,7 +546,6 @@ class main {
 					datums
 				FROM " . $this->table . " WHERE id = 23 HAVING title <> ''";
 		$result = mysql_query($sql) or $this->debug($sql, mysql_error());
-
 		
 		if($row = mysql_fetch_object($result)) {
 		
@@ -720,20 +565,11 @@ class main {
 		return $out;
 	}
 	
-	
-	
-	
-	
-	
-	
 	function getCalImg() {
-		
-
 		$sql = "SELECT
 					id, parent, objType, images, links
 				FROM " . $this->table . " WHERE id = 6";
 		$result = mysql_query($sql) or $this->debug($sql, mysql_error());
-
 		
 		if($row = mysql_fetch_object($result)) {
 			
@@ -742,17 +578,8 @@ class main {
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	function sponsors() {
-		
-			$sql = "SELECT
+	function sponsors() {		
+		$sql = "SELECT
 					id, parent, objType, images,
 					title_$this->lang as title,
 					texis_lv as texis,
@@ -760,7 +587,6 @@ class main {
 				FROM " . $this->table . " WHERE id = 22
 				HAVING title <> ''";
 		$result = mysql_query($sql) or $this->debug($sql, mysql_error());
-
 		
 		if($row = mysql_fetch_object($result)) {
 			
@@ -773,21 +599,11 @@ class main {
 		}		
 		
 	}
-	
-	
-	
-	
-
-	
-	
-
 
 	function showLocator()
 	{
-
 		$relatives = $this->findRelatives($this->id);
 		$item = $this->getItems($relatives);
-
 
 		foreach($relatives as $id => $value)
 		{
@@ -798,15 +614,8 @@ class main {
 		return $out;
 	}
 
-
-
-
-
-
-
 	function showLocatorPublic($id = 0)
 	{
-
 		if($id == 0)
 			$id = $this->id;
 		
@@ -829,15 +638,8 @@ class main {
 		return implode(" &#187; ", $arr);
 	}
 
-
-
-
-
-
-
 	function getItems( $ids = array())
 	{
-
 		$out	= array();
 		$str		= " id = 0";
 
@@ -864,25 +666,14 @@ class main {
 				$out[$row->id][$key] = $value;
 				
 			}
-			
-			
-			//$out[$row->id] = array('objType' => $row->objType, 'parent' => $row->parent, 'title' => $row->title, "short" => $row->short, 'texis' => $row->texis);
 		}	
 
-	return $out;
+		return $out;
 	}
-
-
-
-
-
-
 
 	function findParentForSide()
 	{
-
 		$data = array();
-		
 
 		if($this->useTopCategories)
 		{
@@ -917,16 +708,8 @@ class main {
 		return $parent;
 	}
 
-
-
-
-
-
-
-
 	function findParent($id)
 	{
-
 		$sql = "SELECT parent FROM " . $this->table . " WHERE id = '" . (int)$id . "'";
 		$result = mysql_query($sql) or $this->debug($sql, mysql_error());
 
@@ -939,13 +722,6 @@ class main {
 
 		return $out;
 	}
-
-
-
-
-
-	
-
 
 	function findRoot($id)
 	{
@@ -961,19 +737,10 @@ class main {
 		return $id;
 	}
 
-
-
-
-
-
-
-
 	function findRelatives($id)
-	{
-		
+	{		
 		$parent = $this->findParent($id);
 		$out = array();
-		//$depth = count($this->findRelatives($this->id)) - 1;
 		$depth = $this->depthID - 1;
 		
 		$out[$id] = $depth;
@@ -991,17 +758,8 @@ class main {
 		return $out;
 	}
 
-
-
-
-
-
-
-
-
 	function findChildrens($id)
 	{
-
 		$out = array();
 
 		$sql = "SELECT id, objType, parent, title_$this->lang as title FROM " . $this->table . " WHERE parent = '" . $id . "' ORDER BY objType";
@@ -1015,20 +773,9 @@ class main {
 		return $out;
 	}
 
-
-
-
-
-
-
-
 	function getTree($parent = 0)
 	{
-
 		$this->dep = $dep;
-
-		//if($parent == -1) { $parent = $this->findParentForSide(); }
-
 		$sql = "select * from lv_items where parent = '$parent' ORDER BY objType, seq";
 		$result = mysql_query($sql);
 	
@@ -1047,17 +794,8 @@ class main {
 			
 		}
 
-
-	return $this->treeX;
+		return $this->treeX;
 	}
-
-
-
-
-	
-	
-
-
 
 	function showTree($parent = 0)
 	{
@@ -1095,26 +833,15 @@ class main {
 			}
 		}
 
-
 		return $out;
 	}
-
-
 	
-	
-	
-	
-	
-	
-	
-	function search() {
-		
+	function search() {		
 		$search = mysql_real_escape_string( $_POST["search"] );
 		
 		$out = '<h1 style="display: inline;">Search: </h1><span style="color: orange; font-weight: bold;">' . $search . '</span>';
 		
-		$lang = (isset($_SESSION['lang'])) ? $_SESSION['lang'] : 'lv';
-		
+		$lang = (isset($_SESSION['lang'])) ? $_SESSION['lang'] : 'lv';		
 		
 		if(!$this->isAdmin) {
 			
@@ -1122,8 +849,6 @@ class main {
 			$priv = $bb3auth->check('u_raksti_priv') ? 'AND active = 1' : ' AND active = 1 AND priv < 1';
 			
 		}
-		
-		
 		
 		$sql = 'SELECT 
 					id,  
@@ -1155,11 +880,6 @@ class main {
 		return $out;
 	}
 
-
-	
-
-
-
 	function debug($sql, $err){
 		if($this->qDebug)
 		{
@@ -1168,40 +888,16 @@ class main {
 			exit;
 		}
 	}
+}	
 
-
-
-}	// EOF class
-
-
-
-
-
-
-
-
-
-
-
-
-function js() {
-	
+function js() {	
 	$items = new main();
-	
-	//list($images, $links) = $items->getCalImg();
 
 	$out = '<script type="text/javascript">' . "\n";
 	$out .= 'var BASE_URL = "'.BASE_URL.'";' . "\n";
-	//$out .= 'var CAL_IMG = "'.BASE_URL.'' . $images . '";' . "\n";
-	//$out .= 'var CAL_URL = "'. $links . '";' . "\n";
 	$out .= '</script>' . "\n";
 	
 	return $out;
 }
-
-
-
-
-
 
 ?>
