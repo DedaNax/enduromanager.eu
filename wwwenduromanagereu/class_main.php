@@ -409,8 +409,8 @@ class main {
 							
 				$out .= "</li>"; 
 				$out .= '<p><img src="./enduro_logo.jpg" class="logo"></p>';				
-				$out .= "</li>"; 
-				$out .= '<p><a href="http://www.rocketbiker.lv" target="_blanc"><img src="./mapon_o.jpg" width="180px" height="180px"></a></p>';	
+				$out .= '<p><a href="http://www.endurolatvia.lv/" target="_blanc"><img src="./madona.jpg" width="195px" ></a></p>';	
+				$out .= '<p><a href="http://www.rocketbiker.lv/katalogs/" target="_blanc"><img src="./mapon_o.jpg" width="120px" height="120px"></a></p>';	
 
 		$out .= "</ul>\n";
 
