@@ -238,7 +238,7 @@ function nrList(){
 	//echo $yr; print_r($row);
 	echo "<p width=\"100%\" align=\"center\">";
 	$j = 0;
-	for ($i = ($row[ymin] > $yr ? $yr: $row[ymin]); $i <= ($row[ymax]+1 > $yr ? $row[ymax]+1 : $yr) ;$i++){
+	for ($i = ($row['ymin'] > $yr ? $yr: $row['ymin']); $i <= ($row['ymax']+1 > $yr ? $row['ymax']+1 : $yr) ;$i++){
 		$j++;
 		if($j==10){
 			echo "<br>";
@@ -282,7 +282,7 @@ function nrList(){
 		echo "</select>";*/	
 		
 		echo '<td style="width: 60px;"><select name = "NR_YR" id = "NR_YR" style="width: 60px;">';
-		for($i=($row[ymin] > $yr ? date('Y'): $row[ymin])-1; $i <= (($row[ymax] > date('Y') ? $row[ymax] : $yr)+1);$i++){
+		for($i=($row['ymin'] > $yr ? date('Y'): $row['ymin'])-1; $i <= (($row['ymax'] > date('Y') ? $row['ymax'] : $yr)+1);$i++){
 			echo "<option value=\"",$i,"\">";
 			echo $i;
 			echo "</option>";
@@ -333,7 +333,7 @@ function nrList(){
 				echo "<img src = \"./images/PageWhiteEdit_16x16_gray.png\" alt=\"Atvērt\" title=\"Atvērt\" border = \"0\">";
 			}
 				
-			echo " <a onclick=\"confDelGet('".DEL_CONFIRM."','index.php?rm_func=lic&rm_subf=delnr&opt=".$row[ID]."')\">";
+			echo " <a onclick=\"confDelGet('".DEL_CONFIRM."','index.php?rm_func=lic&rm_subf=delnr&opt=".$row['ID']."')\">";
 				echo "<img src=\"./images/RedCross_16x16.png\" border = \"0\" alt=\"Dzēst\" title=\"Dzēst\" 
 					onmouseover=\"document.body.style.cursor = 'pointer'\"
 					onmouseout = \"document.body.style.cursor = 'default'\"
@@ -375,18 +375,17 @@ function formatDate($d){
 
 function licList(){
     $rcm = new RacerManager;
-	$cm = new champManager;
-	
+	$cm = new champManager;	
 	$yr = isset($_SESSION['params']['yr']) ? $_SESSION['params']['yr'] : date('Y');
 	
 	$sql = "select min(year(`START_DATE`)) as ymin , max(year(`START_DATE`)) as ymax from `enduro_licence`";
 	$q_result = queryDB($sql);
 	
 	$row = mysql_fetch_array($q_result, MYSQL_ASSOC);
-	//echo $yr; print_r($row);
+
 	echo "<p width=\"100%\" align=\"center\">";
 	$j = 0;
-	for ($i = ($row[ymin] > $yr ? $yr: $row[ymin]); $i <= ($row[ymax] > $yr ? $row[ymax] : $yr) ;$i++){
+	for ($i = ($row['ymin'] > $yr ? $yr: $row['ymin']); $i <= max($row['ymax'] , date('Y')) ;$i++){
 		$j++;
 		if($j==10){
 			echo "<br>";
@@ -507,15 +506,7 @@ function licList(){
 				});
 			});
 		</script>";
-		/*echo '<td style="width: 70px;"><input style="width: 70px;" type="text" name="LIC_TO" id="LIC_TO">';
-		echo "<script type=\"text/javascript\">
-			$(function(){
-				$('*[name=LIC_TO]').appendDtpicker({
-					\"dateOnly\": true,
-					\"dateFormat\": \"DD-MM-YYYY\"						
-				});
-			});
-		</script>";*/
+	
 		echo "<input type=\"hidden\" value=\"$yr\" name = \"yr\">";
 		echo "<input type=\"hidden\" value=\"\" name = \"RACER_ID\" id = \"RACER_ID\">";
 		echo "<input type=\"hidden\" value=\"\" name = \"ID\" id = \"ID\">";
@@ -540,7 +531,7 @@ function licList(){
 				echo "<img src = \"./images/PageWhiteEdit_16x16_gray.png\" alt=\"Atvērt\" title=\"Atvērt\" border = \"0\">";
 			}
 				
-			echo " <a onclick=\"confDelGet('".DEL_CONFIRM."','index.php?rm_func=lic&rm_subf=dellic&opt=".$row[ID]."')\">";
+			echo " <a onclick=\"confDelGet('".DEL_CONFIRM."','index.php?rm_func=lic&rm_subf=dellic&opt=".$row['ID']."')\">";
 				echo "<img src=\"./images/RedCross_16x16.png\" border = \"0\" alt=\"Dzēst\" title=\"Dzēst\" 
 					onmouseover=\"document.body.style.cursor = 'pointer'\"
 					onmouseout = \"document.body.style.cursor = 'default'\"

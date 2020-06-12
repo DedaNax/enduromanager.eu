@@ -1,9 +1,0 @@
-Subject: Lietotāja konta otreizējā aktivizācija
-
-Sveiki, {USERNAME}!
-
-Jūsu lietotāja konts forumā «{SITENAME}» tika atslēgts, visdrīzāk tas notika tāpēc, ka Jūsu profilā tika veiktas izmaiņas. Lai aktivētu savu lietotāja kontu apmeklējiet šo saiti:
-
-{U_ACTIVATE}
-
-{EMAIL_SIG}

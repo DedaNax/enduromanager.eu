@@ -9,12 +9,11 @@ if (
    return 0;
 }
 
-function printGUI(){
+function printGUI(){	
 	$maintenceWarn = 0;
 	$maintence = 0;
 	
 	$ap = new AP;
-
 	
 	$i = 0;
 	$keys = array_keys($_GET);
@@ -29,7 +28,6 @@ function printGUI(){
 		$i++;
 	}
 	
-	$bb3auth = new BB3Auth();
 	$sec = new Security;
 	
 	$params['lang'] = isset($params['lang']) ? $params['lang'] : (($_SESSION['params']['lang'] != $params['lang'] && isset($params['lang'])) ? $params['lang'] : $_SESSION['params']['lang'] );
@@ -37,9 +35,6 @@ function printGUI(){
 	$params['type'] = isset($params['type']) ? $params['type'] : $_SESSION['params']['type'];
 		
 	$_SESSION['params'] = $params;
-	
-	$_SESSION['user_id'] = $bb3auth->user->data["user_id"];
-	$_SESSION['ses_id'] = $bb3auth->user->data["session_id"];
 
 	switch($params['lang']){
 		case "lv":
@@ -49,58 +44,59 @@ function printGUI(){
 			include "./lang/eng.php";
 			break;
 		default:
+			$_SESSION['params']['lang'] =  "lv";
 			include "./lang/lat.php";
 	}
 	
-	$side = '';	
-	$sport = $sec->testUserGroup($_SESSION['user_id'],"Sportisti");
-	$endadmin = $sec->testUserGroup($_SESSION['user_id'],ENDURO_ADMINS);
+	$side = null;	
+	$sport = $sec->testUserGroup($_SESSION['user']['user_id'],"Sportisti");
+	$endadmin = $sec->testUserGroup($_SESSION['user']['user_id'],ENDURO_ADMINS);
 	
 	if ($sport){
-		$side[] = Array('href' => '?rm_func=racer&rm_subf=myprofile&menuitem=mydata', 'title' => MY_DATA, 'level' => 0,'sel'=> checkSel(racer,myprofile));
+		$side[] = Array('href' => '?rm_func=racer&rm_subf=myprofile&menuitem=mydata', 'title' => MY_DATA, 'level' => 0,'sel'=> checkSel("racer","myprofile"));
 	}
 	// ENDURO
 	$side[] = Array('href' => ' ?menuitem=enduro&rm_func=enduro&rm_subf=apply', 'title' => MENU_ENDURO, 'level' => 0);
 	if($params['menuitem'] == "enduro"){
 		$i=0;
 		if ($sport){
-			$side[] = Array('href' => '?rm_func=enduro&rm_subf=apply', 'title' => MENU_APPL, 'level' => 1,'sel'=> (checkSel(enduro,apply)||checkSel(enduro,addapplication)||checkSel(enduro,delapl)) );
-			$em = $sec->getCustomField($_SESSION['user_id'],"pf_rm_enduro_manager");
+			$side[] = Array('href' => '?rm_func=enduro&rm_subf=apply', 'title' => MENU_APPL, 'level' => 1,'sel'=> (checkSel("enduro","apply")||checkSel("enduro","addapplication")||checkSel("enduro","delapl")) );
+			$em = $sec->getCustomField($_SESSION['user']['user_id'],"pf_rm_enduro_manager");
 			if( isset($em) && $em == 0){
-				$side[] = Array('href' => ' ?rm_func=enduro&rm_subf=clubapply', 'title' => ENDURO_CLUB_APPL,'level' => 1,'sel'=> checkSel(enduro,clubapply));				
+				$side[] = Array('href' => ' ?rm_func=enduro&rm_subf=clubapply', 'title' => ENDURO_CLUB_APPL,'level' => 1,'sel'=> checkSel("enduro","clubapply"));				
 			}
 			$i=1;
 		}
 		if (
-			($sec->testUserGroup($_SESSION['user_id'],"RM_ENDURO_ORG"))
+			($sec->testUserGroup($_SESSION['user']['user_id'],"RM_ENDURO_ORG"))
 		){
 			if($i!=0){$side[] = Array('level' => 1);}
-			$side[] = Array('href' => ' ?rm_func=race&rm_subf=racelist&type=3', 'title' => MENU_E_RACE,'level' => 1,'sel'=> checkSel(race,racelist));
+			$side[] = Array('href' => ' ?rm_func=race&rm_subf=racelist&type=3', 'title' => MENU_E_RACE,'level' => 1,'sel'=> checkSel("race","racelist"));
 			$i=1;
 		}
 		if (
-			($sec->testUserGroup($_SESSION['user_id'],ENDURO_ADMINS))
+			($sec->testUserGroup($_SESSION['user']['user_id'],ENDURO_ADMINS))
 		){
 			if($i!=0){$side[] = Array('level' => 1);}
-			$side[] = Array('href' => ' ?rm_func=champ&rm_subf=champlist&type=3', 'title' => MENU_CHAMP, 'level' => 1,'sel'=> checkSel(champ,champlist));		
-			$side[] = Array('href' => ' ?rm_func=champ&rm_subf=classlist&type=3', 'title' => ENDURO_CLASS, 'level' => 1,'sel'=> checkSel(champ,classlist));
+			$side[] = Array('href' => ' ?rm_func=champ&rm_subf=champlist&type=3', 'title' => MENU_CHAMP, 'level' => 1,'sel'=> checkSel("champ","champlist"));		
+			$side[] = Array('href' => ' ?rm_func=champ&rm_subf=classlist&type=3', 'title' => ENDURO_CLASS, 'level' => 1,'sel'=> checkSel("champ","classlist"));
 			$i=1;
 		}
 		if (
-				($sec->testUserGroup($_SESSION['user_id'],"RM_ENDURO_ORG")) ||
-				($sec->testUserGroup($_SESSION['user_id'],ENDURO_ADMINS))
+				($sec->testUserGroup($_SESSION['user']['user_id'],"RM_ENDURO_ORG")) ||
+				($sec->testUserGroup($_SESSION['user']['user_id'],ENDURO_ADMINS))
 		){
 			if($i!=0){$side[] = Array('level' => 1);}
-			$side[] = Array('href' => ' ?rm_func=enduro&rm_subf=reg', 'title' => MENU_E_REG,'level' => 1,'sel'=> checkSel(enduro,reg));
-			$side[] = Array('href' => ' ?rm_func=enduro&rm_subf=start', 'title' => MENU_E_START,'level' => 1,'sel'=> checkSel(enduro,start));
-			$side[] = Array('href' => ' ?rm_func=enduro&rm_subf=teams', 'title' => MENU_E_TEAM,'level' => 1,'sel'=> checkSel(enduro,teams));
-			$side[] = Array('href' => ' ?rm_func=enduro&rm_subf=laiks', 'title' => MENU_E_TIME,'level' => 1,'sel'=> checkSel(enduro,laiks));
+			$side[] = Array('href' => ' ?rm_func=enduro&rm_subf=reg', 'title' => MENU_E_REG,'level' => 1,'sel'=> checkSel("enduro","reg"));
+			$side[] = Array('href' => ' ?rm_func=enduro&rm_subf=start', 'title' => MENU_E_START,'level' => 1,'sel'=> checkSel("enduro","start"));
+			$side[] = Array('href' => ' ?rm_func=enduro&rm_subf=teams', 'title' => MENU_E_TEAM,'level' => 1,'sel'=> checkSel("enduro","teams"));
+			$side[] = Array('href' => ' ?rm_func=enduro&rm_subf=laiks', 'title' => MENU_E_TIME,'level' => 1,'sel'=> checkSel("enduro","laiks"));
 			$i=1;
 		} 
 		if($i!=0){$side[] = Array('level' => 1);}
-		$side[] = Array('href' => ' ?rm_func=print&rm_subf=enduroapllist&type=3', 'title' => MENU_ENDURO_APLS,'level' => 1,'sel'=> checkSel('print',enduroapllist));
+		$side[] = Array('href' => ' ?rm_func=print&rm_subf=enduroapllist&type=3', 'title' => MENU_ENDURO_APLS,'level' => 1,'sel'=> checkSel('print',"enduroapllist"));
 		$side[] = Array('href' => ' ?rm_func=print&rm_subf=enduroapllist&no_gui=1&type=3', 'title' => MENU_ENDURO_APLS_PRINT,'level' => 1,'target' => '_blank');
-		$side[] = Array('href' => ' ?rm_func=reslt&rm_subf=enduromenu&type=3', 'title' => MENU_ENDURO_RESULT,'level' => 1,'sel'=> checkSel(reslt,enduromenu));
+		$side[] = Array('href' => ' ?rm_func=reslt&rm_subf=enduromenu&type=3', 'title' => MENU_ENDURO_RESULT,'level' => 1,'sel'=> checkSel("reslt","enduromenu"));
 		
 		
 	}
@@ -111,50 +107,49 @@ function printGUI(){
 		if ($sport){
 			if($i!=0){$side[] = Array('level' => 1);}
 			$i=1;
-			$side[] = Array('href' => '?rm_func=racer&rm_subf=raceAppl', 'title' => MENU_APPL, 'level' => 1,'sel'=> checkSel(racer,raceAppl));
-			$side[] = Array('href' => '?rm_func=racer&rm_subf=myteam', 'title' => MENU_PE_TEAM, 'level' => 1,'sel'=> checkSel(racer,myteam));
-			$side[] = Array('href' => '?rm_func=teamrace&rm_subf=imginp', 'title' => MENU_PE_INPUT, 'level' => 1,'sel'=> checkSel(teamrace,imginp));
+			$side[] = Array('href' => '?rm_func=racer&rm_subf=raceAppl', 'title' => MENU_APPL, 'level' => 1,'sel'=> checkSel("racer","raceAppl"));
+			$side[] = Array('href' => '?rm_func=racer&rm_subf=myteam', 'title' => MENU_PE_TEAM, 'level' => 1,'sel'=> checkSel("racer","myteam"));
+			$side[] = Array('href' => '?rm_func=teamrace&rm_subf=imginp', 'title' => MENU_PE_INPUT, 'level' => 1,'sel'=> checkSel("teamrace","imginp"));
 		}
 		if (
-			($sec->testUserGroup($_SESSION['user_id'],"RM_ENDURO_ORG"))
+			($sec->testUserGroup($_SESSION['user']['user_id'],"RM_ENDURO_ORG"))
 		){
 			if($i!=0){$side[] = Array('level' => 1);}
 			$i=1;
-			$side[] = Array('href' => '?rm_func=race&rm_subf=racelist&type=1', 'title' => MENU_E_RACE,'level' => 1,'sel'=> checkSel(race,racelist));
+			$side[] = Array('href' => '?rm_func=race&rm_subf=racelist&type=1', 'title' => MENU_E_RACE,'level' => 1,'sel'=> checkSel("race","racelist"));
 		}
 		if (
-			($sec->testUserGroup($_SESSION['user_id'],ENDURO_ADMINS))
+			($sec->testUserGroup($_SESSION['user']['user_id'],ENDURO_ADMINS))
 		){
 			if($i!=0){$side[] = Array('level' => 1);}
 			$i=1;
-			$side[] = Array('href' => '?rm_func=champ&rm_subf=champlist&type=1', 'title' => MENU_CHAMP, 'level' => 1,'sel'=> checkSel(champ,champlist));		
-			$side[] = Array('href' => '?rm_func=champ&rm_subf=classlist&type=1', 'title' => ENDURO_CLASS, 'level' => 1,'sel'=> checkSel(champ,classlist));
+			$side[] = Array('href' => '?rm_func=champ&rm_subf=champlist&type=1', 'title' => MENU_CHAMP, 'level' => 1,'sel'=> checkSel("champ","champlist"));		
+			$side[] = Array('href' => '?rm_func=champ&rm_subf=classlist&type=1', 'title' => ENDURO_CLASS, 'level' => 1,'sel'=> checkSel("champ","classlist"));
 		}
 		if($i!=0){$side[] = Array('level' => 1);}
-		$side[] = Array('href' => '?rm_func=print&rm_subf=trdata', 'title' => MENU_ENDURO_APLS,'level' => 1,'sel'=> checkSel('print',trdata));
+		$side[] = Array('href' => '?rm_func=print&rm_subf=trdata', 'title' => MENU_ENDURO_APLS,'level' => 1,'sel'=> checkSel('print',"trdata"));
 		$side[] = Array('href' => '?rm_func=print&rm_subf=trdata&no_gui=1', 'title' => MENU_ENDURO_APLS_PRINT,'level' => 1,'target' => '_blank');
-		$side[] = Array('href' => '?rm_func=reslt&rm_subf=menu', 'title' => MENU_ENDURO_RESULT,'level' => 1,'sel'=> checkSel(reslt,menu));
+		$side[] = Array('href' => '?rm_func=reslt&rm_subf=menu', 'title' => MENU_ENDURO_RESULT,'level' => 1,'sel'=> checkSel("reslt","menu"));
 	}
 	
 	//RACER DATA
 	if (
-		($sec->testUserGroup($_SESSION['user_id'],ENDURO_ADMINS) ||
-		 $sec->testUserGroup($_SESSION['user_id'],"RM_ENDURO_ORG"))
+		($sec->testUserGroup($_SESSION['user']['user_id'],ENDURO_ADMINS) ||
+		 $sec->testUserGroup($_SESSION['user']['user_id'],"RM_ENDURO_ORG"))
 	){	
 		$side[] = Array('href' => ' ?menuitem=racerdata&rm_func=racer&rm_subf=viewlist', 'title' => MENU_RACER_DATA, 'level' => 0);
 		if($params['menuitem'] == "racerdata"){
-			$side[] = Array('href' => '?rm_func=lic&rm_subf=list', 'title' => MENU_LICENCE, 'level' => 1,'sel'=> checkSel(lic,'list'));			
-			$side[] = Array('href' => '?rm_func=racer&rm_subf=viewlist', 'title' => MENU_RACERS, 'level' => 1,'sel'=> checkSel(racer,viewlist));	
-			$side[] = Array('href' => '?rm_func=racer&rm_subf=clublist', 'title' => MENU_CLUB_LIST, 'level' => 1,'sel'=> checkSel(racer,clublist));	
+			$side[] = Array('href' => '?rm_func=lic&rm_subf=list', 'title' => MENU_LICENCE, 'level' => 1,'sel'=> checkSel("lic",'list'));			
+			$side[] = Array('href' => '?rm_func=racer&rm_subf=viewlist', 'title' => MENU_RACERS, 'level' => 1,'sel'=> checkSel("racer","viewlist"));	
+			$side[] = Array('href' => '?rm_func=racer&rm_subf=clublist', 'title' => MENU_CLUB_LIST, 'level' => 1,'sel'=> checkSel("racer","clublist"));	
 		}		
 	}
 		
-	$header = TITLE;
-	
-	$hd =  $ap->headers( Array(0 => $side),$bb3auth->user );
+	$header = TITLE;	
+	$hd =  $ap->headers( Array(0 => $side), $_SESSION['user']);
 	
 	if (!$_SESSION['params']['no_gui']) {
-		$hd =  $ap->headers( Array(0 => $side),$bb3auth->user );
+		$hd =  $ap->headers( Array(0 => $side), $_SESSION['user']);
 		echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 			<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"lv\" lang=\"lv\">
 				<head>
@@ -172,11 +167,9 @@ function printGUI(){
 						hs.outlineType = 'rounded-white';
 						hs.showCredits = false;
 						hs.wrapperClassName = 'draggable-header';
-					</script>
-					
-		";
-		echo str_replace("<body",($_SESSION['params']['anh'] ? "<body onload=\"location.href = location.href+'#".$_SESSION['params']['anh']."';\"": "<body"),$hd);
-		//echo $hd;
+					</script>";
+
+		echo str_replace("<body",($_SESSION['params']['anh'] ? "<body onload=\"location.href = location.href+'#".$_SESSION['params']['anh']."';\"": "<body"),$hd);		
 	} elseif (!$_SESSION['params']['script_gui']) {
 		echo printheader();
 	}
@@ -188,26 +181,13 @@ function printGUI(){
 	if($_SESSION['params']['chr']) {
 		$_SESSION['selrace'] = $_SESSION['params']['chr'];
 		if ($_SESSION['params']['rm_subf'] == "copyracers"){$_SESSION['params']['rm_subf'] = "start";}
-	}
-	
-	if ($maintenceWarn){
-		echo "<table width=\"100%\" style=\"background-color:#FFCCFF\"><tr><td align=\"center\">";
-			echo "<b style=\"font-size:20px;color:orange\">Uzmanību! Pēc 15 min sistēma nebūs pieejama uz 1 stundu!</b>";
-		echo "</table>";
-	}
-	if(!$maintence){
-		if ($bb3auth->check('u_rm_use') || $func=="reslt" || $func=="print" || $func="appl"){
-			//printAactualRaceMenu();
-			printMain(); 
-		} else {			
-			printHowTo();
-		}
-	} else {
-		echo "<table width=\"100%\" style=\"background-color:#FFCCFF\"><tr><td align=\"center\">";
-			echo "<b style=\"font-size:20px;color:orange\">Uzmanību! Sistēma nebūs pieejama līdz 13:20!</b>";
-		echo "</table>";
-		
-	}
+	}	
+
+	if ($func=="reslt" || $func=="print" || $func="appl" || $_SESSION['user']->isUser()) {
+		printMain(); 
+	} else {			
+		printHowTo();
+	}	
 		
 	if (!$_SESSION['params']['no_gui']) {
 		echo $ap->footer();
@@ -253,14 +233,12 @@ function printAactualRaceMenu($t){
 			echo "</option>";
 		}
 	echo "</select>";
-		
-	
 	
 	echo "<hr>";
-	
 }
 
 function printMain() {	
+	
 	$opt = $_SESSION['params']['opt'];
 	$func = $_SESSION['params']['rm_func'] ? $_SESSION['params']['rm_func'] : "empty";
 	$subf = $func != "empty" ? ($_SESSION['params']['rm_subf'] ? $_SESSION['params']['rm_subf'] : "empty") : "empty";
@@ -269,8 +247,6 @@ function printMain() {
 		echo prntWarn("Nav tiesību!");
 		return;
 	}
-	
-	
 	
 	switch($func) {		
 		case "user": 
@@ -314,6 +290,9 @@ function printMain() {
 			break;
 		case "lic":		
 			doLic($subf,$opt);
+			break;
+		case "resetPass":
+			resetPass($subf,$opt);
 			break;
 		default:
 			printDefault();
@@ -1319,15 +1298,21 @@ function checkPerm($f,$s){
 			"savenewuser" => array(				
 				"all" => true
 			)
+		),
+		"resetPass" => array(
+			"all" => true
 		)
 	);
+	if($perm[$f]['all']){
+		return true;
+	}
 	if($perm[$f][$s]['all']){
 		return true;
 	}
 	$sec = new Security;
-	//echo count( $perm[$f][$s]);
+	
 	for($i=0;$i<count($perm[$f][$s]);$i++){
-		if($sec->testUserGroup($_SESSION['user_id'],$perm[$f][$s][$i])){
+		if($sec->testUserGroup($_SESSION['user']['user_id'],$perm[$f][$s][$i])){
 			return true;
 		}		
 	}

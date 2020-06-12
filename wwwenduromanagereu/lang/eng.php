@@ -41,7 +41,7 @@
  define("MENU_ENDURO_RESULT", "Results");
  define("MENU_ENDURO_SPRINT", "Enduro sprint");
  define("MENU_CROSS", "Cross country");
- define("WRONG_LOGIN", "Lietotāja vārds vai parole nav pareiza!");
+ define("WRONG_LOGIN", "User name or password is incorrect!");
  define("MENU_LICENCE", "Licences");
  define("MENU_CLUB_LIST", "Klubi");
  
@@ -197,17 +197,24 @@
  define("ENDURO_APPLY_AUTH_WARN","To apply for the competition can only authorized athlete!");// 
  define("ENDURO_APPLY_AUTH_TEXT","To log in to the system, you need to enter a username (email) and password in the top section. If you do not have athlete's profile in the system, please register <a href=\"http://www.enduromanager.eu/?rm_func=appl&rm_subf=pe&reg=1&addmode=appl\"> here</a>!<br> Problems, questions and uncertainties, please contact competitions secretary Dina Blūma by e-mail dbluma@inbox.lv");// 
  
- 
- 
- 
- 
- 
- 
- 
- 
+ define("WRONG_LOGIN_LINK","Can't login? To reset your password press");// 
+ define("WRONG_LOGIN_PUSH","here");//  
+ define("RESET_PASS_RESET_INFO","Please enter your registration e-mail address to reset the password. After submit, you will receive an email with password reset instructions.");// 
+ define("RESET_PASS_EMAIL_FIELD","e-mail address:");// 
+ define("RESET_PASS_EMAIL_BUTTON","Request");// 
+ define("RESET_PASS_USER_NOT_REGISTERED","There is no registered user with provided e-mail address!");// 
+ define("RESET_PASS_WRONG_EMAIL_FORMAT","Wrong e-mail format!");// 
+ define("RESET_PASS_INFO","An e-mail with password reset instruction has been sent! Please, check your e-mail!");//  
+ define("RESET_PASS_EMAIL_SUBJ","www.enduromanager.eu password reset");// 
+ define("RESET_PASS_INPUT_INFO","Please, repeat your e-mail address and enter new password twice!");// 
+ define("RESET_PASS_INPUT_EMAIL_FIELD","e-mail address");// 
+ define("RESET_PASS_INPUT_PASS1_FIELD","Password");// 
+ define("RESET_PASS_INPUT_PASS2_FIELD","Password repeat");// 
+ define("RESET_PASS_INPUT_SUBMIT_BUTTON","Change password");// 
+ define("RESET_PASS_TOKEN_EXPIRED","Your link has expired!");// 
+ define("RESET_PASS_PASSWORD_MISSMATCH","Passwords does not match!");// 
+ define("RESET_PASS_WRONG_EMAIL","e-mail address is wrong!");// 
+ define("RESET_PASS_INFO_SUCCESS","The password has been changed successfully!");//  
+ define("RESET_PASS_EMPTY_PASS","The password is empty!");//  
 
- 
-  
- 
-   
 ?>

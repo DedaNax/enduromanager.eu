@@ -189,4 +189,26 @@
  
  define("ENDURO_APPLY_AUTH_WARN","Pieteikties sacensībām var tikai autorizēts sportists!");// 
  define("ENDURO_APPLY_AUTH_TEXT","Lai autorizētos sistēmā, Jums jāievada lietotājvārds (e-pasts) un parole lapas augšējā sadaļā. Ja Jums nav sportista profils sistēmā, lūdzu reģistrēties <a href=\"http://www.enduromanager.eu/?rm_func=appl&rm_subf=pe&reg=1&addmode=appl\">šeit!</a><br> Problēmu, jautājumu un neskaidrību gadījumā, lūdzu sazināties ar Dinu Blūmu dbluma@inbox.lv");// 
+ 
+ define("WRONG_LOGIN_LINK","Nesanāk ieiet? Lai atjaunotu paroli spied");// 
+ define("WRONG_LOGIN_PUSH","šeit");//  
+ define("RESET_PASS_RESET_INFO","Lai atjaonotu paroli, Jums jāievada jūsu e-pasts ar kuru esat piereģistrējies(-jusies) sistēmā. Pēc pieprasījuma uz Jūsu norādīto e-pastu atnāks vēstule ar instrukcijām paroles atjaunošanai.");// 
+ define("RESET_PASS_EMAIL_FIELD","Jūsu e-pasts:");// 
+ define("RESET_PASS_EMAIL_BUTTON","Atjaunot");// 
+ define("RESET_PASS_USER_NOT_REGISTERED","Lietotājs ar tādu e-pasta adresi nav reistrēts sistēmā!");// 
+ define("RESET_PASS_WRONG_EMAIL_FORMAT","e-pasts formāts nav pareizs!");// 
+ define("RESET_PASS_INFO","Jums ir nosūtīta vēstule ar paroles atjaunošanas instrukcijām! Lūdzu pārbaudiet e-pastu!");//  
+ define("RESET_PASS_EMAIL_SUBJ","www.enduromanager.eu paroles atjaunošana");// 
+ define("RESET_PASS_INPUT_INFO","Lūdzu, atkārtoti ievadiet lietotāja vārdu (e-pastu) un divas reizes jauno paroli!");// 
+ define("RESET_PASS_INPUT_EMAIL_FIELD","e-pasta adrese");// 
+ define("RESET_PASS_INPUT_PASS1_FIELD","Parole");// 
+ define("RESET_PASS_INPUT_PASS2_FIELD","Parole atkāroti");// 
+ define("RESET_PASS_INPUT_SUBMIT_BUTTON","Nomainīt");// 
+ define("RESET_PASS_TOKEN_EXPIRED","Norādes derīguma termiņš ir beidies!");// 
+ define("RESET_PASS_PASSWORD_MISSMATCH","Ievadītās paroles nesakrīt!");// 
+ define("RESET_PASS_WRONG_EMAIL","Ir norādīta cita e-pasta adrese!");// 
+ define("RESET_PASS_INFO_SUCCESS","Parole ir veiksmīgi nomainīta!");//  
+ define("RESET_PASS_EMPTY_PASS","Parole ir tukša!");//  
+ 
+ 
 ?>

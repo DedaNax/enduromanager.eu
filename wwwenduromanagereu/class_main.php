@@ -1,35 +1,6 @@
 <?php
-session_start();
-
-/*
-function __autoload($class_name) {
-    require_once "plugins/" . $class_name . '.php';
-}
-*/
-
-//require_once("plugins/SEO.php");
-//require_once("plugins/Plugin.php");
-//require_once("plugins/Galerija.php");
-//require_once("plugins/Kalendars.php");
-
-
-/*
- *	Revision v2.0
- */
-
-
-
-require_once("_config.php");
-require_once("BB3Auth.php");
-
-
 
 class main {
-
-
-/******************************************************************************/
-
-
 	public $lang = "lv";
 	public $id = 0;
 	public $firstChild = false;
@@ -49,65 +20,11 @@ class main {
 	public $useAsDefault = 1;
 
 	var $isAdmin = false;
-
 	var $plugins = Array();
 
-
-
 	public function __construct( $table = "items")
-	{
-	/*
-		$this->table = $table;
-
-		$link = mysql_connect(DB_HOST, DB_USER, DB_PASS);		
-		if (!$link) {
-			die("Nevaru pievienties serverim : " . mysql_error());
-		}
-
-		$db_selected = mysql_select_db(DB_NAME, $link);
-		if(!$db_selected) {
-			die("Nevaru atrast datubaazi <b>" . $this->db . "</b> : " . mysql_error());
-		}
-
-
-		$sql = "CREATE TABLE IF NOT EXISTS $table (
-				`id` int(10) unsigned NOT NULL auto_increment,
-				`objType` int(10) unsigned default NULL,
-				`parent` int(10) unsigned default NULL,
-				`title` varchar(255) character set utf8 default NULL,
-				`short` text character set utf8,
-				`texis` text character set utf8,
-				`seq` int(10) unsigned NOT NULL default '0',
-				`datums` date default NULL,
-				`laiks` time default NULL,
-				PRIMARY KEY  (`id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-
-		$result = mysql_query($sql) or die(mysql_error());
-
-
-		
-		if(mysql_affected_rows() > 0)
-		{
-			$result = mysql_query("INSERT INTO $table SET id=1, objType=1, title='About'") or die(mysql_error());
-		}
-			
-		$result = mysql_query("SET NAMES UTF8");
-		
-
-		// set plugins
-		
-		//$this->plugins[] = new Galerija($this);
-		//$this->plugins[] = new Kalendars($this);
-		//$this->plugins[] = new Map($this);
-*/
-		
+	{	
 	}
-
-
-
-
-
 
 	public function setID($id)
 	{
@@ -153,27 +70,10 @@ class main {
 			
 	}
 
-
-	
-	
-	
-	
-	
-
-
-
-
 	public function setLanguage($lang = "lv")
 	{
 		$this->lang = $lang;
-		//$this->table = $this->lang . "_" . $this->table;
 	}
-
-
-
-
-
-
 
 	public function getTopCategories()
 	{
@@ -203,12 +103,6 @@ class main {
 		return $out;
 	}
 
-
-
-
-
-
-
 	public function showTopCategories()
 	{
 		$data = $this->getTopCategories();
@@ -222,16 +116,8 @@ class main {
 			$out .= "<span id='$key' class='links'><a class='links' $style href='admin.php?id=".$key."'>".$value['title']."</a> : </span>";
 		}
 
-		//$out .= "<span id='links'>:</span>";
-
 		return $out;
 	}
-
-
-
-
-
-
 
 	public function showTopCategoriesPublic()
 	{
@@ -251,19 +137,11 @@ class main {
 
 				$top[] = "<a href=\"" . SEO::encode($row->id, $row->title) . "\"> $row->title </a>";				
 				
-			}
-			
+			}			
 		}
-
 
 		return implode(" | ", $top);
 	}
-
-
-
-
-	
-
 
 	public function getSideCategories($parent = 0, $depth = 0)
 	{
@@ -297,10 +175,6 @@ class main {
 
 			if($row->objType == 0 || (!$this->useOnlyCategories && $row->objType !=0)) {
 
-				// get First Child
-				//if($row->parent == $this->id && !$this->firstChild && $row->objType != 0) { $this->firstChild = $row->id; }
-
-
 				$this->tree[$row->id] = array(	'parent'	=> $row->parent, 
 												'objType'	=> $row->objType, 
 												'title'		=> $row->title, 
@@ -315,20 +189,11 @@ class main {
 
 		}
 
-
-	return $this->tree;
+		return $this->tree;
 	}
-
-
-
-
-
-
-	// izmantojas arÄ« admin
 
 	public function showSideCategories()
 	{	
-		
 		$data = $this->getSideCategories();
 
 		foreach($data as $id => $item)
@@ -369,22 +234,9 @@ class main {
 		return $out;
 	}
 
-
-
-
-
-
 	function showSideCategoriesPublic2($ext = false) {
-
-		
 		return $this->showSideCategoriesPublic(false, 0, $ext);
 	}
-
-
-
-
-
-
 
 	function showSideCategoriesPublic($parent = false, $level = 0, $ext = false) {	
 				$i=0;
@@ -408,8 +260,7 @@ class main {
 				}	
 							
 				$out .= "</li>"; 
-				$out .= '<p><img src="./enduro_logo.jpg" class="logo"></p>';				
-				$out .= '<p><a href="http://www.endurolatvia.lv/" target="_blanc"><img src="./madona.jpg" width="195px" ></a></p>';	
+				$out .= '<p><img src="./enduro_logo.jpg" class="logo"></p>';								
 				$out .= '<p><a href="http://www.rocketbiker.lv/katalogs/" target="_blanc"><img src="./mapon_o.jpg" width="120px" height="120px"></a></p>';	
 
 		$out .= "</ul>\n";
@@ -558,8 +409,7 @@ class main {
 							</div>
 						</div>
 						<img src="'.BASE_URL.'/images/logo_big.png" alt="" border="0" style="position: absolute; bottom: -14px; left: 15px;" />
-					</div>';
-		
+					</div>';		
 		}
 		
 		return $out;
@@ -571,11 +421,9 @@ class main {
 				FROM " . $this->table . " WHERE id = 6";
 		$result = mysql_query($sql) or $this->debug($sql, mysql_error());
 		
-		if($row = mysql_fetch_object($result)) {
-			
+		if($row = mysql_fetch_object($result)) {			
 			return Array($row->images, $row->links);
-		}
-		
+		}		
 	}
 	
 	function sponsors() {		
@@ -588,16 +436,14 @@ class main {
 				HAVING title <> ''";
 		$result = mysql_query($sql) or $this->debug($sql, mysql_error());
 		
-		if($row = mysql_fetch_object($result)) {
-			
+		if($row = mysql_fetch_object($result)) {			
 			$out = '<div style="margin-top: 20px;">
 						<h3 style="color: #b3b3b3;" class="sponsors">'.$row->title.'</h3>
 						'.$row->texis.'
 					</div>';
 			
 			return $out;
-		}		
-		
+		}				
 	}
 
 	function showLocator()
@@ -607,10 +453,8 @@ class main {
 
 		foreach($relatives as $id => $value)
 		{
-			//if($this->id == $id) { $style = "style='font-weight: bold;'"; }
 			$out .= " <span id='links'>&#187</span> <a id='links' href='?id=$id'>".$item[$id]['title']."</a> ";
 		}
-
 		return $out;
 	}
 
@@ -629,9 +473,7 @@ class main {
 		foreach($relatives as $id => $value) {
 			
 			$last = ($rel == $n) ? 'class="last"' : ''; 
-			//$arr[] = '<a '.$last.' href="' . SEO::encode($id) . '">' . mb_strtoupper($item[$id]['title'], "utf-8") . '</a>';
-			$arr[] = '<a '.$last.' href="' . SEO::encode($id) . '">' . strtoupper($item[$id]['title']) . '</a>';
-			
+			$arr[] = '<a '.$last.' href="' . SEO::encode($id) . '">' . strtoupper($item[$id]['title']) . '</a>';			
 			$n++;
 		}
 		
@@ -684,10 +526,7 @@ class main {
 				$data = $this->getTopCategories();
 				$parent = isset($data[$this->findRoot($this->id)]) ? $this->findRoot($this->id) : array_shift(array_keys($data)) ;
 
-			} else {
-			
-				// id nav noradits, (pirmaa vertiba | useAsDefault)
-			
+			} else {			
 				if(isset($this->useAsDefault) && $this->useAsDefault > 0)
 				{
 					$parent = $this->useAsDefault;
@@ -894,7 +733,6 @@ function js() {
 	$items = new main();
 
 	$out = '<script type="text/javascript">' . "\n";
-	$out .= 'var BASE_URL = "'.BASE_URL.'";' . "\n";
 	$out .= '</script>' . "\n";
 	
 	return $out;
