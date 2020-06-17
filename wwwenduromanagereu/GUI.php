@@ -387,6 +387,11 @@ function checkPerm($f,$s){
 			)
 		),
 		"enduro" => array(			
+			"changeNR" => array(
+				0 => "RM_ADMIN",
+				1 => "RM_ENDURO_ADMIN",
+				2 => "RM_ENDURO_ORG"
+			),
 			"delteamracer" => array(
 				0 => "RM_ADMIN",
 				1 => "RM_ENDURO_ADMIN",
@@ -1311,12 +1316,13 @@ function checkPerm($f,$s){
 	}
 	$sec = new Security;
 	
-	for($i=0;$i<count($perm[$f][$s]);$i++){
-		if($sec->testUserGroup($_SESSION['user']['user_id'],$perm[$f][$s][$i])){
-			return true;
-		}		
+	if($perm[$f][$s]) {
+		for($i=0;$i<count($perm[$f][$s]);$i++){
+			if($sec->testUserGroup($_SESSION['user']['user_id'],$perm[$f][$s][$i])){
+				return true;
+			}		
+		}
 	}
-	
 	return false;
 }
 ?>

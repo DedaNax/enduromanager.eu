@@ -64,7 +64,7 @@
 		
 		
 		
-		$sql = "SELECT * ,data.`pf_rm_sport_nr`  as NR_X, club.`name` as club_name
+		$sql = "SELECT * ,ea.`NR`  as NR_X, club.`name` as club_name
 				FROM `enduro_application` ea
 				  inner join `phpbb_profile_fields_data` data on (data.`user_id` = ea.`racer_id`)
 				  inner join `d_class` cl on (cl.`classid` = ea.`class_id`)
@@ -91,7 +91,7 @@
 			}
 			if($rc!=$row['user_id']){				
 				echo "<tr>";
-				echo "<td><b>",$row['pf_rm_sport_nr'],"</b>";
+				echo "<td><b>",$row['NR_X'],"</b>";
 				echo "<td>",$row['pf_rm_f_name'];
 				echo " ",$row['pf_rm_l_name'];
 				echo "<td>",str_replace ( "^" , " " , $row['TEHN']);

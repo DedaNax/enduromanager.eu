@@ -217,4 +217,5 @@
  define("RESET_PASS_INFO_SUCCESS","The password has been changed successfully!");//  
  define("RESET_PASS_EMPTY_PASS","The password is empty!");//  
 
+ define("APPLY_AGREE","I confirm that I have familiarised myself with the season's regulations of the specific Enduro discipline and supplementary regulations for the particular event, I will abide to these regulations and will not hold the competition organisers responsible for any accidents caused, among others, due to the state of my health. I accept all risk and responsibility and promise not to raise claims against the organiser or LaMSF regarding any material damage or injuries I may suffer. I confirm that I have or will purchase an accident insurance policy with the required coverage including the risk of motorsport competitive racing.<br>For enduro competitions, I confirm that I have the necessary drivers licence, and my motorcycle is suitable for driving on common roads.");
 ?>

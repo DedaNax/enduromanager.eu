@@ -210,5 +210,6 @@
  define("RESET_PASS_INFO_SUCCESS","Parole ir veiksmīgi nomainīta!");//  
  define("RESET_PASS_EMPTY_PASS","Parole ir tukša!");//  
  
+ define("APPLY_AGREE","Apstiprinu, ka esmu iepazinies ar konkrētās enduro disciplīnas gada nolikumu un sacensību nolikumu, ievērošu šos nolikumus un neprasīšu atbildību no sacensību organizatora par nelaimes gadījumiem, kas radušies tajā skaitā mana veselības stāvokļa dēļ. Es uzņemos visu risku un atbildību, un apsolos necelt pretenzijas pret organizatoru un LaMSF par sev radītajiem materiālajiem zaudējumiem vai veselības bojājumiem. Apstiprinu, ka man ir vai iegādāšos nelaimes gadījumu apdrošināšanas polise ar atbilstošu segumu, kurā ir iekļauts motosporta sacensību risks.<br>Enduro sacensībām - apstiprinu, ka man ir atbilstoša transportlīdzekļa vadītāja apliecība un motocikls ir derīgs braukšanai pa koplietošanas ceļiem.");
  
 ?>

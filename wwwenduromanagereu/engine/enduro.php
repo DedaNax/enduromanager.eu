@@ -778,8 +778,34 @@ function proceedEnduro($subf,$opt){
 			unpair();
 			printStarts($opt);
 			break;
+		case "changeNR":
+			printEnduroReg(changeNR());
+			break;
 		default:
 	}
+}
+
+function changeNR() {
+	$sql = "		
+		UPDATE 
+			`enduro_application`
+		SET 
+			`NR` = '".$_SESSION['params']['nr']."'
+		WHERE
+			`ERA_ID` = ".$_SESSION['params']['ea'];	
+	queryDB($sql);
+
+	$sql = '
+		SELECT 
+			`RACE_ID`
+		FROM 
+			`enduro_application`
+		WHERE
+			`ERA_ID` = '.$_SESSION['params']['ea'];	
+	$r = queryDB($sql);	
+	$cc = mysql_fetch_array($r,MYSQL_ASSOC);
+
+	return $cc["RACE_ID"];
 }
 
 function saveEteamMember($et,$ea){
@@ -1840,8 +1866,8 @@ function printEnduroApply($opt){
 	if(!$apl[0]){
 		$cl = $cm->getActulaRaceClass($opt);
 		if ($cl){			
-			echo "<tr><td>Klase: ";
-			echo "<td><select name=\"class\">";
+			echo "<tr><td>Klase:";
+			echo "<td><select name=\"class\" style=\"width: 150px;\">";
 				for($i=0;$i<count($cl);$i++) {
 					echo "<option value=\"",$cl[$i]->getID(),"\">";					
 						echo $cl[$i]->getName();
@@ -1887,7 +1913,7 @@ function printEnduroApply($opt){
 					echo "</option>";
 				}
 			echo "</select>"; */
-			echo '<td style="width: 150px;"><input type="text" name = "NR">';
+			echo '<td><input type="text" name = "NR" style="width: 142px;" value="',$racer[0]->getNR(),'">';
 				
 		echo "<tr><td>Licence:<td>";
 		
@@ -1924,7 +1950,7 @@ function printEnduroApply($opt){
 		
 		
 		echo "<tr><td>Tehnika:<td>";		
-		echo '<select name="tehn1"
+		echo '<select name="tehn1" style="width: 150px;"
 				onchange="fillTeh(this.value,1)"
 		
 		>';      
@@ -1951,7 +1977,7 @@ function printEnduroApply($opt){
 		//echo "<tr><td>Apdrošināšana:<td><input type=\"checkbox\" name=\"INS\" >";
 		
 		if(!$_SESSION['params']['org']){
-			echo "<tr><td colspan=\"2\"><font style=\"font-size:14px\">Ar šo es apstiprinu, ka esmu iepazinies ar sacensību nolikumu un piekrītu sacensību noteikumiem. Es apstiprinu savu piedalīšanos, uzņemos visu risku un atbildību, un apsolos necelt pretenzijas pret sacensību organizatoriem par sev radītajiem materiālajiem zaudējumiem un/vai veselības bojājumiem. Apstiprinu, ka esmu apdrošinājis savu dzīvību, kurā ir iekļauts moto sacensību risks</font>";
+			echo "<tr><td colspan=\"2\" style=\"font-size:14px;text-align: justify;\">".APPLY_AGREE;
 			echo '<tr><td colspan="2"> <input type="checkbox" onchange="document.getElementById(\'sub\').disabled = !this.checked"> Iepazinos un piekrītu';	
 		}
 		
@@ -2154,8 +2180,8 @@ function printEnduroReg($opt){
 				
 				$nrs = array();
 				for($i=0;$i<count($racers);$i++){
-					if ($racers[$i]->RACER->getNR()){
-						array_push($nrs,$racers[$i]->RACER->getNR());
+					if ($racers[$i]->NR){
+						array_push($nrs,$racers[$i]->NR);
 					}
 				}
 				$nrs = array_count_values($nrs);
@@ -2172,7 +2198,7 @@ function printEnduroReg($opt){
 							
 						}
 						echo "<tr ";
-							if($nrs[$racers[$i]->RACER->getNR()] > 1 && $racers[$i]->RACER->getNR() ){
+							if($nrs[$racers[$i]->NR] > 1 && $racers[$i]->NR ){
 								echo "style=\"background-color:#FF6666\"";
 							} elseif($racers[$i]->RACER->getUserID() == $_SESSION['params']['racer']){
 								echo "style=\"background-color:#99FF99\"";
@@ -2202,7 +2228,7 @@ function printEnduroReg($opt){
 								echo "</a>";
 							
 							echo "<td width=\"*\">";
-								echo "<font style=\"font-weight:bold;font-size:14px\">",$racers[$i]->NR ? $racers[$i]->NR : "<font color=\"red\">NAV</font>" ,"</font> / ";
+								echo "<span style=\"font-weight:bold;font-size:14px;cursor:pointer;\" onclick=\"changeNumber(",$racers[$i]->EA_ID,",",$racers[$i]->CLASS_ID,",'",$racers[$i]->NR,"')\">",$racers[$i]->NR ? $racers[$i]->NR : "<font color=\"red\">NAV</font>" ,"</span> / ";
 								echo "<a style=\"font-weight:bold;font-size:14px;text-decoration:none;\" href = \"?rm_func=racer&rm_subf=viewprofile&opt=$opt&day=$day&red_f=enduro&red_s=reg&editmode=enduroreg&anh=clas",$racers[$i]->CLASS_ID,"&racer=",$racers[$i]->RACER->getUserID(),"&id=",$racers[$i]->RACER->getUserID(),"\">";
 									echo $racers[$i]->RACER->getFName(), " ", $racers[$i]->RACER->getLName();									
 								echo "</a>";								
