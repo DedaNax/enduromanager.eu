@@ -276,7 +276,8 @@
 			return false;
 		}
 
-		$sql = "SELECT `user_id` FROM `phpbb_users` WHERE trim(`username`) = trim('$email')";
+		$sql = "SELECT `user_id` FROM `phpbb_users` WHERE lower(trim(`username`)) = lower(trim('$email'))";
+		echo $sql;
 		$r = queryDB($sql);
 
 		if(mysql_num_rows($r) != 1){

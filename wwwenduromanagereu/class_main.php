@@ -261,7 +261,7 @@ class main {
 							
 				$out .= "</li>"; 
 				$out .= '<p><img src="./enduro_logo.jpg" class="logo"></p>';								
-				$out .= '<p><a href="http://www.rocketbiker.lv/katalogs/" target="_blanc"><img src="./mapon_o.jpg" width="120px" height="120px"></a></p>';	
+				$out .= '<p><img src="./images/madona2020.jpg" width="200px" height="120px"></p>';	
 
 		$out .= "</ul>\n";
 
