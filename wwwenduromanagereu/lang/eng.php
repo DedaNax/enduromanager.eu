@@ -36,8 +36,8 @@
  define("MENU_RACERS", "Sportisti");
  define("MENU_NEW_RACER", "Jauns sportists");
  
- define("MENU_ENDURO_APLS", "Applicatioins");
- define("MENU_ENDURO_APLS_PRINT", "Appications print");
+ define("MENU_ENDURO_APLS", "Applications");
+ define("MENU_ENDURO_APLS_PRINT", "Applications print");
  define("MENU_ENDURO_RESULT", "Results");
  define("MENU_ENDURO_SPRINT", "Enduro sprint");
  define("MENU_CROSS", "Cross country");
