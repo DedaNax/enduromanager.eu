@@ -2415,12 +2415,14 @@ function printEditRace($opt){
 														
 													$erdlist = "$erdlist;$erdid";
 												echo "<tr><td>";
-													echo "<input type=\"radio\" name=\"rad$erdid\" value=\"1\" title=\"Pulksten rādītaja virzienā\" ";
+													echo "<input type=\"radio\" name=\"rad$erdid\" value=\"1\" title=\"Pulksteņa rādītaja virzienā\" ";
 														echo (isset($days[$i]->ORIENTATION) && $days[$i]->ORIENTATION) ? " checked " : "";
-													echo "><img src=\"./images/CW.png\" alt=\"Pulksten rādītaja virzienā\" title=\"Pulksten rādītaja virzienā\">";
-													echo "<input type=\"radio\" name=\"rad$erdid\" value=\"0\" title=\"Pret pulksten rādītaju\" ";
+													echo "><img src=\"./images/CW.png\" alt=\"Pulksteņa rādītaja virzienā\" title=\"Pulksteņa rādītaja virzienā\">";
+													echo "<input type=\"radio\" name=\"rad$erdid\" value=\"0\" title=\"Pret pulksteņa rādītaju\" ";
 														echo (isset($days[$i]->ORIENTATION) && $days[$i]->ORIENTATION == 0) ? " checked " : "";
-													echo "><img src=\"./images/VCW.png\" alt=\"Pret pulksten rādītaju\" title=\"Pret pulksten rādītaju\">";
+													echo "><img src=\"./images/VCW.png\" alt=\"Pret pulksteņa rādītaju\" title=\"Pret pulksteņa rādītaju\">";
+												echo "<tr><td>";	
+													echo '<input type="checkbox" name="mc',$erdid,'" value="1" ',($days[$i]->MOTOCROSS ? 'checked' : ''),'> Ar motokrosu';
 												echo "<tr><td>";
 													echo "<a href=\"?rm_func=reslt&rm_subf=publishDayResult&day=".$days[$i]->ERD_ID."\">".ORG_RACE_DAY_RESULT_PUBLISH."</a>";
 											echo "</table>";
@@ -2669,7 +2671,7 @@ function saveRace($opt){
 				$erd = explode(";",$_SESSION['params']['erdlist']);
 				for($i=0;$i<count($erd);$i++){
 					if ($erd[$i]){
-						$em->saveERD(str_replace("erd","",$erd[$i]),$_SESSION['params'][$erd[$i]],$_SESSION['params']["rad".$erd[$i]]);
+						$em->saveERD(str_replace("erd","",$erd[$i]),$_SESSION['params'][$erd[$i]],$_SESSION['params']["rad".$erd[$i]],$_SESSION['params']["mc".$erd[$i]]);
 					}
 				}				
 				$ercd = explode(";",$_SESSION['params']['ercdlist']);

@@ -67,7 +67,7 @@
 					}
 				}			
 					echo "<br> <a href=\"?rm_func=reslt&rm_subf=enduroAbs&r=",$r[$i]->getID(),"\">";
-						echo "Absolūtais vertējums";
+						echo "EGP";
 					echo "</a>";
 					echo "<a target=\"_blank\" href=\"?rm_func=reslt&rm_subf=enduroAbs&no_gui=1&r=",$r[$i]->getID(),"\">";
 						echo "<font style=\"font-size:15px\">^</font>";
@@ -502,7 +502,7 @@
 		
 		echo "<a href=\"?rm_func=reslt&rm_subf=enduromenu\"><b>Rezultāti</b></a>";
 		echo " -> <b>",$r[0]->getName(),"</b>";
-		echo "<h1 align=\"center\" style=\"font-size:20px\">Absolūtais vērtējums</h1><hr>";
+		echo "<h1 align=\"center\" style=\"font-size:20px\">EGP</h1><hr>";
 		
 		$sql = "
 			SELECT 
@@ -510,7 +510,6 @@
 				edr.erd_id as ERD_ID, 
 				club.`name` as _club, 
 				moto.`lang_value` as _moto,
-				pd.`pf_rm_sport_nr`,
 				pd.`pf_rm_f_name`,
 				pd.`pf_rm_l_name`,
 				edr.`points`,
@@ -519,7 +518,8 @@
 				sec_to_time((res.`pts` div 100)) as tim2,
 				res.`pts`,
 				res.`pts2`,
-				ea.`era_id`
+				ea.`era_id`,
+				ea.`NR` as 'pf_rm_sport_nr'
 			FROM `enduro_application` ea
 				inner join `phpbb_profile_fields_data` pd on (pd.`user_id` = ea.`racer_id`)
 					left join `c_club` club on (club.`ID` = pd.`pf_rm_club`)
@@ -548,19 +548,20 @@
 					echo "<td width=\"80px\">Tehnika";
 					echo "<td width=\"50px\">";
 					
-					if (strpos($cmp->getName(), 'Sprint')){
-						echo "Laiks";
-					} else {
+				//	if (strpos($cmp->getName(), 'Sprint')){
+				//		echo "Laiks";
+					//} else {
 						echo "1. diena";
 						echo "<td width=\"50px\">2. diena";
 						echo "<td width=\"50px\">Kopā";
-					}
+				//	}
 					
 					echo "<td width=\"50px\" align=\"center\">Vieta";
 		}
 		$vieta = 1;
 		while($row = mysql_fetch_array($r, MYSQL_ASSOC)){
 			if($eaid <> $row["era_id"]){
+				$eaid = $row["era_id"];	
 				echo "<tr>";
 					echo "<td>",$row["pf_rm_sport_nr"];
 					echo "<td>",$row["pf_rm_f_name"]," ",$row["pf_rm_l_name"];
@@ -572,8 +573,8 @@
 							echo "style=\"background-color:pink\"";
 						}
 					echo ">",substr($row["tim"],0,2) == "00" ? substr($row["tim"],3,20): $row["tim"],"<b>.</b>",( $row["sec100"] % 100) <10 ? "0".( $row["sec100"] % 100) : ( $row["sec100"] % 100);
-				$eaid = $row["era_id"];				
-				if (strpos($cmp->getName(), 'Sprint')){
+						
+	/* 			if (strpos($cmp->getName(), 'Sprint')){
 					echo "<td align=\"center\">";
 					switch($vieta){
 						case 1:
@@ -590,7 +591,7 @@
 							break;
 					}
 					$vieta++;
-				}
+				} */
 			} else {
 					
 					echo "<td align=\"center\"";

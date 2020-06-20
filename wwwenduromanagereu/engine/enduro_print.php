@@ -186,8 +186,8 @@ function enduro_start(){
 												
 												$ofs = explode(":",$stage[0]->OFFSET_TIME);
 												
-												$time[0] += $ofs[0];
-												$time[1] += $ofs[1];
+												$time[0] = ((int)$time[0]) + ((int)$ofs[0]);
+												$time[1] = ((int)$time[1]) + ((int)$ofs[1]);												
 												$time[0] += $time[1] >= 60 ? 1 : 0;														
 												$time[1] = $time[1] >= 60 ? $time[1] - 60 : $time[1];
 												
@@ -198,8 +198,8 @@ function enduro_start(){
 										if($cl[$i]->FIN_OFFSET){
 											$ofs = explode(":",$cl[$i]->FIN_OFFSET);
 											
-											$time[0] += $ofs[0];
-											$time[1] += $ofs[1];
+											$time[0] = ((int)$time[0]) + ((int)$ofs[0]);
+											$time[1] = ((int)$time[1]) + ((int)$ofs[1]);											
 											$time[0] += $time[1] >= 60 ? 1 : 0;														
 											$time[1] = $time[1] >= 60 ? $time[1] - 60 : $time[1];
 											

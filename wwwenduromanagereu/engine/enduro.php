@@ -6,6 +6,7 @@ class EnduroRaceDay{
 	public $START_DATE;
 	public $REG_ACTIVE;
 	public $OFFSET_MIN;
+	public $MOTOCROSS;
 }
 class EnduroRaceClassDay{
 	public $ERCD_ID;
@@ -149,13 +150,21 @@ class EnduroManager{
 		//echo $sql;
 		queryDB($sql);
 	}
-	public function saveERD($erd,$day,$or){
+	public function saveERD($erd,$day,$or,$m){
 		if (!$erd || !$day){
 			echo "KĻŪDA!!!";
 			return ;
 		}
 		
-		$sql = "update `enduro_race_day` set `start_date` = '$day', `orientation` = ".(isset($or) ? $or : " null ")." where `erd_id` = $erd";
+		$sql = "
+		update 
+			`enduro_race_day` 
+		set 
+			`start_date` = '$day', 
+			`orientation` = ".(isset($or) ? $or : " null ").",
+			`motocross` = ".(isset($m) ? $m : " null ")."
+		where 
+			`erd_id` = $erd";
 		//echo $sql;
 		queryDB($sql);
 	}
@@ -178,6 +187,7 @@ class EnduroManager{
 			$item->ORIENTATION = $row["ORIENTATION"];
 			$item->REG_ACTIVE = $row["REG_ACTIVE"];
 			$item->OFFSET_MIN = $row["OFFSET_MIN"];
+			$item->MOTOCROSS = $row["MOTOCROSS"];
 						
 			array_push($reslt,$item);
 		}
@@ -199,7 +209,8 @@ class EnduroManager{
 			$item->ORIENTATION = $row["ORIENTATION"];
 			$item->REG_ACTIVE = $row["REG_ACTIVE"];
 			$item->OFFSET_MIN = $row["OFFSET_MIN"];
-						
+			$item->MOTOCROSS = $row["MOTOCROSS"];
+
 			array_push($reslt,$item);
 		}
 		return $reslt;
@@ -542,7 +553,7 @@ class EnduroManager{
 	public function getEnduroDayFreeRacerList($d,$c){
 		$sql = "SELECT 
 					ea.`racer_id`,
-					pd.`pf_rm_sport_nr`  as NR
+					ea.`NR`  as NR
 				FROM `enduro_application` ea 
 					inner join `enduro_day_racer` edr on (
 						edr.`ea_id` = ea.`era_id` and 
@@ -564,14 +575,16 @@ class EnduroManager{
 		 while ($row = mysql_fetch_array($q_result, MYSQL_ASSOC)) {
 			
 			$rcrs = $rcr->getRacer($row["racer_id"]);
-			 
+			$rcrs[0]->setNr($row["NR"]);
+
 			array_push($reslt,$rcrs[0]);
 		}
 		return $reslt;
 	}
 	public function getEnduroDayFreeRacerList1($d,$c,$p,$pos){
 		$sql = "SELECT 
-					ea.`racer_id`
+					ea.`racer_id`,
+					ea.`NR`  as NR
 				FROM `enduro_application` ea 
 					inner join `enduro_day_racer` edr on (
 						edr.`ea_id` = ea.`era_id` and 
@@ -589,8 +602,9 @@ class EnduroManager{
 		$rcr = new RacerManager;
 		 while ($row = mysql_fetch_array($q_result, MYSQL_ASSOC)) {
 			
-			$rcrs = $rcr->getRacer($row["racer_id"]);
-			 
+			$rcrs = $rcr->getRacer($row["racer_id"]);			 
+			$rcrs[0]->setNr($row["NR"]);
+
 			array_push($reslt,$rcrs[0]);
 		}
 		return $reslt;
@@ -781,8 +795,97 @@ function proceedEnduro($subf,$opt){
 		case "changeNR":
 			printEnduroReg(changeNR());
 			break;
+		case "motoinp":
+			switch($_SESSION['params']['save']){
+				case "save":
+					motoInputSave();
+					motoInput();
+					break;
+				default:
+					motoInput();
+			}			
+			break;	
 		default:
 	}
+}
+
+function motoInputSave() {	
+	$names = explode(";",$_SESSION['params']['names']);	
+	for ($i=0;$i<count($names);$i++) {				
+		$id = str_replace("motocrs","",$names[$i]);			
+		$value = $_SESSION['params'][$names[$i]];
+
+		$sql = "delete from `enduro_test_result_moto` where `edr_id` = $id";		
+		queryDB($sql);
+
+		$sql = "insert into `enduro_test_result_moto` (`edr_id`,`pts`) values($id,".($value ? $value : 0).")";
+				
+		queryDB($sql);		
+	}	
+}
+
+function motoInput() {
+	$rcm = new RacerManager;
+	$rm = new raceManager;
+	$em = new EnduroManager;
+	$cm = new champManager;
+	
+	$names = "";
+	$day=$_SESSION['params']['day'];
+	$cl = $em->getERCD($opt,$_SESSION['params']['day'],"");
+	$r = $rm->getRace($cl[0]->RACE_ID,"","","","","","","");
+	$erd = $em->getERD1($day);
+	
+	echo "<a href=\"?rm_func=enduro&rm_subf=laiks&opt=$opt&day=$day\"><b>Rezultātu ievade</b></a>";
+	echo " -> <b>",$r[0]->getName(),"</b>";
+	echo " -> <b>",$erd[0]->START_DATE,"</b>";
+	echo " -> <b>Visas klases</b>";
+	echo " -> <b>Motokrosa punkti</b>";
+	
+	echo "<hr>";
+
+	echo "<form action =\"index.php\" method=\"post\">";
+		if (count($cl)>0){
+			for($n=0;$n<count($cl);$n++){
+									
+				echo "<br><b>",$cl[$n]->NAME,"</b><br>";
+				echo "<table border=\"1\">";			
+				
+					$rcr = $em->getEnduroDayFreeRacerList1($day,$cl[$n]->CLASS_ID,"","");
+					for($i=0;$i<count($rcr);$i++){
+						echo "<tr><td>",$rcr[$i]->getNr()," ",$rcr[$i]->getFname()," ",$rcr[$i]->getLname();					
+							$edr = $em->getEDRByracer($day,$rcr[$i]->getUserID());
+							
+							$sql = "select *
+									from `enduro_test_result_moto`
+									where `edr_id` = ".$edr[0]->EDR_ID.";";
+							$r = queryDB($sql);
+							$row = mysql_fetch_array($r, MYSQL_ASSOC);
+							
+							$name = "motocrs".$edr[0]->EDR_ID;
+							
+							echo "<td><input 
+										type=\"text\" 
+										size=\"11\" 
+										maxlength=\"11\" 
+										name=\"$name\"
+										value=\"", $row['PTS'],"\">";
+							
+							$names.=$name.";";
+						
+					}
+				echo "</table>";
+			}
+		}
+		
+		echo "<input name=\"names\" type=\"hidden\" value=\"$names\">";		
+		echo "<input name=\"rm_subf\" type=\"hidden\" value=\"motoinp\">";
+		echo "<input name=\"rm_func\" type=\"hidden\" value=\"enduro\">";
+		echo "<input name=\"save\" type=\"hidden\" value=\"save\">";
+		echo "<input name=\"opt\" type=\"hidden\" value=\"$opt\">";
+		echo "<input name=\"day\" type=\"hidden\" value=\"$day\">";
+		echo "<hr><center><input type=\"submit\" value=\"Saglabāt\"></center>";
+	echo "</form>";
 }
 
 function changeNR() {
@@ -1003,7 +1106,7 @@ function printTeams($opt){
 				c.`NAME` as CLASS_NAME,				
 				pd.`pf_rm_f_name` as F_NAME,
 				pd.`pf_rm_l_name` as L_NAME,
-				pd.`pf_rm_sport_nr` as NR							
+				ea.`NR`
 			from `enduro_application` ea
 				inner join `d_race` r on (ea.`race_id` = r.`race_id`)
 				inner join `d_class` c on (c.`classid` = ea.`class_id`)
@@ -1553,7 +1656,7 @@ function timeInput($opt){
 			echo "</a>";
 		}
 
-		echo "<tr >";
+/* 		echo "<tr >";
 		for($j=0;$j<count($task);$j++){
 			echo "<td>";
 				echo "<form action=\"index.php\" method=\"POST\" enctype=\"multipart/form-data\">";
@@ -1566,7 +1669,7 @@ function timeInput($opt){
 					echo "<input type=\"hidden\" name=\"day\" value=\"$day\">";
 					echo "<input type=\"hidden\" name=\"opt\" value=\"$opt\">";
 				echo "</form>";
-		}
+		} */
 		echo "<tr >";
 		for($j=0;$j<count($task);$j++){
 			echo "<td align=\"center\">";
@@ -1578,6 +1681,13 @@ function timeInput($opt){
 			echo "</a>";
 		}
 	echo "</table>";
+
+	if($erday->MOTOCROSS){
+		echo "<br><br>";
+			echo "<b><font style=\"font-size:16px\">Motokrosa punkti</font></b><br>";	
+			echo "<a href=\"?rm_func=enduro&rm_subf=motoinp&day=$day&race=$opt\">Ievadīt motkorosa punktus</a>";
+	}
+
 	echo "<br><br>";
 		echo "<b><font style=\"font-size:16px\">Iepazīšanas apļi</font></b><br>";
 	if($cl){

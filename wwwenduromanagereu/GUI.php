@@ -387,6 +387,11 @@ function checkPerm($f,$s){
 			)
 		),
 		"enduro" => array(			
+			"motoinp" => array(
+				0 => "RM_ADMIN",
+				1 => "RM_ENDURO_ADMIN",
+				2 => "RM_ENDURO_ORG"
+			),
 			"changeNR" => array(
 				0 => "RM_ADMIN",
 				1 => "RM_ENDURO_ADMIN",

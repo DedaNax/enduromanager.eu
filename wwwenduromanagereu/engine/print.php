@@ -130,7 +130,7 @@
 			$racer = $rcm->getRacer($apl[0]->RACER_ID);
 			$m = getMoto();
 			if($racer){
-				$contents = str_replace("{start_no}",$racer[0]->getNR(),$contents);
+				$contents = str_replace("{start_no}",$apl[0]->NR,$contents);
 				$contents = str_replace("{lic_no}",$racer[0]->getLNR(),$contents);
 				$contents = str_replace("{country}",$racer[0]->getValsts_name(),$contents);
 				$contents = str_replace("{name}",$racer[0]->getFname()." ".$racer[0]->getLname(),$contents);

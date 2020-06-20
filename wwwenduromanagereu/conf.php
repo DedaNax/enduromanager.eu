@@ -19,7 +19,7 @@ define("RM_ADMINS","RM_ADMIN");
 
 define("ENDURO_HOB_ID","11");
 
-define("ENDURO_ABS_CLASES","7,8,9,10,62,26,63,78,83");
+define("ENDURO_ABS_CLASES","7,8,9,10,62,26,63,78,83,88");
 
 
 define("ROOT_GAL_ID",122);

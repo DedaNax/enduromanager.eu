@@ -56,6 +56,9 @@
 				`Secparts`, 
 				`tim`, 
 				`pt`, 
+				`classpt`,
+				`motopt`,
+				`moto`,
 				`edr_id`, 
 				`sec100`, 
 				`user_id`, 
@@ -94,6 +97,9 @@
 				".$result[$i]['Secparts'].",
 				".($result[$i]['tim'] ? "'".$result[$i]['tim']."'" : "null").",
 				".$result[$i]['pt'].",
+				".$result[$i]['class_pt'].",
+				".$result[$i]['motoPTS'].",
+				".$result[$i]['moto'].",
 				".$result[$i]['edr_id'].",
 				".($result[$i]['sec100'] ? $result[$i]['sec100'] : "null").",
 				".$result[$i]['user_id'].",
@@ -162,7 +168,12 @@
 							for ($j=0;$j<count($tests);$j++){
 								echo "<td>",$tests[$j];
 							}
-						echo "<td>Laiks kopā<td>Ieskaites punkti<td>Vieta";
+						echo "<td>Laiks kopā<td>Ieskaites punkti";
+						if($row['moto']==1){
+							echo "<td>Motokrosa pukti";
+							echo "<td>Gala punkti";
+						}
+						echo "<td>Vieta";
 				}		
 				echo "<tr><td><b>",$row['SportNr'],"</b><td>",$row['FName']," ",$row['LName'],"<td>",$row['ClubName'],"<td>",$row['CountryName'];
 	
@@ -195,7 +206,16 @@
 					}
 					
 					echo "<td style=\"text-align:center\">";
-					echo ($row['DQ'] || $row['DQ2'] || $row['DQ3']) ? "" : $row['pt'];
+					echo ($row['DQ'] || $row['DQ2'] || $row['DQ3']) ? "" : $row['classpt'];
+
+					if($row['moto']){
+						echo "<td style=\"text-align:center\">";
+						echo ($row['DQ'] || $row['DQ2'] || $row['DQ3']) ? "" : $row['motopt'];
+
+						echo "<td style=\"text-align:center\">";
+						echo ($row['DQ'] || $row['DQ2'] || $row['DQ3']) ? "" : $row['pt'];
+					}
+
 					echo "<td style=\"text-align:center\">",($row['DQ'] || $row['DQ2'] || $row['DQ3']) ? "" :$place;
 				$class = $row['ClassID'];
 				$place++;
@@ -208,7 +228,97 @@
 			break;
 		}
 	}
+
+	function sortResultsMoto($data) {				
+		$all = array();
+		$class= array();
+		array_push($class,$data[0]);
+		for($i = 1; $i < count($data);$i++){
+			if($data[$i]["CLASS_ID"] != $class[count($class)-1]["CLASS_ID"]){
+				array_push($all,$class);
+				$class =  array();
+			}
+
+			array_push($class,$data[$i]);
+		}
+
+		array_push($all,$class);
+
+		$data1 = array();
+		for($i = 0; $i < count($all); $i++) {
+			for($j = 0; $j < count($all[$i]); $j++) {
+				$all[$i][$j]["CLASS_POINTS"] = getPointsFromPlace($j+1);
+			}
+
+			usort($all[$i], function($a,$b){
+				return 
+					$b["CLASS_POINTS"] + ($b["MOTOCROSS"]? $b["motoPTS"] : 0)
+					<=> 
+					$a["CLASS_POINTS"] + ($a["MOTOCROSS"]? $a["motoPTS"] : 0);
+			});
+
+			for($j = 0; $j < count($all[$i]); $j++) {
+				$all[$i][$j]["TOTAL_POINTS"] = getPointsFromPlace($j+1);
+				array_push($data1,$all[$i][$j]);
+			}
+		}
+
+		return $data1;
+	}
 	
+	function getPointsFromPlace($place) {
+		switch($place){
+			case 1:
+				return 20;
+				break;
+			case 2:
+				return 17;
+				break;
+			case 3:
+				return 15;
+				break;
+			case 4:
+				return 13;
+				break;
+			case 5:
+				return 11;
+				break;
+			case 6:
+				return 10;
+				break;
+			case 7:
+				return 9;
+				break;
+			case 8:
+				return 8;
+				break;
+			case 9:
+				return 7;
+				break;
+			case 10:
+				return 6;
+				break;
+			case 11:
+				return 5;
+				break;
+			case 12:
+				return 4;
+				break;
+			case 13:
+				return 3;
+				break;
+			case 14:
+				return 2;
+				break;
+			case 15:
+				return 1;
+				break;
+			default:
+				return 0;
+		}
+		return 0;
+	}
+
 	function storeEnduroDay(){
 		$rm = new raceManager;
 		$cm = new champManager;
@@ -272,12 +382,15 @@
 		queryDB($sql);
 		
 		$sql = "
-		select  * ,club.name as club_name,
+		select  *,club.name as club_name,
 				b.`summ` + b.`pen` + (b.`secparts` div 100) as reslt, 
 				b.`summ2` + b.`pen` + (b.`secparts` / 100) as reslt2,
 				sec_to_time(b.`summ` + b.`pen` + (b.`secparts` div 100)) as tim , 
 				sec_to_time(b.`summ2` + b.`pen` + (b.`secparts` div 100)) as tim2,
-				(b.`summ` + b.`pen`)*100 + b.`secparts` as sec100
+				(b.`summ` + b.`pen`)*100 + b.`secparts` as sec100,
+				b.`startNR`,				
+				moto.`PTS` as motoPTS,
+				rd.MOTOCROSS
 		from `enduro_race_class_day` ercd
 			inner join (
 				SELECT 
@@ -291,6 +404,7 @@
 				  edr.`erd_id`, 
 				  ea.`class_id`, 
 				  ea.`racer_id`,
+				  ea.`NR` as 'startNR',
 				  a.`summ`,
 				  a.`pen`,
 				  a.`summ2`,
@@ -329,7 +443,9 @@
 			) b on (b.`class_id` = ercd.`class_id` and b.`erd_id` = ercd.`erd_id`)
 				inner join `phpbb_profile_fields_data` u on (u.`user_id` = b.`racer_id`)
 				left join `c_club` club on (club.`ID` = u.`pf_rm_club`)
-				inner join `d_class` cl on (cl.`classid` = b.`class_id`)
+				inner join `d_class` cl on (cl.`classid` = b.`class_id`)				
+				left join `enduro_test_result_moto` moto on moto.`edr_id` = b.`edr_id`
+				inner join `enduro_race_day` rd on rd.`erd_id` = b.`erd_id`
 		where ercd.`erd_id` = ".$_SESSION['params']['day']."
 		order by cl.`weight` asc,cl.`code`, `reslt2` asc, b.`racer_id`";
 	//echo $sql;
@@ -341,12 +457,22 @@
 	$et = $em->getEt("",$erd[0]->RACE_ID);
 	$cl = "";
 	$pl1=0;
-	$pl2=1;		
-	$pt = 20;	
-	$pt1 = 20;
+	$pl2=1;	
 	$tmp = -1;
 	$index = 0;
-	while($row = mysql_fetch_array($r, MYSQL_ASSOC)){		
+
+	$results = array();
+	while($row = mysql_fetch_array($r, MYSQL_ASSOC)){
+		array_push($results,$row);
+	}
+
+	$sorted = sortResultsMoto($results);
+	$moto = $sorted[0]["MOTOCROSS"];
+
+	for($zzz = 0; $zzz < count($sorted);$zzz++)
+	{
+		$row = $sorted[$zzz];
+		
 		$DQ = 0;		
 		$DQ2 = 0;	
 		$DQ3 = 0;
@@ -358,8 +484,7 @@
 		if($row['CLASS_ID'] != $class_id) {
 			$tests = array();
 			$pl1=0;
-			$pl2=1;		
-			$pt = 20;			
+			$pl2=1;				
 			$tmp = -1;
 			$cl = $em->getERCD("",$day,$row['CLASS_ID'] );
 			echo "</table>";
@@ -390,6 +515,11 @@
 					}
 					echo "<td>Laiks kopā";
 					echo "<td>Ieskaites punkti";
+					if($moto){
+						echo "<td>Motokrosa punkti";
+						echo "<td>Gala punkti";
+					}
+
 			$class_id = $row['CLASS_ID'];	
 		}
 		$resutltToStore[$index]['tests']=$tests;
@@ -400,19 +530,8 @@
 				$tmp = $row['reslt2'];
 			}
 			
-			$epts=0;
-			if($pl2 == 1){
-				$epts=$pt1;
-			} elseif ($pl2 < 6){
-				$epts = $pt1 - ($pl2 -1)* 2 -1;
-			} elseif ($pl2 >=6){
-				$epts = $pt1 - $pl2  -4;
-			}
-			
-			$pt = $epts>0 ? $epts : 0;
-			
 			echo "<tr>";
-			echo "<td><b>",$row['pf_rm_sport_nr'],"</b>"; $resutltToStore[$index]['SportNr'] = $row['pf_rm_sport_nr'];
+			echo "<td><b>",$row['startNR'],"</b>"; $resutltToStore[$index]['SportNr'] = $row['startNR'];
 			echo "<td>",$row['pf_rm_f_name']; $resutltToStore[$index]['FName'] = $row['pf_rm_f_name'];
 			echo " ",$row['pf_rm_l_name']; $resutltToStore[$index]['LName'] = $row['pf_rm_l_name'];
 			echo "<td>",$row['club_name']; $resutltToStore[$index]['ClubName'] = $row['club_name'];
@@ -509,10 +628,19 @@
 												) : ""
 											)
 				);							
-			echo "<td align=\"center\">",($DQ || $DQ2 || $DQ3) ? "&nbsp" : $pt;		$resutltToStore[$index]['pt']	= ($DQ || $DQ2 || $DQ3) ? 0 : $pt;
+			echo "<td align=\"center\">",($DQ || $DQ2 || $DQ3) ? "&nbsp" : $row['CLASS_POINTS'];		
+			if($moto){
+				echo "<td align=\"center\">",$row['motoPTS'];
+				echo "<td align=\"center\">",($DQ || $DQ2 || $DQ3) ? "&nbsp" :$row['TOTAL_POINTS']; 
+			}
+			$resutltToStore[$index]['class_pt']	= ($DQ || $DQ2 || $DQ3) ? 0 : $row['CLASS_POINTS'];
+			$resutltToStore[$index]['pt']	= ($DQ || $DQ2 || $DQ3) ? 0 : $row['TOTAL_POINTS'];
+			$resutltToStore[$index]['motoPTS']	= ($DQ || $DQ2 || $DQ3) ? 0 : $row['motoPTS'];
+
 			$resutltToStore[$index]['edr_id']	= $row['edr_id'];
 			$resutltToStore[$index]['sec100']	= $row['sec100'];
 			$resutltToStore[$index]['user_id'] = $row['user_id'];
+			$resutltToStore[$index]['moto'] = $moto;
 
 			$rc = $row['user_id'];
 		}	
