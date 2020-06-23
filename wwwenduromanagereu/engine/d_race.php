@@ -2266,7 +2266,8 @@ function listRaceClass($opt){
 	
 	echo "<form action=\"index.php\" method=\"post\">";
 	echo "<table width =\"100%\" border = \"1\">";
-	echo "<tr class=\"title\"><td width=\"20\">&nbsp<td>Nosaukums";
+	echo "<tr class=\"title\"><td width=\"20\">&nbsp<td>Nosaukums<td>Kods";
+	
 	for($i=0;$i<count($cl);$i++){
 		echo "<tr><td width=\"70\">";		
 		echo "<input type=\"checkbox\" name =\"class".$cl[$i]->getID()."\" value=\"class\"";
@@ -2277,6 +2278,7 @@ function listRaceClass($opt){
 		}
 		echo ">";
 		echo "<td>". $cl[$i]->getName();				
+		echo "<td>". $cl[$i]->getCode();				
 	}
 	echo "</table>";
 	echo "<center><input type=\"submit\" value=\"Saglabāt\"></center>";
