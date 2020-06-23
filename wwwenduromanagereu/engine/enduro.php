@@ -2033,14 +2033,15 @@ function printEnduroApply($opt){
 				where `racer_id` = ".$racer[0]->getUserID()." and YEAR(`start_date`) = year(now())";
 
 		$q_result = queryDB($sql);
-		echo '<select name = "lic"  style="width: 150px;"> ';
+	/* 	echo '<select name = "lic"  style="width: 150px;"> ';
 		while($row = mysql_fetch_array($q_result, MYSQL_ASSOC)){
 					echo "<option value=\"",$row["LIC_NR"],"\" >";
 					echo $row["LIC_NR"]," (",$row["TYPE"],")";
 					echo "</option>";
 		}
-		echo "</select>";
-	
+		echo "</select>"; */
+		$row = mysql_fetch_array($q_result, MYSQL_ASSOC);
+		echo '<input type="text" name = "lic" style="width: 142px;" value="',$row ? $row['LIC_NR'] : "" ,'">';
 		
 		
 		$sql = "
