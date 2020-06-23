@@ -97,9 +97,9 @@
 				".$result[$i]['Secparts'].",
 				".($result[$i]['tim'] ? "'".$result[$i]['tim']."'" : "null").",
 				".$result[$i]['pt'].",
-				".$result[$i]['class_pt'].",
-				".$result[$i]['motoPTS'].",
-				".$result[$i]['moto'].",
+				".$result[$i]['class_pt'].",				
+				".($result[$i]['motoPTS'] ? $result[$i]['motoPTS'] : "0").",
+				".($result[$i]['moto'] ? $result[$i]['moto'] : "0").",
 				".$result[$i]['edr_id'].",
 				".($result[$i]['sec100'] ? $result[$i]['sec100'] : "null").",
 				".$result[$i]['user_id'].",
@@ -113,6 +113,8 @@
 				".$result[-1]['ChampId'].",
 				$publishID
 			)";
+
+			//echo $sql,"<br>";
 			queryDB($sql);
 		}
 		

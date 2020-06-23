@@ -66,22 +66,22 @@
 						}					
 					}
 				}			
-					echo "<br> <a href=\"?rm_func=reslt&rm_subf=enduroAbs&r=",$r[$i]->getID(),"\">";
+					/* echo "<br> <a href=\"?rm_func=reslt&rm_subf=enduroAbs&r=",$r[$i]->getID(),"\">";
 						echo "EGP";
 					echo "</a>";
 					echo "<a target=\"_blank\" href=\"?rm_func=reslt&rm_subf=enduroAbs&no_gui=1&r=",$r[$i]->getID(),"\">";
 						echo "<font style=\"font-size:15px\">^</font>";
-					echo "</a>";				
+					echo "</a>"; */				
 				echo "<br>";
-				if (strpos($cmp->getName(), 'Sprint') == false){
+				//if (strpos($cmp->getName(), 'Sprint') == false){
 					echo "<a href=\"?rm_func=reslt&rm_subf=endurorace&r=",$r[$i]->getID(),"\">";
-						echo "sacensības gala rezultāti";
+						echo "Sacensību gala rezultāti";
 					echo "</a>";
 					echo "<a target=\"_blank\" href=\"?rm_func=reslt&rm_subf=endurorace&no_gui=1&r=",$r[$i]->getID(),"\">";
 						echo "<font style=\"font-size:15px\">^</font>";
 					echo "</a>";	
 					echo "<br>";
-				}
+				//}
 				 echo "<a href=\"?rm_func=reslt&rm_subf=clubTeams&r=",$r[$i]->getID(),"\">";
 					 echo "Klubu komandas";
 				 echo "</a>";
@@ -412,7 +412,11 @@
 		
 		
 		$sql = "
-			SELECT * , club.name as club_name,sum(edr.`points`) as resl
+			SELECT 
+				* , 
+				club.name as club_name,
+				sum(edr.`points`) as resl,
+				ea.NR as eaNR
 			FROM `enduro_day_racer` edr				
 				inner join `enduro_application` ea on (ea.`era_id` = edr.`ea_id`)
 					inner join `d_class` cl on (cl.`classid` = ea.`class_id`)
@@ -462,7 +466,7 @@
 			if($rc!=$row['user_id']){
 				
 				echo "<tr>";
-				echo "<td><b>",$row["pf_rm_sport_nr"],"</b>";
+				echo "<td><b>",$row["eaNR"],"</b>";
 				echo "<td>",$row["pf_rm_f_name"];
 				echo " ",$row["pf_rm_l_name"];
 				echo "<td>",$row["club_name"];
@@ -559,7 +563,9 @@
 					echo "<td width=\"50px\" align=\"center\">Vieta";
 		}
 		$vieta = 1;
+
 		while($row = mysql_fetch_array($r, MYSQL_ASSOC)){
+			
 			if($eaid <> $row["era_id"]){
 				$eaid = $row["era_id"];	
 				echo "<tr>";
