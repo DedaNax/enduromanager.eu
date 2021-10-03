@@ -66,14 +66,14 @@
 						}					
 					}
 				}			
-					/* echo "<br> <a href=\"?rm_func=reslt&rm_subf=enduroAbs&r=",$r[$i]->getID(),"\">";
+					  echo "<br> <a href=\"?rm_func=reslt&rm_subf=enduroAbs&r=",$r[$i]->getID(),"\">";
 						echo "EGP";
 					echo "</a>";
 					echo "<a target=\"_blank\" href=\"?rm_func=reslt&rm_subf=enduroAbs&no_gui=1&r=",$r[$i]->getID(),"\">";
 						echo "<font style=\"font-size:15px\">^</font>";
-					echo "</a>"; */				
+					echo "</a>";  
 				echo "<br>";
-				//if (strpos($cmp->getName(), 'Sprint') == false){
+				if (strpos($cmp->getName(), 'Sprint') == false){
 					echo "<a href=\"?rm_func=reslt&rm_subf=endurorace&r=",$r[$i]->getID(),"\">";
 						echo "Sacensību gala rezultāti";
 					echo "</a>";
@@ -81,7 +81,7 @@
 						echo "<font style=\"font-size:15px\">^</font>";
 					echo "</a>";	
 					echo "<br>";
-				//}
+				}
 				 echo "<a href=\"?rm_func=reslt&rm_subf=clubTeams&r=",$r[$i]->getID(),"\">";
 					 echo "Klubu komandas";
 				 echo "</a>";
@@ -92,7 +92,7 @@
 				echo "<br>";
 			}
 			if ($r[$i]->exresLink){
-				echo '<a target="_blank" href="',$r[$i]->exresLink,'"> Sacensības rezultāti</a>';				
+				echo '<a target="_blank" href="',$r[$i]->exresLink,'"> Sacensībus rezultāti</a>';				
 			}
 			$i++;			
 			if ($i<>0){echo "<hr>";}
@@ -207,172 +207,170 @@
 				left join `c_club` club on (club.`ID` = u.`pf_rm_club`)
 				inner join `d_class` cl on (cl.`classid` = b.`class_id`)
 		where ercd.`erd_id` = ".$_SESSION['params']['day']."
-		order by cl.`weight` asc,cl.`code`, `reslt2` asc, b.`racer_id`";
-	//echo $sql;
+		order by cl.`weight` asc,cl.`code`, `reslt2` asc, b.`racer_id`";	
 
-	$r = queryDB($sql);
-	$class_id = -1;
-	$rc = -1;
+		$r = queryDB($sql);
+		$class_id = -1;
+		$rc = -1;
+			
+		$et = $em->getEt("",$erd[0]->RACE_ID);
+		$cl = "";
+		$pl1=0;
+		$pl2=1;		
+		$pt = 20;	
+		$pt1 = 20;
+		$tmp = -1;
 		
-	$et = $em->getEt("",$erd[0]->RACE_ID);
-	$cl = "";
-	$pl1=0;
-	$pl2=1;		
-	$pt = 20;	
-	$pt1 = 20;
-	$tmp = -1;
-	
-	while($row = mysql_fetch_array($r, MYSQL_ASSOC)){
+		while($row = mysql_fetch_array($r, MYSQL_ASSOC)){
+			
+			$DQ = 0;		
+			$DQ2 = 0;	
+			$DQ3 = 0;
 		
-		$DQ = 0;		
-		$DQ2 = 0;	
-		$DQ3 = 0;
-	
-		if($row["CLASS_ID"] != $class_id) {
-			$pl1=0;
-			$pl2=1;		
-			$pt = 20;			
-			$tmp = -1;
-			$cl = $em->getERCD("",$_SESSION['params']['day'],$row["CLASS_ID"] );
-			echo "</table>";
-			echo "<br><b style=\"font-size:16px\">",$row['Name'],"</b><br>";
-			echo "<table border =\"1\" style=\"border-collapse: collapse\">";
-				echo "<tr style=\"font-weight:bold\">";
-					echo "<td>Num";
-					echo "<td width=\"150\">Sportists";
-					echo "<td width=\"150\">Klubs";
-					echo "<td width=\"100\">Valsts";
-					echo "<td>TK LK0";
-					echo "<td>LK";
-					for($i=0;$i<count($et);$i++){
-						for($j=0;$j<$cl[0]->ENDURO_LAPS;$j++){
-							$sql = "select * 
-									from `enduro_test_ignore` 
-									where 
-										`erd_id` = ".$_SESSION['params']['day']." 
-										and `test_id` = ".$et[$i]->ET_ID." 
-										and `class_id` = ".$row["CLASS_ID"]."
-										and `lap` = ".($j+1);
-							$r1 = queryDB($sql);					
-							if (mysql_num_rows($r1)!=0){continue;}
-							
-							echo "<td>",$et[$i]->NAME, $j+1;
-						}						
-					}
-					echo "<td>Laiks kopā";
-					echo "<td>Ieskaites punkti";
-			$class_id = $row["CLASS_ID"];	
-		}
-		if($rc!=$row["user_id"]){
-			$pl1++;
-			if($tmp != $row["reslt2"]){
-				$pl2=$pl1;	
-				$tmp = $row["reslt2"];
-			}
-			
-			$epts=0;
-			if($pl2 == 1){
-				$epts=$pt1;
-			} elseif ($pl2 < 6){
-				$epts = $pt1 - ($pl2 -1)* 2 -1;
-			} elseif ($pl2 >=6){
-				$epts = $pt1 - $pl2  -4;
-			}
-			
-			$pt = $epts>0 ? $epts : 0;
-			
-			echo "<tr>";
-			echo "<td><b>",$row["pf_rm_sport_nr"],"</b>";
-			echo "<td>",$row["pf_rm_f_name"];
-			echo " ",$row["pf_rm_l_name"];
-			echo "<td>",$row["club_name"];
-			echo "<td>",$valsts[$row["pf_rm_country"]];
-			echo "<td ",$row["DQ_LK0K"] ? "style=\"background-color:pink\"" : "",">",substr($row["lk0k"],0,2) != "00" ? $row["lk0k"] : substr($row["lk0k"],3,20);
-			echo "<td ",$row["DQ_LK"] ? "style=\"background-color:pink\"" : "",">",substr($row["lk"],0,2) != "00" ? $row["lk"] : substr($row["lk"],3,20);
-
-			if($row["DQ_LK0K"] || $row["DQ_LK"] || $row["DQ_IZS"]){
-				$DQ = 1;				
-			}
-			
-			if($row["DQ_DQ"]){$DQ3 = 1;}
-			
-			for($i=0;$i<count($et);$i++){
-				for($j=0;$j<$cl[0]->ENDURO_LAPS;$j++){
-					
-					$sql = "select * 
-							from `enduro_test_ignore` 
-							where `erd_id` = ".$_SESSION['params']['day']." 
-							and `test_id` = ".$et[$i]->ET_ID." 
-							and `class_id` = ".$row["CLASS_ID"]."
-							and `lap` = ".($j+1);
-					$r1 = queryDB($sql);					
-					if (mysql_num_rows($r1)!=0){continue;}
-					
-					$sql = "
-						select * 
-						from `enduro_test_result`
-						where 
-							`EDR_ID` = ".$row['edr_id']." and 
-							`TASK` = ".$et[$i]->ET_ID ." and
-							`LAP` = ".($j+1);
-					$r1 = queryDB($sql);
-					if($row1 = mysql_fetch_array($r1, MYSQL_ASSOC)){
-						if ($row1["RESULT"] != "00:00:00"){						
-							echo "<td align=\"right\">",substr($row1["RESULT"],0,2) != "00" ? $row1["RESULT"] : substr($row1["RESULT"],3,20) ,".",$row1["SEC_PARTS"] < 10 ?  0 : "",$row1["SEC_PARTS"];
-						}else {
-							$sql = "
-								select * 
-								from `enduro_test_ignore`
-								where 
-									`ERD_ID` = ".$_SESSION['params']['day']." 
-									and `test_id` = ".$et[$i]->ET_ID ." 
-									and `class_id` = ".$row["CLASS_ID"]."
-									and `LAP` = ".($j+1);
-							$r1 = queryDB($sql);
-							if($row2 = mysql_fetch_array($r1, MYSQL_ASSOC)){
-								echo "<td>",$row1["RESULT"];
-							} else {
-								echo "<td style=\"background-color:pink\">&nbsp";
-								$DQ2 = 1;
-							}
+			if($row["CLASS_ID"] != $class_id) {
+				$pl1=0;
+				$pl2=1;		
+				$pt = 20;			
+				$tmp = -1;
+				$cl = $em->getERCD("",$_SESSION['params']['day'],$row["CLASS_ID"] );
+				echo "</table>";
+				echo "<br><b style=\"font-size:16px\">",$row['Name'],"</b><br>";
+				echo "<table border =\"1\" style=\"border-collapse: collapse\">";
+					echo "<tr style=\"font-weight:bold\">";
+						echo "<td>Num";
+						echo "<td width=\"150\">Sportists";
+						echo "<td width=\"150\">Klubs";
+						echo "<td width=\"100\">Valsts";
+						echo "<td>TK LK0";
+						echo "<td>LK";
+						for($i=0;$i<count($et);$i++){
+							for($j=0;$j<$cl[0]->ENDURO_LAPS;$j++){
+								$sql = "select * 
+										from `enduro_test_ignore` 
+										where 
+											`erd_id` = ".$_SESSION['params']['day']." 
+											and `test_id` = ".$et[$i]->ET_ID." 
+											and `class_id` = ".$row["CLASS_ID"]."
+											and `lap` = ".($j+1);
+								$r1 = queryDB($sql);					
+								if (mysql_num_rows($r1)!=0){continue;}
+								
+								echo "<td>",$et[$i]->NAME, $j+1;
+							}						
 						}
-					} else {
-						echo "<td style=\"background-color:pink\">&nbsp";
-						$DQ2 = 1;
-					}	
-				}						
+						echo "<td>Laiks kopā";
+						echo "<td>Ieskaites punkti";
+				$class_id = $row["CLASS_ID"];	
 			}
-			$secparts =  $row["secparts"] % 100 ;
-			
-			
-			echo "<td style=\"font-weight:bold",($DQ || $DQ3) ? ";background-color:pink" : "","\" align=\"right\">",
-				$DQ3 ? "<i>DQ</i>" :
-				(
-					$DQ ? "<i>Izstājies</i>" : (
-												$row["tim"] ?  (
-													(substr($row["tim"],0,2) != "00" ? $row["tim"] : (
-														substr($row["tim"],3,20)
-													)). "." .( $secparts < 10 ? 0 : "").$secparts
-													
-												) : ""
-											)
-				);							
-			echo "<td align=\"center\">",($DQ || $DQ2 || $DQ3) ? "&nbsp" : $pt;			
-			if(!$DQ && !$DQ2 && !$DQ3){
-				$sql = "
-					update `enduro_day_racer`
-						set 
-							`points` = $pt,
-							`sec100` = ".$row["sec100"]."
-					where `edr_id` = ".$row["edr_id"];
-				queryDB($sql);
-			}
-			$rc = $row['user_id'];
-		}		
+			if($rc!=$row["user_id"]){
+				$pl1++;
+				if($tmp != $row["reslt2"]){
+					$pl2=$pl1;	
+					$tmp = $row["reslt2"];
+				}
+				
+				$epts=0;
+				if($pl2 == 1){
+					$epts=$pt1;
+				} elseif ($pl2 < 6){
+					$epts = $pt1 - ($pl2 -1)* 2 -1;
+				} elseif ($pl2 >=6){
+					$epts = $pt1 - $pl2  -4;
+				}
+				
+				$pt = $epts>0 ? $epts : 0;
+				
+				echo "<tr>";
+				echo "<td><b>",$row["pf_rm_sport_nr"],"</b>";
+				echo "<td>",$row["pf_rm_f_name"];
+				echo " ",$row["pf_rm_l_name"];
+				echo "<td>",$row["club_name"];
+				echo "<td>",$valsts[$row["pf_rm_country"]];
+				echo "<td ",$row["DQ_LK0K"] ? "style=\"background-color:pink\"" : "",">",substr($row["lk0k"],0,2) != "00" ? $row["lk0k"] : substr($row["lk0k"],3,20);
+				echo "<td ",$row["DQ_LK"] ? "style=\"background-color:pink\"" : "",">",substr($row["lk"],0,2) != "00" ? $row["lk"] : substr($row["lk"],3,20);
+
+				if($row["DQ_LK0K"] || $row["DQ_LK"] || $row["DQ_IZS"]){
+					$DQ = 1;				
+				}
+				
+				if($row["DQ_DQ"]){$DQ3 = 1;}
+				
+				for($i=0;$i<count($et);$i++){
+					for($j=0;$j<$cl[0]->ENDURO_LAPS;$j++){
+						
+						$sql = "select * 
+								from `enduro_test_ignore` 
+								where `erd_id` = ".$_SESSION['params']['day']." 
+								and `test_id` = ".$et[$i]->ET_ID." 
+								and `class_id` = ".$row["CLASS_ID"]."
+								and `lap` = ".($j+1);
+						$r1 = queryDB($sql);					
+						if (mysql_num_rows($r1)!=0){continue;}
+						
+						$sql = "
+							select * 
+							from `enduro_test_result`
+							where 
+								`EDR_ID` = ".$row['edr_id']." and 
+								`TASK` = ".$et[$i]->ET_ID ." and
+								`LAP` = ".($j+1);
+						$r1 = queryDB($sql);
+						if($row1 = mysql_fetch_array($r1, MYSQL_ASSOC)){
+							if ($row1["RESULT"] != "00:00:00"){						
+								echo "<td align=\"right\">",substr($row1["RESULT"],0,2) != "00" ? $row1["RESULT"] : substr($row1["RESULT"],3,20) ,".",$row1["SEC_PARTS"] < 10 ?  0 : "",$row1["SEC_PARTS"];
+							}else {
+								$sql = "
+									select * 
+									from `enduro_test_ignore`
+									where 
+										`ERD_ID` = ".$_SESSION['params']['day']." 
+										and `test_id` = ".$et[$i]->ET_ID ." 
+										and `class_id` = ".$row["CLASS_ID"]."
+										and `LAP` = ".($j+1);
+								$r1 = queryDB($sql);
+								if($row2 = mysql_fetch_array($r1, MYSQL_ASSOC)){
+									echo "<td>",$row1["RESULT"];
+								} else {
+									echo "<td style=\"background-color:pink\">&nbsp";
+									$DQ2 = 1;
+								}
+							}
+						} else {
+							echo "<td style=\"background-color:pink\">&nbsp";
+							$DQ2 = 1;
+						}	
+					}						
+				}
+				$secparts =  $row["secparts"] % 100 ;
+				
+				
+				echo "<td style=\"font-weight:bold",($DQ || $DQ3) ? ";background-color:pink" : "","\" align=\"right\">",
+					$DQ3 ? "<i>DQ</i>" :
+					(
+						$DQ ? "<i>Izstājies</i>" : (
+													$row["tim"] ?  (
+														(substr($row["tim"],0,2) != "00" ? $row["tim"] : (
+															substr($row["tim"],3,20)
+														)). "." .( $secparts < 10 ? 0 : "").$secparts
+														
+													) : ""
+												)
+					);							
+				echo "<td align=\"center\">",($DQ || $DQ2 || $DQ3) ? "&nbsp" : $pt;			
+				if(!$DQ && !$DQ2 && !$DQ3){
+					$sql = "
+						update `enduro_day_racer`
+							set 
+								`points` = $pt,
+								`sec100` = ".$row["sec100"]."
+						where `edr_id` = ".$row["edr_id"];
+					queryDB($sql);
+				}
+				$rc = $row['user_id'];
+			}		
+		}
+		echo "</table>";	
 	}
-	echo "</table>";
-	
-}
 
 	function printresult2(){
 		$rm =new raceManager;
@@ -504,6 +502,8 @@
 		$cmps  = $cm->getChamps($r[0]->getCH_ID(),"","","");
 		$cmp = $cmps[0];
 		
+		$erd = $em->getERD($_SESSION['params']['r']);
+
 		echo "<a href=\"?rm_func=reslt&rm_subf=enduromenu\"><b>Rezultāti</b></a>";
 		echo " -> <b>",$r[0]->getName(),"</b>";
 		echo "<h1 align=\"center\" style=\"font-size:20px\">EGP</h1><hr>";
@@ -552,18 +552,18 @@
 					echo "<td width=\"80px\">Tehnika";
 					echo "<td width=\"50px\">";
 					
-				//	if (strpos($cmp->getName(), 'Sprint')){
-				//		echo "Laiks";
-					//} else {
+					if (count($erd) == 1){
+						echo "Laiks";
+					} else {
 						echo "1. diena";
 						echo "<td width=\"50px\">2. diena";
 						echo "<td width=\"50px\">Kopā";
-				//	}
+					}
 					
 					echo "<td width=\"50px\" align=\"center\">Vieta";
 		}
-		$vieta = 1;
 
+		$vieta = 1;
 		while($row = mysql_fetch_array($r, MYSQL_ASSOC)){
 			
 			if($eaid <> $row["era_id"]){
@@ -580,7 +580,7 @@
 						}
 					echo ">",substr($row["tim"],0,2) == "00" ? substr($row["tim"],3,20): $row["tim"],"<b>.</b>",( $row["sec100"] % 100) <10 ? "0".( $row["sec100"] % 100) : ( $row["sec100"] % 100);
 						
-	/* 			if (strpos($cmp->getName(), 'Sprint')){
+				if (count($erd) == 1){
 					echo "<td align=\"center\">";
 					switch($vieta){
 						case 1:
@@ -597,7 +597,7 @@
 							break;
 					}
 					$vieta++;
-				} */
+				} 
 			} else {
 					
 					echo "<td align=\"center\"";

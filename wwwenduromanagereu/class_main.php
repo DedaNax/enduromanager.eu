@@ -260,11 +260,7 @@ class main {
 				}	
 							
 				$out .= "</li>"; 
-				$out .= '<p><img src="./enduro_logo.jpg" class="logo"></p>';								
-				$out .= '<p><img src="./images/madona2020.jpg" width="200px" height="120px"></p>';	
-				$out .= '<p><img src="./images/RBE_2020.png" width="200px" height="200px"></p>';	
-				$out .= '<p><img src="./images/Stende_2020.png" width="200px" height="200px"></p>';	
-				$out .= '<p><img src="./images/Zante_2020.jpg" width="200px" height="100px"></p>';	
+				$out .= '<p><img src="./enduro_logo.jpg" class="logo"></p>';
 
 		$out .= "</ul>\n";
 

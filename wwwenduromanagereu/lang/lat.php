@@ -212,4 +212,27 @@
  
  define("APPLY_AGREE","Apstiprinu, ka esmu iepazinies ar konkrētās enduro disciplīnas gada nolikumu un sacensību nolikumu, ievērošu šos nolikumus un neprasīšu atbildību no sacensību organizatora par nelaimes gadījumiem, kas radušies tajā skaitā mana veselības stāvokļa dēļ. Es uzņemos visu risku un atbildību, un apsolos necelt pretenzijas pret organizatoru un LaMSF par sev radītajiem materiālajiem zaudējumiem vai veselības bojājumiem. Apstiprinu, ka man ir vai iegādāšos nelaimes gadījumu apdrošināšanas polise ar atbilstošu segumu, kurā ir iekļauts motosporta sacensību risks.<br>Enduro sacensībām - apstiprinu, ka man ir atbilstoša transportlīdzekļa vadītāja apliecība un motocikls ir derīgs braukšanai pa koplietošanas ceļiem.");
  
+ define("ENDURO_APPLY_AGREE","Iepazinos un piekrītu");
+ define("ENDURO_APPLY_COVID19_TITLE","Sacensību dalībnieku kontaktinformācija");
+ define("ENDURO_APPLY_COVID19_TEXT","Saskaņā ar MK noteikumu Nr.360 “Epidemioloģiskās drošības pasākumi Covid-19 infekcijas izplatības ierobežošanai” 32.7 17.3.4. punktu, visas sacensību norisē iesaistītās un ar sacensību norises nodrošināšanu saistītās personas tiek akreditētas. Šim nolūkam sacensību pieteikumā ir jānorāda sportista un viņa pavadošā mehāniķa vārds, uzvārds un kontaktinformācija. Nepieciešamības gadījumā šie dati tiks nodoti Slimību un profilakses kontroles centram (SPKC). <a href = \"https://www.lamsf.lv/vadlinijas-lamsf-motosporta-sacensibu-organizesana\" target=\"blank\">Papildus informācija šeit<a>");
+ define("ENDURO_APPLY_RACER_ID","Sportista personas kods:");
+ define("ENDURO_APPLY_RACER_PHONE","Sportista telefona numurs:");
+ define("ENDURO_APPLY_TECH_ID","Mehāniķa personas kods:");
+ define("ENDURO_APPLY_TECH_NAME","Mehāniķa Vārds Uzvārds:");
+ define("ENDURO_APPLY_TECH_PHONE","Mehāniķa telefona numurs:");
+ define("ENDURO_APPLY_NO_COVID_DATA_WARNING","Visiem datiem sadaļā par COVID-19 jābūt aizpildītiem!");
+
+ define("ENDURO_APPLY_RACE","Sacensības:");
+ define("ENDURO_APPLY_NO_ACTIVE_RACE","Nav nevienas aktīvas sacensības!");
+ define("ENDURO_APPLY_CLASS","Klase:");
+ define("ENDURO_APPLY_START_NR","Starta numurs:");
+ define("ENDURO_APPLY_LICENSE","Licence:");
+ define("ENDURO_APPLY_TECHN","Tehnika:");
+ define("ENDURO_APPLY_MAKE","Marka");
+ define("ENDURO_APPLY_MODEL","Modelis");
+ define("ENDURO_APPLY_CC","Dzinēja tilpums");
+ define("ENDURO_APPLY_TAKT","Taktis");
+ define("ENDURO_APPLY_BTN_APPLY","Pieteikties");
+ define("ENDURO_APPLY_REVOKE","Atteikties no dalības sacensībās");
+ 
 ?>

@@ -26,7 +26,7 @@
 		if ($row &&
 			password_verify($pass,$row['user_password']))
 		{
-			$_SESSION['user'] = $row;
+			$_SESSION['user'] = $row;			
 			header( 'Location: http://www.enduromanager.eu' ) ;		
 		} else {						
 			loginFail();		
@@ -277,13 +277,14 @@
 		}
 
 		$sql = "SELECT `user_id` FROM `phpbb_users` WHERE lower(trim(`username`)) = lower(trim('$email'))";
-		echo $sql;
+		//echo $sql;
 		$r = queryDB($sql);
 
 		if(mysql_num_rows($r) != 1){
 			echo prntWarn(RESET_PASS_USER_NOT_REGISTERED);
 			return false;
 		}
+		
 		$user_id = mysql_fetch_array($r,MYSQL_ASSOC)['user_id'];
 		$guid = bin2hex(openssl_random_pseudo_bytes(32));
 		

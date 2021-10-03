@@ -33,7 +33,12 @@ class EnduroApplication{
 	public $LIC_NR;
 	public $LIC_TYPE;
 	public $CLASS_NAME;
-	
+
+	public $covid19RacerID;
+	public $covid19RacerPhone;
+	public $covid19TechnID;
+	public $covid19TechnName;
+	public $covid19TechnPhone;	
 }
 class EnduroTask{
 	public $ET_ID;
@@ -290,9 +295,28 @@ class EnduroManager{
 		return $reslt;
 	}
 	
-	public function insERA($r,$c,$rcr,$t,$i,$nr,$l){
-		$sql = "insert into `enduro_application` (`race_ID`,`class_id`,`racer_id`,`tehn`,`ins`,`NR`,`LIC_NR`)
-				values ($r,$c,$rcr,'$t',$i,'$nr','$l')";	
+	
+	public function insERA($r,$c,$rcr,$t,$i,$nr,$l,$covid19RacerID,$covid19RacerPhone,$covid19TechnID,$covid19TechnName,$covid19TechnPhone){
+		$covid19RacerID = $covid19RacerID ? $covid19RacerID : "";
+		$covid19RacerPhone = $covid19RacerPhone ? $covid19RacerPhone : "";
+		$covid19TechnID = $covid19TechnID ? $covid19TechnID : "";
+		$covid19TechnName = $covid19TechnName ? $covid19TechnName : "";
+		$covid19TechnPhone = $covid19TechnPhone ? $covid19TechnPhone : "";
+
+		$sql = "insert into `enduro_application` (
+					`race_ID`,
+					`class_id`,
+					`racer_id`,
+					`tehn`,
+					`ins`,
+					`NR`,
+					`LIC_NR`,
+					`covid19RacerID`,
+					`covid19RacerPhone`,
+					`covid19TechnID`,
+					`covid19TechnName`,
+					`covid19TechnPhone`)
+				values ($r,$c,$rcr,'$t',$i,'$nr','$l','$covid19RacerID','$covid19RacerPhone','$covid19TechnID','$covid19TechnName','$covid19TechnPhone')";	
 				
 		queryDB($sql);
 		return mysql_insert_id ();
@@ -317,7 +341,12 @@ class EnduroManager{
 					ea.`INS`,
 					el.`TYPE`,
 					ea.`LIC_NR`,
-					c.`name` as CLASS_NAME
+					c.`name` as CLASS_NAME,
+					ea.`covid19RacerID`,
+					ea.`covid19RacerPhone`,
+					ea.`covid19TechnID`,
+					ea.`covid19TechnName`,
+					ea.`covid19TechnPhone`
 				from `enduro_application` ea
 					left join `enduro_licence` el on el.`LIC_NR` = ea.`LIC_NR` 
 					left join `d_class` c on c.`classid` = ea.`class_id`";
@@ -365,6 +394,13 @@ class EnduroManager{
 			$item->LIC_NR = $row["LIC_NR"];
 			$item->LIC_TYPE = $row["TYPE"];
 			$item->CLASS_NAME = $row["CLASS_NAME"];
+
+			$item->covid19RacerID = $row["covid19RacerID"];
+			$item->covid19RacerPhone = $row["covid19RacerPhone"];
+			$item->covid19TechnID = $row["covid19TechnID"];
+			$item->covid19TechnName = $row["covid19TechnName"];
+			$item->covid19TechnPhone = $row["covid19TechnPhone"];
+
 			array_push($reslt,$item);
 		}
 		return $reslt;
@@ -731,20 +767,39 @@ function proceedEnduro($subf,$opt){
 			break;
 		case "addapplication":	
 			$_SESSION['params']['racer'] = $_SESSION['params']['racer']?$_SESSION['params']['racer']:$_SESSION['user']['user_id'];
-			$em->insERA($_SESSION['params']['raceid'],$_SESSION['params']['class'],$_SESSION['params']['racer'],$_SESSION['params']['teh_Marka']."^".$_SESSION['params']['teh_Model']."^".$_SESSION['params']['teh_V']."^".$_SESSION['params']['teh_T'],0,$_SESSION['params']['NR'],$_SESSION['params']['lic']);
-			switch($_SESSION['params']['f2']){
-				case "club":
-					printEnduroClubApply($opt);
-					break;
-				default:
-					if ($_SESSION['params']['org']){
-						printEnduroReg($opt);
-					} else {
-						//printEnduroApply($opt);
-						enduroapllist();
-					}
+			
+			if(validateCovid()){
+
+				$em->insERA(
+				 	 $_SESSION['params']['raceid']
+					,$_SESSION['params']['class']
+					,$_SESSION['params']['racer']
+					,$_SESSION['params']['teh_Marka']."^".$_SESSION['params']['teh_Model']."^".$_SESSION['params']['teh_V']."^".$_SESSION['params']['teh_T']
+					,0
+					,$_SESSION['params']['NR']
+					,$_SESSION['params']['lic']
+					,$_SESSION['params']['covid19RacerID']
+					,$_SESSION['params']['covid19RacerPhone']
+					,$_SESSION['params']['covid19TechnID']
+					,$_SESSION['params']['covid19TechnName']
+					,$_SESSION['params']['covid19TechnPhone']);
+
+				switch($_SESSION['params']['f2']){
+					case "club":
+						printEnduroClubApply($opt);
+						break;
+					default:
+						if ($_SESSION['params']['org']){
+							printEnduroReg($opt);
+						} else {
+							//printEnduroApply($opt);
+							enduroapllist();
+						}						
+				}
+			} else {
+				printEnduroApply($opt);
+			}
 					
-			}			
 			break;
 		case "delapl":
 			$em->delERA($_SESSION['params']['id']);
@@ -772,11 +827,35 @@ function proceedEnduro($subf,$opt){
 			printEnduroReg($opt);
 			break;
 		case "apladd":
-			$em->insERA($_SESSION['params']['opt'],$_SESSION['params']['c'],$_SESSION['params']['racer'],'',1,'','');
+			$em->insERA(
+				 $_SESSION['params']['opt']
+				,$_SESSION['params']['c']
+				,$_SESSION['params']['racer']
+				,''
+				,1
+				,''
+				,''
+				,$_SESSION['params']['covid19RacerID']
+				,$_SESSION['params']['covid19RacerPhone']
+				,$_SESSION['params']['covid19TechnID']
+				,$_SESSION['params']['covid19TechnName']
+				,$_SESSION['params']['covid19TechnPhone']);
 			printEnduroReg($opt);
 			break;
 		case "aplapply":
-			$id = $em->insERA($_SESSION['params']['opt'],$_SESSION['params']['c'],$_SESSION['params']['racer'],'',1,'','');
+			$id = $em->insERA(
+				 $_SESSION['params']['opt']
+				,$_SESSION['params']['c']
+				,$_SESSION['params']['racer']
+				,''
+				,1
+				,''
+				,''
+				,$_SESSION['params']['covid19RacerID']
+				,$_SESSION['params']['covid19RacerPhone']
+				,$_SESSION['params']['covid19TechnID']
+				,$_SESSION['params']['covid19TechnName']
+				,$_SESSION['params']['covid19TechnPhone']);
 			$em->insEDR($id);			
 			printEnduroReg($opt);
 			break;
@@ -807,6 +886,27 @@ function proceedEnduro($subf,$opt){
 			break;	
 		default:
 	}
+}
+
+function validateCovid(){
+
+	$rm = new raceManager;
+	$r = $rm->getRace($_SESSION['params']['opt'],"","","","","","");
+
+	if($r[0]->COVID19){
+		if(!$_SESSION['params']['covid19RacerID'] ||
+		   !$_SESSION['params']['covid19RacerPhone'] ||
+		   !$_SESSION['params']['covid19TechnID'] ||
+		   !$_SESSION['params']['covid19TechnName'] ||
+		   !$_SESSION['params']['covid19TechnPhone']){
+
+			echo prntWarn(ENDURO_APPLY_NO_COVID_DATA_WARNING);
+
+			return false;
+		}
+	}
+
+	return true;
 }
 
 function motoInputSave() {	
@@ -1943,7 +2043,7 @@ function printEnduroApply($opt){
 	if ($r){
 		if (count($r)>1){
 			
-			echo "<tr><td width=\"50px\">Sacensības:";
+			echo "<tr><td width=\"50px\">".ENDURO_APPLY_RACE;
 			echo "<td><select onchange=\"window.location = this.options[this.selectedIndex].value;\">";
 				for($i=0;$i<count($r);$i++) {
 					$cmp = $cm->getChamps($r[$i]->getCH_ID(),"","","");
@@ -1959,13 +2059,13 @@ function printEnduroApply($opt){
 			$opt = $opt ? $opt: $r[0]->getID();
 		} else {
 			$cmp = $cm->getChamps($r[0]->getCH_ID(),"","","");			
-			echo "<tr><td width=\"50px\">Sacensības:<td><font style=\"font-size:18px;color:blue;font-weight:bold\">",
+			echo "<tr><td width=\"50px\">".ENDURO_APPLY_RACE."<td><font style=\"font-size:18px;color:blue;font-weight:bold\">",
 				 $cmp[0]->getName(),", ",$r[0]->getName() ," - ",$r[0]->getDate(),"</font>";
 			echo "<input type=\"hidden\" name = \"raceid\" value=\"",$r[0]->getID(),"\">";
 			$opt = $r[0]->getID();
 		}
 	} else {
-		echo "<tr><td colspan=\"2\" style=\"align:center\"><h1 style=\"color:red;font-weight:bold\">Nav nevienas aktīvas sacensības!</h1>";
+		echo "<tr><td colspan=\"2\" style=\"align:center\"><h1 style=\"color:red;font-weight:bold\">".ENDURO_APPLY_NO_ACTIVE_RACE."</h1>";
 		return;
 	}
 		
@@ -1976,7 +2076,7 @@ function printEnduroApply($opt){
 	if(!$apl[0]){
 		$cl = $cm->getActulaRaceClass($opt);
 		if ($cl){			
-			echo "<tr><td>Klase:";
+			echo "<tr><td>".ENDURO_APPLY_CLASS;
 			echo "<td><select name=\"class\" style=\"width: 150px;\">";
 				for($i=0;$i<count($cl);$i++) {
 					echo "<option value=\"",$cl[$i]->getID(),"\">";					
@@ -1989,7 +2089,7 @@ function printEnduroApply($opt){
 		$racer = $rcm->getRacer($user);
 		
 			
-		echo "<tr><td>Starta numurs:";	
+		echo "<tr><td>".ENDURO_APPLY_START_NR;	
 			
 			/*$re snr = $racer[0]->getNR()?$racer[0]->getNR():1111;
 			
@@ -2025,8 +2125,7 @@ function printEnduroApply($opt){
 			echo "</select>"; */
 			echo '<td><input type="text" name = "NR" style="width: 142px;" value="',$racer[0]->getNR(),'">';
 				
-		echo "<tr><td>Licence:<td>";
-		
+		echo "<tr><td>".ENDURO_APPLY_LICENSE."<td>";	
 		
 		$sql = "select *
 				from  `enduro_licence` 
@@ -2060,7 +2159,7 @@ function printEnduroApply($opt){
 		//print_r($apl1);
 		
 		
-		echo "<tr><td>Tehnika:<td>";		
+		echo "<tr><td>".ENDURO_APPLY_TECHN."<td>";		
 		echo '<select name="tehn1" style="width: 150px;"
 				onchange="fillTeh(this.value,1)"
 		
@@ -2072,30 +2171,45 @@ function printEnduroApply($opt){
 		
 		echo ' </select>';
 		echo "<tr><td><td>";
-		echo '<table border = "0">';
-			echo '<tr><td>Marka<td>Modelis<td>Dzinēja tilpums<td>Taktis';
-			echo '<tr>';
-			echo '<td><input type="text" name ="teh_Marka" ID ="teh_Marka1">';
-			echo '<td><input type="text" name ="teh_Model" ID ="teh_Model1">';
-			echo '<td><input type="text" name ="teh_V" ID ="teh_V1">';
-			echo '<td><select  name ="teh_T" ID ="teh_T1" >';
-				echo '<option value = "2">2</option>';
-				echo '<option value = "4">4</option>';
-			echo '</select>';
-		echo '</table>';
-		
-		
+			echo '<table border = "0">';
+				echo '<tr><td>'.ENDURO_APPLY_MAKE.'<td>'.ENDURO_APPLY_MODEL.'<td>'.ENDURO_APPLY_CC.'<td>'.ENDURO_APPLY_TAKT;
+				echo '<tr>';
+				echo '<td><input type="text" name ="teh_Marka" ID ="teh_Marka1">';
+				echo '<td><input type="text" name ="teh_Model" ID ="teh_Model1">';
+				echo '<td><input type="text" name ="teh_V" ID ="teh_V1">';
+				echo '<td><select  name ="teh_T" ID ="teh_T1" >';
+					echo '<option value = "2">2</option>';
+					echo '<option value = "4">4</option>';
+				echo '</select>';
+			echo '</table>';
 		//echo "<tr><td>Apdrošināšana:<td><input type=\"checkbox\" name=\"INS\" >";
-		
+
+		$covid19 = $r[0]->COVID19;
+		if($covid19){			
+			echo '<tr><td colspan=2><hr><h1 style="color:red;text-align:center;">'.ENDURO_APPLY_COVID19_TITLE.'</h1>';
+			echo '<tr><td colspan=2 style="color:red">'.ENDURO_APPLY_COVID19_TEXT;
+			echo '<tr><td width=150px>'.ENDURO_APPLY_RACER_ID;
+				echo '<td><input type="text" name ="covid19RacerID">';
+			echo '<tr><td width=150px>'.ENDURO_APPLY_RACER_PHONE;
+				echo '<td><input type="text" name ="covid19RacerPhone" value="'.$racer[0]->getTel().'">';
+			echo '<tr><td width=150px>'.ENDURO_APPLY_TECH_NAME;
+				echo '<td><input type="text" name ="covid19TechnName">';
+			echo '<tr><td width=150px>'.ENDURO_APPLY_TECH_ID;
+				echo '<td><input type="text" name ="covid19TechnID">';			
+			echo '<tr><td width=150px>'.ENDURO_APPLY_TECH_PHONE;
+				echo '<td><input type="text" name ="covid19TechnPhone">';
+			echo '<tr><td colspan=2><hr>';
+		}
+
 		if(!$_SESSION['params']['org']){
 			echo "<tr><td colspan=\"2\" style=\"font-size:14px;text-align: justify;\">".APPLY_AGREE;
-			echo '<tr><td colspan="2"> <input type="checkbox" onchange="document.getElementById(\'sub\').disabled = !this.checked"> Iepazinos un piekrītu';	
+			echo '<tr><td colspan="2"> <input type="checkbox" onchange="document.getElementById(\'sub\').disabled = !this.checked">'.ENDURO_APPLY_AGREE;	
 		}
 		
 		echo "<tr><td colspan=\"2\"><center><input type=\"submit\" value=\"";
 		
 		if(!$_SESSION['params']['org']){
-			echo "Pieteikties\" ID = \"sub\" disabled ";
+			echo ENDURO_APPLY_BTN_APPLY."\" ID = \"sub\" disabled ";
 		} else {
 			echo "Pieteikt\"";
 		}
@@ -2109,18 +2223,18 @@ function printEnduroApply($opt){
 			
 			echo "</form>";
 	}	else {
-		echo "<tr><td width=\"\">Klase:<td> ";
+		echo "<tr><td width=\"\">".ENDURO_APPLY_CLASS."<td> ";
 			//$cl = $cm->getClass($apl[0]->CLASS_ID,"");,$cl[0]->getName()
 		echo "<font style=\"font-size:18px;color:blue;font-weight:bold\">",$apl[0]->CLASS_NAME,"</font>";
 		
-		echo "<tr><td>Starta numurs:<td>",$apl[0]->NR;
-		echo "<tr><td>Licence:<td>",$apl[0]->LIC_NR,$apl[0]->LIC_NR?" (".$apl[0]->LIC_TYPE.")":"";	
-		echo "<tr><td>Tehnika:<td>",str_replace("^", " ",$apl[0]->TEHN)," taktis";
+		echo "<tr><td>".ENDURO_APPLY_START_NR."<td>",$apl[0]->NR;
+		echo "<tr><td>".ENDURO_APPLY_LICENSE."<td>",$apl[0]->LIC_NR,$apl[0]->LIC_NR?" (".$apl[0]->LIC_TYPE.")":"";	
+		echo "<tr><td>".ENDURO_APPLY_TECHN."<td>",str_replace("^", " ",$apl[0]->TEHN)," ".ENDURO_APPLY_TAKT;
 		echo "<tr><td colspan=\"2\"><a onclick=\"confDelGet('Tiešām atteikties?','index.php?rm_func=enduro&opt=$opt&rm_subf=delapl&id=",$apl[0]->ERA_ID,"')\"
 			onmouseover=\"document.body.style.cursor = 'pointer'\"
 			onmouseout = \"document.body.style.cursor = 'default'\"
 		>";
-			echo "Atteikties no dalības sacensībās";
+			echo ENDURO_APPLY_REVOKE;
 		echo "</a>";
 	}
 	

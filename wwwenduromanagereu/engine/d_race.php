@@ -19,6 +19,7 @@ class Race{
 	public $tgalvis;
 	public $exresLink;
 	public $slots;
+	public $COVID19;
 		
 	public function setID($value){
 		$this->ID = $value;
@@ -570,6 +571,7 @@ class raceManager{
 			$item->tgalvis = $row["TMS_GAL_VISIBLE"];
 			$item->exresLink = $row["EX_RES_LINK"];
 			$item->slots = $row["SLOTS"]?$row["SLOTS"]:2;
+			$item->COVID19 = $row["COVID19"];
 			
 			array_push($reslt,$item);
 		}
@@ -577,7 +579,7 @@ class raceManager{
 		return $reslt;
 	}	
 	
-	public function insRace($ch_id,$name,$notes,$date,$edate,$rules,$code,$type,$galid,$orggalid,$tmgalid,$erl,$slots){
+	public function insRace($ch_id,$name,$notes,$date,$edate,$rules,$code,$type,$galid,$orggalid,$tmgalid,$erl,$slots,$covid19){
 		
 		$sql = "INSERT INTO `d_race` (
 					`ch_id` ,
@@ -591,7 +593,8 @@ class raceManager{
 					`ORG_GAL_ID`,
 					`TMS_GAL_ID`,
 					`EX_RES_LINK`,
-					`SLOTS` 
+					`SLOTS`,
+					`COVID19`
 				) 
 		        VALUES (
 					'$ch_id', 
@@ -605,11 +608,12 @@ class raceManager{
 					$orggalid,
 					$tmgalid,
 					'$erl',
-					".($slots ? $slots : "null")."
+					".($slots ? $slots : "null").",
+					".($covid19?1:0)."
 				);";		
 		$q_result = queryDB($sql);
 	}	
-	public function saveRace($id,$ch_id,$name,$notes,$date,$edate,$rules,$code,$type,$erl,$slots){
+	public function saveRace($id,$ch_id,$name,$notes,$date,$edate,$rules,$code,$type,$erl,$slots,$covid19){
 		$sql = "UPDATE `d_race` 
 				SET `type` = $type,
 				    `name` = '$name',
@@ -618,8 +622,10 @@ class raceManager{
 		            `notes` = ".($notes ? "'$notes'" : " null ").",
 					`ch_id` = $ch_id, 
 					`EX_RES_LINK` = '$erl',
-					`SLOTS` = ".($slots ? $slots : "null")."
-				WHERE `race_id` = $id;";				
+					`SLOTS` = ".($slots ? $slots : "null").",
+					`COVID19` = ".($covid19?1:0)."
+				WHERE `race_id` = $id;";	
+
 		$q_result = queryDB($sql);
 	}	
 	public function delRace($id){
@@ -650,19 +656,51 @@ class raceManager{
 
 		return $reslt;
 	}
+
+	public function getEGPClass($rid){
+		$sql = "SELECT * FROM `d_egpclass` WHERE `RaceID` = $rid";
+		$q_result = queryDB($sql);		
+		
+		$reslt = array();		
+		 while ($row = mysql_fetch_array($q_result, MYSQL_ASSOC)) {
+			
+			$item = new RaceClass;
+			
+			$item->setRCID($row["id"]);
+			$item->setRID($row["RaceID"]);
+			$item->setCID($row["ClassID"]);
+				
+			array_push($reslt,$item);
+		}
+
+		return $reslt;
+	}
+
 	public function delRClass($rid){
 		$sql = "DELETE FROM `d_raceclass` WHERE `RaceID` = $rid";
 		$q_result = queryDB($sql);
 	}
+
+	public function delEGPClass($rid){
+		$sql = "DELETE FROM `d_egpclass` WHERE `RaceID` = $rid";
+		$q_result = queryDB($sql);
+	}
+
 	public function delRClassByID($id){
 		$sql = "delete from `d_raceclass` where RaceClassID = $id";
 		$q_result = queryDB($sql);
 	}
+
 	public function insRClass($rid,$cid){
 		$sql="INSERT INTO `d_raceclass` (`RaceID`,`ClassID`) VALUES ($rid,$cid)";
 		$q_result = queryDB($sql);
 	}
 	
+	public function insEGPClass($rid,$cid){
+		$sql="INSERT INTO `d_egpclass` (`RaceID`,`ClassID`) VALUES ($rid,$cid)";
+		$q_result = queryDB($sql);
+	}
+
 	public function getRPTask($rid){
 		$sql = "SELECT * FROM `d_racephototask` WHERE `RaceID` = $rid";
 		$q_result = queryDB($sql);
@@ -2239,11 +2277,16 @@ function saveRaceClass($opt){
 				$em->delERCD($ercd[$j]->ERCD_ID);
 			}
 			
-			$rc->delRClassByID($rcl[$i]->getRCID());
-			
+			$rc->delRClassByID($rcl[$i]->getRCID());			
 		}
 	}
-	
+
+	$rc->delEGPClass($opt);
+	$keys = array_keys($_SESSION['params'],"egp");
+	for($i=0;$i<count($keys);$i++){
+		$c = str_replace("egp","",$keys[$i]);
+		$rc->insEGPClass($opt,$c);
+	}
 }
 
 function listRaceClass($opt){
@@ -2257,6 +2300,7 @@ function listRaceClass($opt){
 	}
 	$cl = $rc->getClass("",$r[0]->getType());
 	$rcl = $rm->getRClass($opt);
+	$egp = $rm->getEGPClass($opt);
 	
 		
 	echo "<b><a href=\"?rm_func=race&rm_subf=racelist&type=",$r[0]->getType(),"\">",getRaceTypeName($r[0]->getType())," sacensības<a/></b>";
@@ -2266,10 +2310,10 @@ function listRaceClass($opt){
 	
 	echo "<form action=\"index.php\" method=\"post\">";
 	echo "<table width =\"100%\" border = \"1\">";
-	echo "<tr class=\"title\"><td width=\"20\">&nbsp<td>Nosaukums<td>Kods";
+	echo "<tr class=\"title\"><td width=\"20\">Piedalās<td>EGP<td>Nosaukums<td>Kods";
 	
 	for($i=0;$i<count($cl);$i++){
-		echo "<tr><td width=\"70\">";		
+		echo "<tr><td style=\"text-align:center\">";		
 		echo "<input type=\"checkbox\" name =\"class".$cl[$i]->getID()."\" value=\"class\"";
 		for($j=0;$j<count($rcl);$j++){
 			if($rcl[$j]->getCID() == $cl[$i]->getID()){
@@ -2277,6 +2321,16 @@ function listRaceClass($opt){
 			}
 		}
 		echo ">";
+
+		echo "<td style=\"text-align:center\">";	
+		echo "<input type=\"checkbox\" name =\"egp".$cl[$i]->getID()."\" value=\"egp\"";
+		for($j=0;$j<count($egp);$j++){
+			if($egp[$j]->getCID() == $cl[$i]->getID()){
+				echo " checked ";
+			}
+		}
+		echo ">";
+
 		echo "<td>". $cl[$i]->getName();				
 		echo "<td>". $cl[$i]->getCode();				
 	}
@@ -2500,6 +2554,7 @@ function printEditRace($opt){
 					default:
 						break;
 				}
+				echo '<hr><input type="checkbox" name="covid19" value="1" '.($list[0]->COVID19?'checked':'').'> COVID-19 īpašās prasības';
 				echo "<hr><center><input type=\"submit\" value=\"Saglabāt\"></center>";
 			echo "</form>";
 		}
@@ -2607,6 +2662,8 @@ function printEditRace($opt){
 				echo "<hr><h1>Papildus iespejas:</h1>";			
 				echo "<a href=\"index.php?rm_func=race&rm_subf=raceclass&opt=$id\">",$list[0]->getName()," sacensības klases</a>";
 				echo " | <a href=\"index.php?rm_func=race&rm_subf=enduroraceclassdaystage&opt=$id\"> Laika kontroles</a>";
+				echo " | <a href=\"?rm_func=print&rm_subf=covidlist&no_gui=1&opt=$id\" target=\"_blank\"> COVID-19 dati</a>";
+				echo " | <a href=\"?rm_func=print&rm_subf=covidlist2&no_gui=1&opt=$id\" target=\"_blank\"> COVID-19 pāru dati</a>";
 				break;
 			case 5:
 			case 6:
@@ -2694,10 +2751,10 @@ function saveRace($opt){
 					$em->saveET(str_replace("et","",$et[$i]),$_SESSION['params'][$et[$i]]);
 				}
 				
-				$rm->saveRace($opt,$_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type'],$_POST['ex_res'],$_POST['slots']);
+				$rm->saveRace($opt,$_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type'],$_POST['ex_res'],$_POST['slots'],$_POST['covid19']);
 				break;
 			default:	
-				$rm->saveRace($opt,$_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type'],$_POST['ex_res'],$_POST['slots']);			
+				$rm->saveRace($opt,$_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type'],$_POST['ex_res'],$_POST['slots'],$_POST['covid19']);			
 		}
 		
 	}else {
@@ -2724,11 +2781,11 @@ function saveRace($opt){
 				
 				
 				
-				$rm->insRace($_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type'],$gid,$ogid,$tmgid,$_POST['ex_res'],$_POST['slots']);
+				$rm->insRace($_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type'],$gid,$ogid,$tmgid,$_POST['ex_res'],$_POST['slots'],$_POST['covid19']);
 				return mysql_insert_id();
 				break;
 			default:
-				$rm->insRace($_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type']," null "," null "," null ",$_POST['ex_res'],$_POST['slots']);				     
+				$rm->insRace($_POST["ch_id"],$_POST["name"],$_POST["notes"],$_POST["date"],$_POST["edate"],"",$_POST["code"],$_POST['type']," null "," null "," null ",$_POST['ex_res'],$_POST['slots'],$_POST['covid19']);				     
 				return mysql_insert_id();
 				break;						
 		}

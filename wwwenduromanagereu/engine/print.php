@@ -16,19 +16,104 @@
 				printAnketa($tr);
 				break;		
 			case "trdata":
-				echo printTRData();
+				printTRData();
 				break;
 			case "enduroapl":
 				printEnduroApl($_GET['apl']);
 				break;
-			case "enduroapllist";
-				echo enduroapllist();
+			case "enduroapllist":
+				enduroapllist();
+				break;
+			case "covidlist":
+				enduroCovidList($_SESSION['params']['opt']);
+				break;
+			case "covidlist2":
+				enduroCovidList2($_SESSION['params']['opt']);
 				break;
 			default:
 				echo "$func $mode Kļūda!";
 		}
+	}
 
+	function enduroCovidList2($raceId){
+		$sql = "
+				SELECT 
+					concat(pf_rm_f_name , ' ' , pf_rm_l_name) NAME1,
+					covid19RacerID ID1,
+					covid19RacerPhone PHONE1,
+					covid19TechnName NAME2,
+					covid19TechnID ID2,
+					covid19TechnPhone PHONE2
+				FROM `enduro_application` ea
+					inner join `phpbb_profile_fields_data` data on (data.`user_id` = ea.`racer_id`)					
+				where `race_id` = $raceId					
 
+				order by pf_rm_l_name
+				";
+
+		$r = queryDB($sql);
+		echo "<table border =\"1\">";
+			echo "<tr style=\"font-weight:bold\">";			
+				echo "<td width=\"150px\">Sporista vārds uzvārds";
+				echo "<td width=\"150px\">Sportista personas kods";
+				echo "<td width=\"150px\">Sportista Tālruņa numurs";
+				echo "<td width=\"150px\">Mehāniķa vārds uzvārds";
+				echo "<td width=\"150px\">Mehāniķa personas kods";
+				echo "<td width=\"150px\">Mehāniķa Tālruņa numurs";
+		
+		while($row = mysql_fetch_array($r, MYSQL_ASSOC)){
+			echo "<tr>";
+				echo "<td>",$row['NAME1'];
+				echo "<td>",$row['ID1'];
+				echo "<td>",$row['PHONE1'];	
+				echo "<td>",$row['NAME2'];
+				echo "<td>",$row['ID2'];
+				echo "<td>",$row['PHONE2'];			
+		}
+		echo "</table>";
+	}
+
+	function enduroCovidList($raceId){
+		$sql = "select 
+					* 
+				from (
+					SELECT 
+						concat(pf_rm_f_name , ' ' , pf_rm_l_name) NAME,
+						covid19RacerID ID,
+						covid19RacerPhone PHONE,
+						pf_rm_l_name LNAME
+					FROM `enduro_application` ea
+						inner join `phpbb_profile_fields_data` data on (data.`user_id` = ea.`racer_id`)					
+					where `race_id` = $raceId
+					
+					union all 
+
+					SELECT 
+						covid19TechnName NAME,
+						covid19TechnID ID,
+						covid19TechnPhone PHONE,
+						substring_index(covid19TechnName,' ',2) LNAME
+					FROM `enduro_application` ea
+					where `race_id` = $raceId
+				) a
+
+				order by LNAME
+				";
+
+		$r = queryDB($sql);
+		echo "<table border =\"1\">";
+			echo "<tr style=\"font-weight:bold\">";			
+				echo "<td width=\"150px\">Vārds uzvārds";
+				echo "<td width=\"150px\">Personas kods";
+				echo "<td width=\"150px\">Tālruņa numurs";
+		
+		while($row = mysql_fetch_array($r, MYSQL_ASSOC)){
+			echo "<tr>";
+				echo "<td>",$row['NAME'];
+				echo "<td>",$row['ID'];
+				echo "<td>",$row['PHONE'];			
+		}
+		echo "</table>";
 	}
 
 	function enduroapllist(){
@@ -131,7 +216,7 @@
 			$m = getMoto();
 			if($racer){
 				$contents = str_replace("{start_no}",$apl[0]->NR,$contents);
-				$contents = str_replace("{lic_no}",$racer[0]->getLNR(),$contents);
+				$contents = str_replace("{lic_no}",$apl[0]->LIC_NR,$contents);
 				$contents = str_replace("{country}",$racer[0]->getValsts_name(),$contents);
 				$contents = str_replace("{name}",$racer[0]->getFname()." ".$racer[0]->getLname(),$contents);
 				$contents = str_replace("{byear}",$racer[0]->getBYear_text(),$contents);

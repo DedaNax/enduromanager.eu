@@ -1,8 +1,10 @@
 <?php
-	try {
-		session_start();	
+	try {				
 		error_reporting(E_ALL ^ E_NOTICE);
 		ini_set('display_errors','On');
+		ini_set("session.cookie_domain", ".enduromanager.eu");
+
+		session_start();				
 
 		include "./conf.php";
 		include "./AP.php";
@@ -48,5 +50,5 @@
 			echo mysqli_error($GLOBALS["connection"]);
 			mysqli_close ($GLOBALS["connection"]);
 		}		
-	}
+	}	
 ?>

@@ -78,7 +78,7 @@
  define("REG_USER_TITLE", "User registration");
  define("REG_USER_TXT", "User registration is successfull! Use your e-mail and password to log in to the system.");
  
- define("EM_RACE_LIST_EMPTY", "Pieteikšanās sacensībām nav atvērtas!");
+ define("EM_RACE_LIST_EMPTY", "There is no race opened to apply!");
  
  define("PE_APPL_TEHN_TYPE_TITLE","Machine");
  define("MOTO_BRAND","Manufacturer");
@@ -218,4 +218,27 @@
  define("RESET_PASS_EMPTY_PASS","The password is empty!");//  
 
  define("APPLY_AGREE","I confirm that I have familiarised myself with the season's regulations of the specific Enduro discipline and supplementary regulations for the particular event, I will abide to these regulations and will not hold the competition organisers responsible for any accidents caused, among others, due to the state of my health. I accept all risk and responsibility and promise not to raise claims against the organiser or LaMSF regarding any material damage or injuries I may suffer. I confirm that I have or will purchase an accident insurance policy with the required coverage including the risk of motorsport competitive racing.<br>For enduro competitions, I confirm that I have the necessary drivers licence, and my motorcycle is suitable for driving on common roads.");
+
+ define("ENDURO_APPLY_AGREE","I undersood and accept");
+ define("ENDURO_APPLY_COVID19_TITLE","Race participant contact information");
+ define("ENDURO_APPLY_COVID19_TEXT","In accordance with Regulation of the Cabinet of Ministers No. 360 “Epidemiological safety measures to limit the spread of Covid-19 infection” 32.7 17.3.4. All persons involved in the competition and related to the provision of the competition are accredited. For this purpose, the name and contact details of the Athlete and his / her accompanying mechanic must be indicated in the competition application. If necessary, this data will be transferred to the Centers for Disease Control and Prevention. <a href = \"https://www.lamsf.lv/vadlinijas-lamsf-motosporta-sacensibu-organizesana\" target=\"blank\">Clik for more information (in Latvian)<a>");
+ define("ENDURO_APPLY_RACER_ID","Racer national ID:");
+ define("ENDURO_APPLY_RACER_PHONE","Racer phone number:");
+ define("ENDURO_APPLY_TECH_ID","Mechanic national ID:");
+ define("ENDURO_APPLY_TECH_NAME","Mechanic Name Last name:");
+ define("ENDURO_APPLY_TECH_PHONE","Mechanic phone number:");
+ define("ENDURO_APPLY_NO_COVID_DATA_WARNING","All COVID-19 related data fields are mandatory!");
+
+ define("ENDURO_APPLY_RACE","Race:");
+ define("ENDURO_APPLY_NO_ACTIVE_RACE","There is no active race to apply to!");
+ define("ENDURO_APPLY_CLASS","Class:");
+ define("ENDURO_APPLY_START_NR","Number:");
+ define("ENDURO_APPLY_LICENSE","License:");
+ define("ENDURO_APPLY_TECHN","Machine:");
+ define("ENDURO_APPLY_MAKE","Make");
+ define("ENDURO_APPLY_MODEL","Model");
+ define("ENDURO_APPLY_CC","CC");
+ define("ENDURO_APPLY_TAKT","Tact");
+ define("ENDURO_APPLY_BTN_APPLY","Apply");
+ define("ENDURO_APPLY_REVOKE","Revoke my application");
 ?>

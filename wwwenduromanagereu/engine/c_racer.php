@@ -562,10 +562,10 @@ class RacerManager{
 	
 	public function chechName($name){
 		$sql ="
-			SELECT * 
+			SELECT 1 
 			FROM `phpbb_users`
-			WHERE `username` = '$name'
-		";
+			WHERE lower(`username`) = lower('$name')";
+			
 		$q_result = queryDB($sql);	
 		while ($row = mysql_fetch_array($q_result, MYSQL_ASSOC))
 		{
@@ -2292,7 +2292,15 @@ function ListClubTeams(){
 		for($i=0;$i<count($rcrs);$i++){
 			$rci = $rcm->getRacerInfo($rcrs[$i]->getRacerID());
 			echo "<tr><td width=\"100\">";
-			echo "<table border=\"0\"><tr>";			
+			echo "<table border=\"0\"><tr>";
+		/*
+			echo "<td><form action=\"index.php\" method=\"post\">";
+				echo "<input type=\"hidden\" name = \"rm_func\" value=\"racer\" > ";
+				echo "<input type=\"hidden\" name = \"rm_subf\" value=\"makelead\">";
+				echo "<input type=\"hidden\" name = \"opt\"  value=\"".$rcrs[$i]->getRacerID()."\" >";				
+				echo "<input type=\"submit\" value=\"Likt par kapteini\">";	
+			echo "</form>";	
+			*/			
 			echo "<td><form action=\"index.php\" method=\"post\">";
 				echo "<input type=\"hidden\" name = \"rm_func\" value=\"racer\" > ";
 				echo "<input type=\"hidden\" name = \"rm_subf\" value=\"viewprofile\">";

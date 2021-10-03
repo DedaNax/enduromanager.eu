@@ -609,6 +609,16 @@ function checkPerm($f,$s){
 			)
 		),
 		"print" => array(
+			"covidlist" => array(
+				0 => "RM_ADMIN",
+				1 => "RM_ENDURO_ADMIN",
+				2 => "RM_ENDURO_ORG"
+			),
+			"covidlist2" => array(
+				0 => "RM_ADMIN",
+				1 => "RM_ENDURO_ADMIN",
+				2 => "RM_ENDURO_ORG"
+			),
 			"enduro_start" => array(
 				0 => "RM_ADMIN",
 				1 => "RM_ENDURO_ADMIN",
