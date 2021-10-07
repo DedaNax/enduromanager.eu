@@ -2523,7 +2523,7 @@ function printEnduroReg($opt){
 								echo "<td width=\"*\">";
 							}
 								echo "<a href = \"?rm_func=racer&rm_subf=viewprofile&opt=$opt&day=$day&red_f=enduro&red_s=reg&editmode=enduroreg&anh=rcr",$freeracers[$i]->getUserID(),"&id=",$freeracers[$i]->getUserID(),"\" style=\"text-decoration:none;\">";
-									echo "(",$freeracers[$i]->getNR(),")",$freeracers[$i]->getFname(), " ", $freeracers[$i]->getLname();
+									echo "(",$freeracers[$i]->getNR(),")",$freeracers[$i]->getFname(), " ", $freeracers[$i]->getLname()," (",$freeracers[$i]->LATEST_APP_DATE,")";
 								echo "</a>";
 					}
 				echo "</table>";

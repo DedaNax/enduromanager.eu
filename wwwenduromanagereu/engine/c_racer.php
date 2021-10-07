@@ -22,6 +22,7 @@ class Racer{
 	public $enduromanager;
 	public $LIC_TYPE;
 	public $LIC_YR;
+	public $LATEST_APP_DATE;
 	
 	public function getValsts_name(){
 		return $this->valsts_name;
@@ -1725,7 +1726,8 @@ class RacerManager{
 					
 					
 					contry.lang_value as cont_name,
-					club.`name` as club_name
+					club.`name` as club_name,
+					dates.latestdate latest_apl
 					
 				FROM `phpbb_profile_fields_data` fd
 					inner join `phpbb_users` us on (us.`user_id` = fd.`user_id`)
@@ -1743,6 +1745,15 @@ class RacerManager{
 									contry.`field_id` = ".KL_COUNT."
 								) 
 							left join `c_club` club on club.`id` = lic.`club`
+
+					left join (
+						select max(r2.`date`) latestdate, apl2.racer_id
+						from `enduro_application` apl2 
+							inner join `d_race` r2 on apl2.`Race_id` = r2.`race_id`
+                            group by apl2.racer_id
+					) dates on dates.`racer_id` = us.`user_id`
+
+
 				WHERE 
 							fd.`user_id` not in (select racer_id from `enduro_application` where `race_id` = $r) and 
 							fd.`user_id` in (select `user_id` from `phpbb_user_group` where `group_id` = ".RACER_GROUP_ID.") and
@@ -1783,6 +1794,7 @@ class RacerManager{
 			
 			$item->LIC_TYPE = $row['TYPE'];
 			$item->LIC_YR = $row['YR'];
+			$item->LATEST_APP_DATE = $row['latest_apl'];
 			
 			array_push($reslt,$item);
 		}
